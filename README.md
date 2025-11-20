@@ -44,13 +44,16 @@ Ce projet a été réalisé en **3 semaines** par une équipe de **3 développeu
 ---
 
 ## 🗂️ Architecture du projet
-/client → Front-end React
-/server → Back-end Node.js + Express
-/server/routes → Routes API
+```
+/client              → Front-end React
+/server              → Back-end Node.js + Express
+/server/routes       → Routes API
 /server/controllers → Logique métier
-/server/models → Schémas MongoDB (User, Post, Connection)
-.env → Variables d'environnement
+/server/models       → Schémas MongoDB (User, Post, Connection)
+.env                 → Variables d'environnement
 README.md
+```
+
 ---
 
 # 🗓️ Planning du projet (3 semaines)
@@ -130,69 +133,85 @@ README.md
 ```bash
 git clone https://github.com/your-username/ProfessionalSocialNetwork.git
 cd ProfessionalSocialNetwork
+```
 
-2️⃣ Installer les dépendances
-Front-end
+## 2️⃣ Installer les dépendances
+
+### Front-end
+```bash
 cd client
 npm install
+```
 
-Back-end
+### Back-end
+```bash
 cd server
 npm install
+```
 
-3️⃣ Configurer l'environnement
+## 3️⃣ Configurer l'environnement
 
-Créer un fichier .env dans server/ :
+Créer un fichier `.env` dans `server/` :
 
+```env
 MONGO_URI=your_mongo_cluster_url
 JWT_SECRET=your_secret_key
 PORT=5000
+```
 
-4️⃣ Lancer le projet
-Back-end
+## 4️⃣ Lancer le projet
+
+### Back-end
+```bash
+cd server
 npm run dev
+```
 
-Front-end
+### Front-end
+```bash
+cd client
 npm start
+```
 
-📘 Documentation API (exemple)
-Authentification
-POST /auth/register
-POST /auth/login
+---
 
-Utilisateurs
-GET    /users/:id
-PUT    /users/:id
+## 📘 Documentation API (exemple)
 
-Posts
-GET    /posts
-POST   /posts
-PUT    /posts/:id
-DELETE /posts/:id
+### Authentification
+- `POST /auth/register`
+- `POST /auth/login`
 
-Connexions
-POST /connections/send/:id
-POST /connections/accept/:id
-GET  /connections/me
+### Utilisateurs
+- `GET    /users/:id`
+- `PUT    /users/:id`
 
-🎥 Démonstration finale
+### Posts
+- `GET    /posts`
+- `POST   /posts`
+- `PUT    /posts/:id`
+- `DELETE /posts/:id`
+
+### Connexions
+- `POST /connections/send/:id`
+- `POST /connections/accept/:id`
+- `GET  /connections/me`
+
+---
+
+## 🎥 Démonstration finale
 
 La démo comprend :
 
-création de compte
+- création de compte
+- connexion
+- édition du profil
+- création d'un post
+- like / commentaire
+- gestion des connexions
+- navigation sur le feed
 
-connexion
+---
 
-édition du profil
-
-création d’un post
-
-like / commentaire
-
-gestion des connexions
-
-navigation sur le feed
-
-📄 Licence
+## 📄 Licence
 
 Projet académique – utilisation pédagogique uniquement.
