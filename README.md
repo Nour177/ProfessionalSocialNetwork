@@ -1,4 +1,4 @@
-# ProfessionalSocialNetwork – Web Application (3 Weeks Project)
+# ProfessionalSocialNetwork – Web Application 
 
 ## 📌 Description
 **ProfessionalSocialNetwork** est une application web inspirée des réseaux professionnels comme LinkedIn.
