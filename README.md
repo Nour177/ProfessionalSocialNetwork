@@ -1,35 +1,40 @@
 # ProfessionalSocialNetwork – Web Application (3 Weeks Project)
 
 ## 📌 Description
-**ProfessionalSocialNetwork** est une application web inspirée des plateformes professionnelles comme LinkedIn.  
-Elle permet aux utilisateurs de créer un profil, partager des publications, interagir via un fil d’actualité et gérer leur réseau professionnel.
+**ProfessionalSocialNetwork** est une application web inspirée des réseaux professionnels comme LinkedIn.
+Elle permet aux utilisateurs de s’inscrire, se connecter, gérer leur profil et interagir via un fil d’actualité.
 
-Ce projet a été réalisé en **3 semaines** par une équipe de **3 développeurs**, en s'appuyant sur l’expérience d’un précédent projet Java/JavaFX, ce qui a permis de réduire la phase de conception.
-
+Le projet est réalisé par une équipe de 3 développeurs, avec une organisation orientée interfaces afin d’optimiser le temps de développement.
+Chaque membre est responsable d’une interface complète (HTML, CSS, JavaScript et intégration back-end).
 ---
 
 ## 🚀 Fonctionnalités principales
-- 🔐 Authentification (inscription, connexion via JWT)  
-- 👤 Gestion de profil (photo, bio, compétences, expérience)  
-- 📰 Fil d’actualité (posts avec texte ou image)  
-- 👍 Likes & commentaires  
-- 🤝 Réseau (envoi et acceptation de connexions)  
-- 📱 Interface responsive  
+- 🔐 Authentification (Inscription & Connexion)
 
+- 👤 Profil utilisateur (affichage et mise à jour)
+
+- 📰 Fil d’actualité (Feed)
+
+- ✍️ Création de publications
+
+- 👍 Likes
+
+- 💬 Commentaires
+
+- 📱 Interface responsive (Bootstrap)
 ---
 
 ## 🛠️ Technologies utilisées
 
 ### **Front-end**
-- React  
-- React Router  
-- Axios  
-- CSS / Tailwind CSS *(optionnel)*  
+- HTML5
+- CSS3
+- Bootstrap
+- JavaScript
 
 ### **Back-end**
 - Node.js + Express  
 - JSON Web Tokens (JWT)  
-- Multer *(pour upload photo si nécessaire)*  
 
 ### **Base de données**
 - MongoDB + Mongoose  
@@ -37,95 +42,60 @@ Ce projet a été réalisé en **3 semaines** par une équipe de **3 développeu
 ### **Outils**
 - Git / GitHub  
 - Postman  
-- Trello / Notion  
 - VS Code  
-- Figma (maquettes simples)  
-
 ---
 
 ## 🗂️ Architecture du projet
 ```
-/client              → Front-end React
-/server              → Back-end Node.js + Express
-/server/routes       → Routes API
-/server/controllers → Logique métier
-/server/models       → Schémas MongoDB (User, Post, Connection)
-.env                 → Variables d'environnement
-README.md
+ProfessionalSocialNetwork
+│
+├── public/                 # Front-end
+│   ├── pages/              # login.html, signup.html, profile.html, feed.html
+│   ├── css/                # styles Bootstrap personnalisés
+│   ├── js/                 # login.js, signup.js, profile.js, feed.js
+│
+├── server/
+│   ├── routes/             # Routes API
+│   ├── controllers/        # Logique métier
+│   ├── models/             # Schémas MongoDB
+│   ├── middleware/         # Auth middleware
+│   └── app.js
+│
+├── .env
+└── README.md
 ```
 
 ---
+# 🗓️ Planning du projet
+### Phase 1 – Initialisation
 
-# 🗓️ Planning du projet (3 semaines)
+Configuration Node.js & Express
 
-### 👥 Répartition de l’équipe
-- **Dev A – Back-end**
-- **Dev B – Front-end**
-- **Dev C – Base de données + intégration + tests**
+Connexion à MongoDB
 
----
+Mise en place de l’authentification
 
-## 🔵 Semaine 1 – Initialisation & Fondations
+Structure du projet
 
-### Dev A (Back-end)
-- Setup Node.js + Express  
-- Authentification (register/login + JWT)  
-- Middleware d’authentification  
+### Phase 2 – Développement des interfaces
 
-### Dev B (Front-end)
-- Création projet React  
-- Pages Login & Register  
-- Routing + connexion API  
+Login & Signup
 
-### Dev C (BDD & intégration)
-- Modèles Mongoose (User, Post, Connection)  
-- Configuration MongoDB + .env  
-- Tests initiaux API via Postman  
+Profil utilisateur
 
----
+Feed (posts, likes, commentaires)
 
-## 🔵 Semaine 2 – Fonctionnalités principales
+### Phase 3 – Finalisation
 
-### Dev A (Back-end)
-- CRUD Profil  
-- CRUD Posts  
-- Routes Connexions (envoyer / accepter)  
+Intégration Front / Back
 
-### Dev B (Front-end)
-- Page Profil  
-- Page Feed  
-- Composants : PostCard, Navbar  
-- Formulaire création de post  
+Gestion des erreurs
 
-### Dev C (Intégration)
-- Intégration front/back (axios)  
-- Ajustements BD  
-- Debug & cohérence data  
+Responsive design
 
----
+Tests fonctionnels
 
-## 🔵 Semaine 3 – Finalisation & Qualité
-
-### Dev A (Back-end)
-- Ajout likes & commentaires  
-- Pagination du feed  
-- Documentation API  
-
-### Dev B (Front-end)
-- Responsive design  
-- UI/UX final  
-- Intégration like + commentaire  
-
-### Dev C (Tests & Déploiement)
-- Tests fonctionnels  
-- Gestion erreurs front/back  
-- Préparation de la démo  
-- (Optionnel) Déploiement :
-  - Front → Vercel  
-  - Back → Render  
-  - DB → MongoDB Atlas  
-
----
+Démonstration finale
 
 # ▶️ Installation & exécution
 
