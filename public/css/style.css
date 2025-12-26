@@ -1,0 +1,140 @@
+.input-box input {
+  padding: 14px 12px;
+  border: 1px solid #c5c5c5;
+  transition: border-color 0.2s;
+}
+
+.input-box input:focus {
+  border-color: #0078d4; 
+}
+
+.btn.btn-primary {
+  width: 100%;
+  background: #0078d4;
+  color: white;
+  border: none;
+  padding: 14px;
+  font-size: 16px;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn.btn-primary:hover {
+  background: #005a9e;
+}
+
+.extra-option {
+  text-align: center;
+  margin: 20px 0;
+}
+
+.option-btn {
+  background: none;
+  border: none;
+  color: #2d2d2d;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 10px 0;
+  font-weight: 500;
+}
+
+.option-btn:hover {
+  text-decoration: underline;
+}
+
+.profile-step {
+    text-align: center;
+    padding: 40px 20px;
+    font-family: Arial, sans-serif;
+}
+
+.title {
+    font-size: 28px;
+    margin-bottom: 30px;
+    font-weight: 500;
+}
+
+/* Card */
+.profile-card {
+    border: 1px solid #ccc;
+    border-radius: 15px;
+    padding: 30px;
+    width: 350px;
+    margin: auto;
+}
+
+/* Upload circle */
+.profile-photo {
+    width: 140px;
+    height: 140px;
+    background-color: #55636e;
+    border-radius: 50%;
+    margin: 0 auto 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 5px solid white;
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+}
+
+.profile-photo.dragover {
+    border-color: #0a66c2;
+    background-color: #3b4a55;
+}
+
+.profile-photo img {
+    width: 70%;
+    height: 70%;
+    object-fit: cover;
+}
+
+/* Text styles */
+.profile-name {
+    font-size: 22px;
+    margin-top: 10px;
+    font-weight: 400;
+}
+
+.profile-subtitle {
+    color: #555;
+    margin-top: 5px;
+}
+
+.profile-location {
+    color: #777;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+/* Buttons */
+.add-photo-btn {
+    background-color: #0a66c2;
+    color: white;
+    border: none;
+    padding: 14px;
+    width: 300px;
+    border-radius: 30px;
+    font-size: 18px;
+    margin-top: 25px;
+    cursor: pointer;
+}
+
+.add-photo-btn:hover {
+    background-color: #004182;
+}
+
+.skip-btn {
+    background: none;
+    border: none;
+    color: #555;
+    margin-top: 15px;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.skip-btn:hover {
+    text-decoration: underline;
+}
