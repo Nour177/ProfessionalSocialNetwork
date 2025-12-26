@@ -1,0 +1,22 @@
+{
+  "name": "professionalsocialnetwork",
+  "version": "1.0.0",
+  "description": "**ProfessionalSocialNetwork** est une application web inspirée des réseaux professionnels comme LinkedIn.\r Elle permet aux utilisateurs de s’inscrire, se connecter, gérer leur profil et interagir via un fil d’actualité.",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "nodemon ./server/app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Nour177/ProfessionalSocialNetwork.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Nour177/ProfessionalSocialNetwork/issues"
+  },
+  "homepage": "https://github.com/Nour177/ProfessionalSocialNetwork#readme"
+}
