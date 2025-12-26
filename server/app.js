@@ -1,6 +1,22 @@
 import express from 'express';
 const app = express();
 
-app.listen(3000, () => {
-    console.log('Server is running on http://localhost:3000');
+const port = process.env.PORT || 3000;
+
+app.get('/login', (req, res) => {
+    res.send('/pages/login.html');
+});
+
+app.get('/register', (req, res) => {
+    res.send('/pages/register.html');
+});
+
+app.post('/register', (req, res) => {
+    // Registration logic here
+    res.send('User registered');
+});
+
+
+app.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
 });
