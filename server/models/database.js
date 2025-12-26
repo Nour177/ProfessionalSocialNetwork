@@ -9,4 +9,3 @@ mongoose.connect(dbURI)
   .then(() => console.log('Connected to MongoDB Atlas'))
   .catch((err) => console.log('Connection error:', err));
 
-
