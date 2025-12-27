@@ -1,22 +1,32 @@
-import express from 'express';
+require('dotenv').config();
+
+const express = require('express');
+const mongoose = require('mongoose');
+const employee = require('./models/employeeSchema');
+
 const app = express();
 
-const port = process.env.PORT || 3000;
+mongoose.connect(process.env.MONGO_URI)
+.then(() => console.log('connected'))
+.catch(err => console.error('error:', err));
 
-app.get('/login', (req, res) => {
-    res.send('/pages/login.html');
+
+
+app.get('/', async (req, res) => {
+    try {
+        const users = await employee.find(); 
+        res.json(users);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Error fetching users');
+    }
 });
 
-app.get('/register', (req, res) => {
-    res.send('/pages/register.html');
-});
-
-app.post('/register', (req, res) => {
-    // Registration logic here
-    res.send('User registered');
-});
 
 
-app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
+
+
+
+app.listen(process.env.PORT, () => {
+    console.log(`erver running on http://localhost:${process.env.PORT}`);
 });
