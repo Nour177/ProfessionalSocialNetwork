@@ -113,7 +113,7 @@ body {
 
 /* Textes "primary" */
 .text-primary {
-  color: var(--hunter-green) !important;
+  color: var(--hunter-green) ;
 }
 
 /* Colonne gauche – liens */
@@ -141,4 +141,55 @@ body {
   height: 45px;
   border-radius: 50%;
   background-color: var(--yellow-green);
+}
+
+/* Formulaires de posts */
+.post-form {
+  background-color: #fff;
+  border: 1px solid #e0e0e0 !important;
+  border-radius: 8px;
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.post-form h6 {
+  color: var(--hunter-green);
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.post-form .form-label {
+  color: #333;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+.post-form .form-control:focus {
+  border-color: var(--hunter-green);
+  box-shadow: 0 0 0 0.2rem rgba(56, 102, 65, 0.25);
+}
+
+.post-form .btn-primary {
+  background-color: var(--hunter-green);
+  border-color: var(--hunter-green);
+}
+
+.post-form .btn-primary:hover {
+  background-color: var(--sage-green);
+  border-color: var(--sage-green);
+}
+
+.post-form .btn-secondary {
+  background-color: #6c757d;
+  border-color: #6c757d;
 }

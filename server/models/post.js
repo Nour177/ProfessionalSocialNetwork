@@ -9,13 +9,19 @@ const postSchema = new mongoose.Schema(
     },
 
     authorAvatar: {
-      type: String, //path
+      type: String,
       default: "",
+    },
+
+    postType: {
+      type: String,
+      enum: ["text", "image", "video", "article", "event"],
+      required: true,
+      default: "text",
     },
 
     content: {
       type: String,
-      required: true,
       trim: true,
       maxlength: 1000,
     },
@@ -25,6 +31,24 @@ const postSchema = new mongoose.Schema(
       default: "",
     },
 
+    video: {
+      type: String,
+      default: "",
+    },
+
+    article: {
+      title: String,
+      coverImage: String,
+      body: String,
+    },
+
+    event: {
+      title: String,
+      description: String,
+      date: Date,
+      location: String,
+    },
+
     likes: {
       type: Number,
       default: 0,
@@ -32,12 +56,8 @@ const postSchema = new mongoose.Schema(
 
     comments: [
       {
-        user: {
-          type: String,
-        },
-        text: {
-          type: String,
-        },
+        user: String,
+        text: String,
         createdAt: {
           type: Date,
           default: Date.now,
@@ -45,11 +65,8 @@ const postSchema = new mongoose.Schema(
       },
     ],
   },
-  {
-    timestamps: true,
-  }
+  { timestamps: true }
 );
 
 const Post = mongoose.model("Post", postSchema);
-
 export default Post;
