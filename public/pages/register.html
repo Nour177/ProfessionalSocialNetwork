@@ -32,7 +32,7 @@
                 <div class="card shadow-sm">
                     
                         <div class="card-body"> 
-                            <form action="/login" method="POST" id="loginForm">
+                            <form action="/register" method="POST" id="loginForm">
                                 <!-- check if email already exists and check for the strength of the password -->
                                 <div id="step-1"> 
                                     <div class="card-header bg-white">
@@ -92,17 +92,17 @@
                                     </div>
                                     <div id="job-option">
                                         <div class="form-floating mb-3 input-box">
-                                            <input type="text" class="form-control" id="recent-job" placeholder="Most recent job experience" required>
-                                            <label for="recent-job" class="text-secondary">Most recent job experience</label>
+                                            <input type="text" class="form-control" id="recent-job" placeholder="Most recent job experience">
+                                            <label for="recent-job" class="text-secondary">Most recent job experience*</label>
                                         </div>
                                         <div class="extra-option">
-                                            <button class="option-btn" id="student">I'm a student</button>
+                                            <button type="button" class="option-btn" id="student">I'm a student</button>
                                         </div>
                                     </div>
                                     <!-- Start year shouldn't be after the end year, the year shouldn't be too small or too big -->
                                     <div id="student-option" class="d-none">
                                         <div class="form-floating mb-3 input-box">
-                                            <input type="text" class="form-control" id="school" placeholder="School or College/University" required>
+                                            <input type="text" class="form-control" id="school" placeholder="School or College/University">
                                             <label for="school" class="text-secondary">School or College/University*</label>
                                         </div>
                                         <div class="form-floating mb-3 input-box">
@@ -132,15 +132,15 @@
                                         <div class="d-flex mb-3">
                                             <div class="me-2">
                                                 <label for="start-year" class="form-label text-secondary">Start Year*</label>
-                                                <input type="number" class="form-control" id="start-year" placeholder="e.g., 2020" required>
+                                                <input type="number" class="form-control" id="start-year" placeholder="e.g., 2020">
                                             </div>
                                             <div>
                                                 <label for="end-year" class="form-label text-secondary">End Year*</label>
-                                                <input type="number" class="form-control" id="end-year" placeholder="e.g., 2024" required>
+                                                <input type="number" class="form-control" id="end-year" placeholder="e.g., 2024">
                                             </div>
                                         </div>
                                         <div class="extra-option">
-                                            <button class="option-btn" id="not-student">I'm not a student</button>
+                                            <button type="button" class="option-btn" id="not-student">I'm not a student</button>
                                         </div>
                                     </div>
 
@@ -168,11 +168,11 @@
                                         <p class="profile-location" id="placeholder-location">Location</p>
                                     </div>
                                     <div class="d-flex justify-content-center gap-3 mt-3">
-                                        <button class="add-photo-btn" onclick="document.getElementById('fileInput').click();">
+                                        <button type="button" class="add-photo-btn" onclick="document.getElementById('fileInput').click();">
                                             Add photo
                                     </div>
                                     <div class="d-grid gap-2 mt-4">
-                                        <button type="submit" class="btn btn-success">Complete Registration</button>
+                                        <button type="submit" class="btn btn-success" id="registerForm">Complete Registration</button>
                                     </div>
                                 </div>
 
