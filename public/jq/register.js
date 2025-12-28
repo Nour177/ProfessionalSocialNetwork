@@ -64,8 +64,42 @@ $(function () {
         }
     });
 
-})
+    $('#registerForm').on('click', function (e) {
+        e.preventDefault();
+        let formData = new FormData();
+        formData.append('email', $('#email').val());
+        formData.append('password', $('#password').val());
+        formData.append('firstname', $('#firstname').val());
+        formData.append('lastname', $('#lastname').val());
+        formData.append('location', $('#location').val());
+        formData.append('g-recaptcha-response', grecaptcha.getResponse());
+        if (!$('#job-option').hasClass('d-none')) {
+            formData.append('recentJob', $('#recent-job').val());
+        } else {
+            formData.append('school', $('#school').val());
+            formData.append('degree', $('#degree').val());
+            formData.append('fieldOfStudy', $('#study-field').val());
+            formData.append('startYear', $('#start-year').val());
+            formData.append('endYear', $('#end-year').val());
+        }
 
+        const fileInput = document.getElementById('fileInput');
+        if (fileInput.files[0]) {
+            formData.append('profileImage', fileInput.files[0]);
+        }
+        fetch('/register', {
+            method: 'POST',
+            body: formData})
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.href = '/pages/login.html';
+                } else {
+                    alert('Registration failed: ' + data.message);
+                }
+            });
+    });
+});
 function validStep1() {
     let email = $('#email').val();
     let password = $('#password').val();
