@@ -1,0 +1,144 @@
+:root {
+  --hunter-green: #386641ff;
+  --sage-green: #6a994eff;
+  --yellow-green: #a7c957ff;
+  --vanilla-cream: #f2e8cfff;
+  --blushed-brick: #bc4749ff;
+}
+
+/* Global */
+body {
+  background-color: #f3f2ef;
+}
+
+.card {
+  margin-bottom: 15px;
+  border: none;
+  border-radius: 0.375rem;
+}
+
+/* Navbar */
+.nav-link {
+  color: var(--hunter-green);
+  min-width: 70px;
+}
+
+.nav-link:hover {
+  color: var(--sage-green);
+}
+
+.navbar {
+  box-shadow: 0 2px 4px rgba(56, 102, 65, 0.2);
+}
+
+.badge {
+  font-size: x-small;
+  background-color: var(--blushed-brick);
+}
+
+/* Profil */
+.profile-card {
+  position: relative;
+  border-radius: 0.375rem;
+}
+
+/* Bannière */
+.profile-banner {
+  height: 70px;
+  background: linear-gradient(
+    135deg,
+    var(--hunter-green),
+    var(--sage-green)
+  );
+  border-top-left-radius: 0.375rem;
+  border-top-right-radius: 0.375rem;
+}
+
+/* Photo */
+.profile-avatar {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  border: 4px solid var(--vanilla-cream);
+  position: absolute;
+  top: 35px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--yellow-green);
+}
+
+/* Infos */
+.profile-info {
+  padding-top: 55px;
+  padding-bottom: 15px;
+  text-align: center;
+}
+
+.profile-info h6 {
+  color: var(--hunter-green);
+}
+
+.profile-info small {
+  color: var(--sage-green);
+}
+/* ===== PALETTE APPLIQUÉE PARTOUT ===== */
+
+
+/* Icônes navbar */
+.nav-link i {
+  color: var(--hunter-green);
+}
+
+/* Texte navbar */
+.nav-link .small {
+  color: var(--hunter-green);
+}
+
+/* Hover navbar */
+.nav-link:hover i,
+.nav-link:hover .small {
+  color: var(--sage-green);
+}
+
+/* Champs de recherche */
+.input-group-text,
+.form-control {
+  border: 1px solid var(--sage-green);
+}
+
+.form-control:focus {
+  border-color: var(--hunter-green);
+  box-shadow: none;
+}
+
+/* Textes "primary" */
+.text-primary {
+  color: var(--hunter-green) !important;
+}
+
+/* Colonne gauche – liens */
+.col-lg-3 .card-body p {
+  color: var(--hunter-green);
+}
+
+/* Hover colonne gauche */
+.col-lg-3 .card-body p:hover {
+  color: var(--sage-green);
+  cursor: pointer;
+}
+
+/* Posts */
+.col-lg-6 h6 {
+  color: var(--hunter-green);
+}
+
+.col-lg-6 p {
+  color: #333;
+}
+
+.post-avatar {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  background-color: var(--yellow-green);
+}
