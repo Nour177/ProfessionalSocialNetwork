@@ -134,7 +134,7 @@ p.position {
     margin-bottom: 15px;
 }
 
-.card-icons img.icon-small {
+.card-icons i.icon-small {
     width: 20px;
     height: 20px;
     cursor: pointer;
@@ -143,20 +143,20 @@ p.position {
     margin-bottom: 7px;
 }
 
-img.icon-small {
+i.icon-small {
     width: 20px;
     height: 20px;
     cursor: pointer;
     transition: transform 0.2s;
     margin-top: 20px;
 }
-img.icon-small:hover {
+i.icon-small:hover {
     transform: scale(1.2);
 }
 
 
 
-.card-icons img.icon-small:hover {
+.card-icons i.icon-small:hover {
     transform: scale(1.2);
 }
 
