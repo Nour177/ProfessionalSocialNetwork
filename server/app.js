@@ -63,15 +63,26 @@ app.get('/register', (req, res) => {
 
 app.post('/login', async (req, res) => {
     const { email, password } = req.body;
-    console.log(req.body.email);
-    let existingEmployee = await employee.findByEmail(email);
-    console.log("employee",existingEmployee);
-    console.log(existingEmployee.password);
-    console.log(password);
-    if (!existingEmployee || existingEmployee.password !== password) {
-        return res.status(400).json({ success: false, message: 'Invalid email or password' });
+    try {
+        let existingEmployee = await employee.findByEmail(email);
+        
+        if (!existingEmployee || existingEmployee.password !== password) {
+            return res.status(400).json({ success: false, message: 'Invalid email or password' });
+        }
+        
+        // Retourner les données utilisateur (sans le mot de passe)
+        const userData = existingEmployee.toObject();
+        delete userData.password;
+        
+        return res.status(200).json({ 
+            success: true, 
+            message: 'Login successful',
+            user: userData
+        });
+    } catch (error) {
+        console.error('Login error:', error);
+        return res.status(500).json({ success: false, message: 'Server error' });
     }
-    return res.status(200).json({ success: true, message: 'Login successful' });
 });
 
 app.post('/register', upload.single('profileImage'), async (req, res) => {
@@ -95,18 +106,26 @@ app.post('/register', upload.single('profileImage'), async (req, res) => {
     }
 
     let existingEmployee = await employee.findByEmail(req.body.email);
-    console.log(existingEmployee);
     if (existingEmployee) {
         return res.status(400).json({ success: false, message: 'Email already exists' });
     }
+    
     let userData = {
         ...req.body,
         profileImagePath: req.file ? `/uploads/${req.file.filename}` : null,
     }
-    console.log("userData : ",userData);
 
-    employee.create(userData);
-    return res.status(200).json({ success:true, message: 'User added successfully' });
+    const newEmployee = await employee.create(userData);
+    
+    // Retourner les données utilisateur (sans le mot de passe)
+    const userResponse = newEmployee.toObject();
+    delete userResponse.password;
+    
+    return res.status(200).json({ 
+        success: true, 
+        message: 'User added successfully',
+        user: userResponse
+    });
 });
 
 

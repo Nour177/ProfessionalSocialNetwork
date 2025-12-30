@@ -1,10 +1,15 @@
 $(function () {
+    console.log('Register script loaded');
 
     $('#continue-1').on('click', function (e) {
         e.preventDefault();
+        console.log('Join button clicked');
         if (validStep1()) {
+            console.log('Step 1 validation passed');
             $('#step-1').addClass('d-none');
             $('#step-2').removeClass('d-none');
+        } else {
+            console.log('Step 1 validation failed');
         }
     });
 
@@ -66,13 +71,27 @@ $(function () {
 
     $('#registerForm').on('click', function (e) {
         e.preventDefault();
+        console.log('Complete Registration button clicked');
+        
+        // Vérifier que le reCAPTCHA est toujours valide
+        const recaptchaResponse = grecaptcha.getResponse();
+        if (!recaptchaResponse || recaptchaResponse.length === 0) {
+            alert('Please complete the reCAPTCHA verification. The verification may have expired.');
+            // Réinitialiser et afficher le reCAPTCHA à nouveau
+            grecaptcha.reset();
+            // Retourner à l'étape 2 pour refaire le reCAPTCHA
+            $('#step-5').addClass('d-none');
+            $('#step-2').removeClass('d-none');
+            return;
+        }
+        
         let formData = new FormData();
         formData.append('email', $('#email').val());
         formData.append('password', $('#password').val());
         formData.append('firstname', $('#firstname').val());
         formData.append('lastname', $('#lastname').val());
         formData.append('location', $('#location').val());
-        formData.append('g-recaptcha-response', grecaptcha.getResponse());
+        formData.append('g-recaptcha-response', recaptchaResponse);
         if (!$('#job-option').hasClass('d-none')) {
             formData.append('recentJob', $('#recent-job').val());
         } else {
@@ -93,10 +112,31 @@ $(function () {
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    window.location.href = '/pages/login.html';
+                    // Stocker les données utilisateur dans localStorage
+                    if (data.user) {
+                        localStorage.setItem('user', JSON.stringify(data.user));
+                        localStorage.setItem('isAuthenticated', 'true');
+                        // Rediriger vers la page d'accueil
+                        window.location.href = '/pages/acceuil.html';
+                    } else {
+                        // Si pas de données utilisateur, rediriger vers login
+                        window.location.href = '/pages/login.html';
+                    }
                 } else {
-                    alert('Registration failed: ' + data.message);
+                    // Si l'erreur est liée au reCAPTCHA, réinitialiser et retourner à l'étape 2
+                    if (data.message && data.message.toLowerCase().includes('recaptcha')) {
+                        alert(data.message);
+                        grecaptcha.reset();
+                        $('#step-5').addClass('d-none');
+                        $('#step-2').removeClass('d-none');
+                    } else {
+                        alert('Registration failed: ' + data.message);
+                    }
                 }
+            })
+            .catch(error => {
+                console.error('Registration error:', error);
+                alert('Network error. Please try again.');
             });
     });
 });

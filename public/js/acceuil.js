@@ -1,5 +1,5 @@
 // Configuration de l'API
-const API_BASE_URL = 'http://localhost:5000'; // Ajustez selon votre configuration
+const API_BASE_URL = 'http://localhost:5000'; // Ajustez selon votre configuration (port)
 
 // État de l'application
 let currentUser = null;
@@ -8,9 +8,7 @@ let posts = [];
 // Vérifier si un post appartient à l'utilisateur actuel
 function isCurrentUserPost(author) {
     if (!currentUser) {
-        // Pour les tests, considérer que tous les posts peuvent être modifiés
-        // En production, comparer avec l'utilisateur connecté
-        return true; // Temporaire pour les tests
+        return false;
     }
     const currentUserName = `${currentUser.firstname} ${currentUser.lastname}`;
     return author === currentUserName;
@@ -23,16 +21,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Initialisation de l'application
 async function initializeApp() {
-    // Charger les informations de l'utilisateur (à adapter selon votre système d'auth)
+    // Vérifier l'authentification
+    const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
+    if (!isAuthenticated) {
+        // redirection vers la page de login si non authentifié
+        window.location.href = '/pages/login.html';
+        return;
+    }
+    
+    // Charger les informations de l'utilisateur
     await loadUserProfile();
     
-    // Charger les posts
+    // Charger les posts (tous les posts dans la base)
     await loadPosts();
     
-    // Configurer les écouteurs d'événements
+    // Configurer les écouteurs d'événements (listeners)
     setupEventListeners();
     
-    // Initialiser le champ date de l'événement avec la date actuelle
+    // Initialiser le champ date de l'événement avec la date actuelle (pour la publication d'événement)
     const eventDateInput = document.getElementById('event-date');
     if (eventDateInput) {
         const now = new Date();
@@ -44,35 +50,29 @@ async function initializeApp() {
 // Charger le profil utilisateur
 async function loadUserProfile() {
     try {
-        // TODO: Récupérer l'utilisateur depuis le localStorage ou session
-        // Pour l'instant, on utilise des données par défaut pour les tests
-        const userData = JSON.parse(localStorage.getItem('user')) || {
-            firstname: 'Test',
-            lastname: 'User',
-            recentJob: 'Développeur',
-            profileImagePath: '/uploads/profileImage-1766835814594-229968944.jpg' // Utiliser une image existante
-        };
+        // Récupérer l'utilisateur depuis le localStorage
+        const userData = JSON.parse(localStorage.getItem('user'));
+        
+        if (!userData) {
+            // Si pas d'utilisateur, rediriger vers login
+            window.location.href = '/pages/login.html';
+            return;
+        }
         
         currentUser = userData;
         updateUserProfileUI(userData);
     } catch (error) {
-        console.error('Erreur lors du chargement du profil:', error);
-        // Utiliser des données par défaut en cas d'erreur
-        currentUser = {
-            firstname: 'Test',
-            lastname: 'User',
-            recentJob: 'Développeur',
-            profileImagePath: ''
-        };
-        updateUserProfileUI(currentUser);
+        console.error('Error loading user profile:', error);
+        // En cas d'erreur, toujours vers login
+        window.location.href = '/pages/login.html';
     }
 }
 
-// Mettre à jour l'interface du profil utilisateur
+// Mettre à jour l'interface du profil utilisateur avec les données
 function updateUserProfileUI(user) {
     const profileAvatar = document.querySelector('.profile-avatar');
     const profileName = document.querySelector('.profile-info h6');
-    const profileJob = document.querySelector('.profile-info small');
+    const profileJob = document.querySelector('#company');
     const postAvatar = document.querySelector('.post-avatar');
     
     if (profileAvatar && user.profileImagePath) {
@@ -84,7 +84,7 @@ function updateUserProfileUI(user) {
     }
     
     if (profileJob && user.recentJob) {
-        profileJob.innerHTML = `${user.recentJob} chez <a href="" class="text-primary">${user.recentJob}</a>`;
+        profileJob.innerHTML = `${user.recentJob}`;
     }
     
     if (postAvatar && user.profileImagePath) {
@@ -92,7 +92,7 @@ function updateUserProfileUI(user) {
     }
 }
 
-// Charger tous les posts
+
 async function loadPosts() {
     try {
         const response = await fetch(`${API_BASE_URL}/api/posts`, {
@@ -104,7 +104,7 @@ async function loadPosts() {
         
         if (response.ok) {
             const data = await response.json();
-            // Gérer les différents formats de réponse
+            // différents formats de réponse
             if (data.success && data.posts) {
                 posts = data.posts;
             } else if (Array.isArray(data)) {
@@ -128,7 +128,7 @@ async function loadPosts() {
             API_URL: API_BASE_URL
         });
         
-        // Afficher un message d'erreur dans l'interface
+        // message d'erreur 
         const postsContainer = document.getElementById('posts-container');
         if (postsContainer) {
             postsContainer.innerHTML = `
@@ -136,12 +136,7 @@ async function loadPosts() {
                     <div class="card-body text-center text-danger">
                         <p><strong>Network Error</strong></p>
                         <p class="small">Unable to connect to the server.</p>
-                        <p class="small">Please check:</p>
-                        <ul class="list-unstyled small">
-                            <li>• Server is running on port 3000</li>
-                            <li>• Access the page via http://localhost:5000/pages/acceuil.html</li>
-                            <li>• Check browser console for details</li>
-                        </ul>
+                        <p class="small">Please check</p>
                     </div>
                 </div>
             `;
@@ -158,7 +153,7 @@ function displayPosts(postsArray) {
         return;
     }
     
-    // Vider le conteneur
+    // Vider le conteneur des posts
     postsContainer.innerHTML = '';
     
     // Afficher chaque post
@@ -173,7 +168,7 @@ function displayPosts(postsArray) {
     });
 }
 
-// Créer un élément HTML pour un post
+// Crée un élément HTML pour un post
 function createPostElement(post) {
     const postCard = document.createElement('div');
     postCard.className = 'card post-card mb-3';
@@ -282,7 +277,7 @@ function createPostElement(post) {
     return postCard;
 }
 
-// Configurer les écouteurs d'événements
+// Configurer les listners
 function setupEventListeners() {
     // Publier un post
     const postInput = document.querySelector('.post-input');
@@ -325,8 +320,8 @@ function setupEventListeners() {
     const videoBtn = document.querySelector('.btn-video');
     const eventBtn = document.querySelector('.btn-event');
     const articleBtn = document.querySelector('.btn-article');
-    
-    // Bouton Photo
+    // si le bouton est présent, on affiche le forlmulaire correspondant
+    // formulaire Photo
     if (photoBtn) {
         photoBtn.addEventListener('click', () => {
             hideAllForms();
@@ -334,7 +329,7 @@ function setupEventListeners() {
         });
     }
     
-    // Bouton Video
+    // formulaire Video
     if (videoBtn) {
         videoBtn.addEventListener('click', () => {
             hideAllForms();
@@ -342,7 +337,7 @@ function setupEventListeners() {
         });
     }
     
-    // Bouton Event
+    // formulaire Event
     if (eventBtn) {
         eventBtn.addEventListener('click', () => {
             hideAllForms();
@@ -350,7 +345,7 @@ function setupEventListeners() {
         });
     }
     
-    // Bouton Article
+    // formulaire Article
     if (articleBtn) {
         articleBtn.addEventListener('click', () => {
             hideAllForms();
@@ -724,10 +719,10 @@ async function addComment(postId, commentText) {
         return;
     }
     
-    // Pour les tests, utiliser un utilisateur par défaut si pas connecté
-    const userName = currentUser 
-        ? `${currentUser.firstname} ${currentUser.lastname}`
-        : 'Test User';
+    // Pour les tests
+    // const userName = currentUser 
+    //     ? `${currentUser.firstname} ${currentUser.lastname}`
+    //     : 'Test User';
     
     try {
         const commentData = {
@@ -762,7 +757,7 @@ async function addComment(postId, commentText) {
     }
 }
 
-// Fonctions utilitaires
+// Fonctions utilitaires (pour les posts )
 function formatTimeAgo(timestamp) {
     if (!timestamp) return 'A moment ago';
     
@@ -973,7 +968,7 @@ async function deletePost(postId) {
     }
 }
 
-// Exporter les fonctions principales pour utilisation externe si nécessaire
+// Exporter les fonctions (en cas de necessité)
 window.acceuilApp = {
     loadPosts,
     createPost,
