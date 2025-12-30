@@ -4,7 +4,7 @@ import Post from '../models/post.js';
 export const getAllPosts = async (req, res) => {
     try {
         const posts = await Post.find()
-            .sort({ createdAt: -1 }) // Plus récents en premier
+            .sort({ createdAt: -1 }) //  récents en premier
             .exec();
         
         return res.status(200).json({
@@ -21,7 +21,7 @@ export const getAllPosts = async (req, res) => {
     }
 };
 
-// Créer un nouveau post
+// Créer un nouveau post (dans la base)
 export const createPost = async (req, res) => {
     try {
         // Gérer les données selon le type de requête (JSON ou FormData)
@@ -121,7 +121,7 @@ export const toggleLike = async (req, res) => {
         }
 
         // Pour le moment, on incrémente simplement les likes
-        // Plus tard, on pourra gérer les utilisateurs qui ont liké
+        // Plus tard, on pourra gérer les utilisateurs pour unliker, et voir qui a aimé
         post.likes = (post.likes || 0) + 1;
         await post.save();
 

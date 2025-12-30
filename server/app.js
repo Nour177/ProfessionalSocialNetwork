@@ -79,15 +79,26 @@ app.get('/register', (req, res) => {
 
 app.post('/login', async (req, res) => {
     const { email, password } = req.body;
-    console.log(req.body.email);
-    let existingEmployee = await employee.findByEmail(email);
-    console.log("employee",existingEmployee);
-    console.log(password);
-    if (!existingEmployee || existingEmployee.password !== password) {
-        return res.status(400).json({ success: false, message: 'Invalid email or password' });
+    try {
+        let existingEmployee = await employee.findByEmail(email);
+        
+        if (!existingEmployee || existingEmployee.password !== password) {
+            return res.status(400).json({ success: false, message: 'Invalid email or password' });
+        }
+        
+        // Retourner les données utilisateur (sans le mot de passe)
+        const userData = existingEmployee.toObject();
+        delete userData.password;
+        
+        return res.status(200).json({ 
+            success: true, 
+            message: 'Login successful',
+            user: userData
+        });
+    } catch (error) {
+        console.error('Login error:', error);
+        return res.status(500).json({ success: false, message: 'Server error' });
     }
-    req.session.firstname = existingEmployee.firstname;
-    return res.status(200).json({ success: true, message: 'Login successful' });
 });
 
 app.post('/register', upload.single('profileImage'), async (req, res) => {
@@ -127,6 +138,7 @@ app.post('/register', upload.single('profileImage'), async (req, res) => {
             role: req.body.recentJob,
         });
     }
+    
     let userData = {
         firstname: req.body.firstname,
         lastname: req.body.lastname,
@@ -138,10 +150,19 @@ app.post('/register', upload.single('profileImage'), async (req, res) => {
         experiences: experienceData,
 
         profileImagePath: req.file ? `/uploads/${req.file.filename}` : null,
-    };
+    }
 
-    employee.create(userData);
-    return res.status(200).json({ success:true, message: 'User added successfully' });
+    const newEmployee = await employee.create(userData);
+    
+    // Retourner les données utilisateur (sans le mot de passe)
+    const userResponse = newEmployee.toObject();
+    delete userResponse.password;
+    
+    return res.status(200).json({ 
+        success: true, 
+        message: 'User added successfully',
+        user: userResponse
+    });
 });
 
 app.post('/check-email', async (req, res) => {
