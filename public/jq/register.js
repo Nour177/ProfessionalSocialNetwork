@@ -1,8 +1,8 @@
 $(function () {
 
-    $('#continue-1').on('click', function (e) {
+    $('#continue-1').on('click', async function (e) {
         e.preventDefault();
-        if (validStep1()) {
+        if (await validStep1()) {
             $('#step-1').addClass('d-none');
             $('#step-2').removeClass('d-none');
         }
@@ -100,7 +100,7 @@ $(function () {
             });
     });
 });
-function validStep1() {
+async function validStep1() {
     let email = $('#email').val();
     let password = $('#password').val();
     let isValid = true;
@@ -121,6 +121,20 @@ function validStep1() {
         $('#password').after('<span class="error-message text-danger">Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters</span>');
         isValid = false;
     }
+
+    const response = await fetch('/check-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+    });
+
+    const data = await response.json();
+
+    if (data.exists) {
+        $('#email').after('<span class="error-message text-danger">Email already exists.</span>');
+        isValid = false;
+    }
+
     return isValid;
 }
 
@@ -189,7 +203,6 @@ function validateStep4() {
         let fieldOfStudy = $('#field-of-study').val();
         let start_date = $('#start-year').val();
         let end_date = $('#end-year').val();
-        let isValid = true;
         if (!school) {
             $('#school').after('<span class="error-message text-danger">School is required.</span>');
             isValid = false;
