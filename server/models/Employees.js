@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import Post from "./post.js";
 
 
 const experienceSchema = new mongoose.Schema({
@@ -50,11 +51,13 @@ const employeeSchema = new mongoose.Schema({
 
   profileImagePath: String,
   description: String,
+  //posts:[Post],
   experiences: [experienceSchema],
   education: [educationSchema],
   certifications:[certificationSchema],
   skills: [String],
   languages: [String],
+  profileImagePath: String,
   coverImagePath: String
 
 }, { timestamps: true });
