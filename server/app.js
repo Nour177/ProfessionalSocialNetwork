@@ -66,7 +66,6 @@ app.post('/login', async (req, res) => {
     console.log(req.body.email);
     let existingEmployee = await employee.findByEmail(email);
     console.log("employee",existingEmployee);
-    console.log(existingEmployee.password);
     console.log(password);
     if (!existingEmployee || existingEmployee.password !== password) {
         return res.status(400).json({ success: false, message: 'Invalid email or password' });
@@ -78,6 +77,9 @@ app.post('/register', upload.single('profileImage'), async (req, res) => {
 
     console.log(req.body);
     console.log(req.file);
+
+    let educationData = [];
+    let experienceData = [];
 
     const recaptchaToken = req.body['g-recaptcha-response'];
     const secretKey = process.env.RECAPTCHA_SECRET_KEY;
@@ -94,19 +96,46 @@ app.post('/register', upload.single('profileImage'), async (req, res) => {
         return res.status(500).json({ success: false, message: 'Error verifying reCAPTCHA' });
     }
 
-    let existingEmployee = await employee.findByEmail(req.body.email);
-    console.log(existingEmployee);
-    if (existingEmployee) {
-        return res.status(400).json({ success: false, message: 'Email already exists' });
+    if (req.body.school) {
+        educationData.push({
+            school: req.body.school,
+            degree: req.body.degree,
+            fieldOfStudy: req.body.fieldOfStudy,
+            startYear: req.body.startYear,
+            endYear: req.body.endYear
+        });
+    }
+    if (req.body.recentJob) {
+        experienceData.push({
+            role: req.body.recentJob,
+        });
     }
     let userData = {
-        ...req.body,
-        profileImagePath: req.file ? `/uploads/${req.file.filename}` : null,
-    }
-    console.log("userData : ",userData);
+        firstname: req.body.firstname,
+        lastname: req.body.lastname,
+        email: req.body.email,
+        password: req.body.password,
+        location: req.body.location,
+        
+        education: educationData,       
+        experiences: experienceData,
 
-    employee.create(userData);
+        profileImagePath: req.file ? `/uploads/${req.file.filename}` : null,
+    };
+
+    let emp = employee.create(userData);
     return res.status(200).json({ success:true, message: 'User added successfully' });
+});
+
+app.post('/check-email', async (req, res) => {
+    const { email } = req.body;
+    let existingEmployee = await employee.findByEmail(email);
+
+    if (existingEmployee) {
+        return res.status(200).json({ exists: true });
+    } else {
+        return res.status(200).json({ exists: false });
+    }
 });
 
 

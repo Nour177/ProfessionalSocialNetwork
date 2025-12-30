@@ -10,10 +10,12 @@ const experienceSchema = new mongoose.Schema({
 });
 
 const educationSchema = new mongoose.Schema({
-  establishment: String,
-  location: String,
+  school: String,
   degree: String,
-  year: Number
+  fieldOfStudy: String,
+  startYear: Number,
+  endYear: Number,
+
 });
 
 const certificationSchema = new mongoose.Schema({
@@ -45,12 +47,7 @@ const employeeSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  recentJob: String,
-  school: String,
-  degree: String,
-  fieldOfStudy: String,
-  startYear: Number,
-  endYear: Number,
+
   profileImagePath: String,
   description: String,
   experiences: [experienceSchema],
@@ -66,5 +63,15 @@ const employeeSchema = new mongoose.Schema({
 employeeSchema.statics.findByEmail = function(email) {
   return this.findOne({ email: email });
 };
+
+employeeSchema.methods.addEducation = function (edu) {
+  this.education.push(edu);
+  return this.save();
+};
+
+employeeSchema.methods.addExperience = function (exp) {
+  this.experiences.push(exp);
+  return this.save();
+}
 
 export default mongoose.model('employee', employeeSchema);
