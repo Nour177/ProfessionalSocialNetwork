@@ -48,14 +48,6 @@ const employeeSchema = new mongoose.Schema({
     required: true,
   },
 
-  recentJob: String,
-
-  school: String,
-  degree: String,
-  fieldOfStudy: String,
-  startYear: Number,
-  endYear: Number,
-  
   profileImagePath: String,
   description: String,
   experiences: [experienceSchema],
