@@ -1,3 +1,5 @@
+import { validateEmail, validatePassword, validateName, validateLocation } from './validations.js';
+
 $(function () {
 
     $('#continue-1').on('click', async function (e) {
@@ -232,25 +234,6 @@ function validateStep4() {
     return isValid;
 }
 
-function validateEmail(email) {
-    const re = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,3}$/;
-    return re.test(String(email).toLowerCase());
-}
-
-function validatePassword(password) {
-    const re = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
-    return re.test(password);
-}
-
-function validateName(name) {
-    const re = /^[A-Za-zÀ-ÖØ-öø-ÿ]+([ '-][A-Za-zÀ-ÖØ-öø-ÿ]+)*$/;
-    return re.test(String(name)) && name.length >= 2 && name.length <= 50;
-}
-
-function validateLocation(location) {
-    const re = /^[A-Za-zÀ-ÖØ-öø-ÿ0-9]+(?:(?:[ '.-]|, ?)[A-Za-zÀ-ÖØ-öø-ÿ0-9]+)*$/;
-    return re.test(String(location)) && location.length >= 2 && location.length <= 100;
-}
 
 function previewFile(file) {
     const reader = new FileReader();

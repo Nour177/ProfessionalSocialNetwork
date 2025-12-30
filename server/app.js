@@ -7,11 +7,27 @@ import { fileURLToPath } from 'url';
 import employee from './models/Employees.js';
 import axios from 'axios';
 
+import {router} from './routes/jobs.js'
+
+import sessions from 'express-session';
+
+
+const oneDay = 1000 * 60 * 60 * 24;
+
 dotenv.config();
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.set('view engine', 'ejs');
+app.use('/jobs', router);
+
+app.use(sessions({
+secret: "ty84fwir767", 
+saveUninitialized: true, 
+cookie: { maxAge: oneDay, secure: false }, 
+resave: false
+}));
+
 connectDB();
 
 const port = process.env.PORT || 3000;
@@ -53,6 +69,7 @@ app.post('/login', async (req, res) => {
     if (!existingEmployee || existingEmployee.password !== password) {
         return res.status(400).json({ success: false, message: 'Invalid email or password' });
     }
+    req.session.firstname = existingEmployee.firstname;
     return res.status(200).json({ success: true, message: 'Login successful' });
 });
 
@@ -106,7 +123,7 @@ app.post('/register', upload.single('profileImage'), async (req, res) => {
         profileImagePath: req.file ? `/uploads/${req.file.filename}` : null,
     };
 
-    let emp = employee.create(userData);
+    employee.create(userData);
     return res.status(200).json({ success:true, message: 'User added successfully' });
 });
 
