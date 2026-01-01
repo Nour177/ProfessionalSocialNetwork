@@ -7,6 +7,7 @@ import { fileURLToPath } from 'url';
 import employee from './models/Employees.js';
 import axios from 'axios';
 import postRoutes from './routes/postRoutes.js';
+import profileRoutes from './routes/profileRoutes.js';
 
 import {router} from './routes/jobs.js'
 
@@ -524,6 +525,8 @@ app.put('/api/settings/privacy', async (req, res) => {
         res.status(500).json({ success: false, message: 'Failed to update privacy settings' });
     }
 });
+app.use(profileRoutes);
+
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
