@@ -6,16 +6,21 @@ import { fileURLToPath } from 'url';
 import employee from './models/Employees.js';
 import postRoutes from './routes/postRoutes.js';
 
-import {router} from './routes/jobs.js'
+import {router} from './routes/postJobRoutes.js'
 
 import sessions from 'express-session';
 import authRoutes from './routes/authRoute.js';
 
-
-const oneDay = 1000 * 60 * 60 * 24;
-
 dotenv.config();
 const app = express();
+
+const oneDay = 1000 * 60 * 60 * 24;
+app.use(sessions({
+secret: "ty84fwir767", 
+saveUninitialized: true, 
+cookie: { maxAge: oneDay, secure: false }, 
+resave: false
+}));
 
 // CORS configuration
 app.use((req, res, next) => {
@@ -33,13 +38,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.set('view engine', 'ejs');
 app.use('/jobs', router);
-
-app.use(sessions({
-secret: "ty84fwir767", 
-saveUninitialized: true, 
-cookie: { maxAge: oneDay, secure: false }, 
-resave: false
-}));
 
 connectDB();
 

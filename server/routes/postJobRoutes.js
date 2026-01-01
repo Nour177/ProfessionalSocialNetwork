@@ -3,7 +3,8 @@ export const router = express.Router()
 import { Job } from '../models/jobSchema.js';
 
 router.get('/post-job', (req, res) => {
-    res.render('job_post',{firstname: 'Yasmine'});
+    console.log('Rendering job post page for user:', req.session.user);
+    res.render('job_post',{firstname: req.session.user ? req.session.user.firstname : null});
 });
 
 router.post('/post-job', (req, res) => {

@@ -23,6 +23,7 @@ export const register = async (req, res) => {
         return res.status(500).json({ success: false, message: 'Error verifying reCAPTCHA' });
     }
 
+    req.session.email = req.body.email;
     // Data Parsing
     if (req.body.school) {
         educationData.push({
@@ -55,6 +56,7 @@ export const register = async (req, res) => {
     try {
         const newEmployee = await employee.create(userData);
         const userResponse = newEmployee.toObject();
+        req.session.user = userResponse;
         delete userResponse.password;
         
         return res.status(200).json({ 
@@ -78,6 +80,8 @@ export const login = async (req, res) => {
         }
         
         const userData = existingEmployee.toObject();
+        req.session.user = userData;
+        console.log('Logged in user:', req.session.user);
         delete userData.password;
         
         return res.status(200).json({ 
