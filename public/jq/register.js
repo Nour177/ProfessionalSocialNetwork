@@ -1,6 +1,15 @@
 import { validateEmail, validatePassword, validateName, validateLocation } from './validations.js';
 
 $(function () {
+    $('#togglePassword').on('click', function () {
+    var passwordField = $('#password');
+    if (passwordField.type === 'password') {
+    passwordField.type = 'text';
+    } else {
+    passwordField.type = 'password';
+    }
+    });
+    
     console.log('Register script loaded');
 
     $('#continue-1').on('click', async function (e) {
