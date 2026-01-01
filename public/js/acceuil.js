@@ -83,8 +83,26 @@ function updateUserProfileUI(user) {
         profileName.textContent = `${user.firstname} ${user.lastname}`;
     }
     
-    if (profileJob && user.recentJob) {
-        profileJob.innerHTML = `${user.recentJob}`;
+    if (profileJob) {
+        // Use recentJob if available, otherwise get from first experience
+        let jobText = '';
+        if (user.recentJob) {
+            jobText = user.recentJob;
+        } else if (user.experiences && user.experiences.length > 0) {
+            const firstExp = user.experiences[0];
+            const jobTitle = firstExp.role || '';
+            const company = firstExp.company || '';
+            if (jobTitle && company) {
+                jobText = `${jobTitle} at ${company}`;
+            } else if (jobTitle) {
+                jobText = jobTitle;
+            } else if (company) {
+                jobText = company;
+            }
+        }
+        if (jobText) {
+            profileJob.innerHTML = jobText;
+        }
     }
     
     if (postAvatar && user.profileImagePath) {
@@ -540,6 +558,27 @@ function setupEventListeners() {
             }
         }
     });
+    
+    // Logout button
+    const logoutBtn = document.getElementById('logout-btn');
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            handleLogout();
+        });
+    }
+}
+
+// Fonction pour gérer la déconnexion
+function handleLogout() {
+    if (confirm('Are you sure you want to logout?')) {
+        // Clear localStorage
+        localStorage.removeItem('user');
+        localStorage.removeItem('isAuthenticated');
+        
+        // Rediriger vers la page de login
+        window.location.href = '/pages/login.html';
+    }
 }
 
 // Créer un nouveau post (texte simple)

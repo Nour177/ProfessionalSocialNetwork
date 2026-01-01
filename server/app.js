@@ -80,11 +80,11 @@ app.get('/register', (req, res) => {
 app.post('/login', async (req, res) => {
     const { email, password } = req.body;
     try {
-        let existingEmployee = await employee.findByEmail(email);
+    let existingEmployee = await employee.findByEmail(email);
         
-        if (!existingEmployee || existingEmployee.password !== password) {
-            return res.status(400).json({ success: false, message: 'Invalid email or password' });
-        }
+    if (!existingEmployee || existingEmployee.password !== password) {
+        return res.status(400).json({ success: false, message: 'Invalid email or password' });
+    }
         
         // Retourner les données utilisateur (sans le mot de passe)
         const userData = existingEmployee.toObject();
@@ -186,11 +186,12 @@ app.get('/myProfile', (req, res) => {
 });
 
 app.put('/edit/editInfos', async (req, res) => {
-    const { newDescription } = req.body;
+    const { email, newDescription } = req.body;
+    const userEmail = email || "aziza@gmail.com"; // Fallback pour compatibilité
 
     try {
         const user = await employee.findOneAndUpdate(
-            { email: "aziza@gmail.com" },
+            { email: userEmail },
             { description: newDescription },
             { new: true }
 
@@ -198,28 +199,33 @@ app.put('/edit/editInfos', async (req, res) => {
         if (!user) {
             return res.status(404).json({ success: false, message: 'User not found' });
         }
-        res.json({ success: true, message: 'Description updated!', description: user.description });
+        const userResponse = user.toObject();
+        delete userResponse.password;
+        res.json({ success: true, message: 'Description updated!', description: user.description, user: userResponse });
     } catch (err) {
         res.status(500).json({ success: false, message: 'Update failed' });
     }
 });
 
 app.put('/edit/editExperience', async (req, res) => {
-    const { index, experience } = req.body;
+    const { email, index, experience } = req.body;
+    const userEmail = email || "aziza@gmail.com"; // Fallback pour compatibilité
 
     try {
         const update = {};
         update[`experiences.${index}`] = experience;
 
         const user = await employee.findOneAndUpdate(
-            { email: "aziza@gmail.com" },
+            { email: userEmail },
             { $set: update },
             { new: true }
         );
         if (!user) {
             return res.status(404).json({ success: false, message: 'User not found' });
         }
-        res.json({ success: true, message: 'Description updated!', description: user.description });
+        const userResponse = user.toObject();
+        delete userResponse.password;
+        res.json({ success: true, message: 'Experience updated!', user: userResponse });
     } catch (err) {
         res.status(500).json({ success: false, message: 'Update failed' });
     }
@@ -227,11 +233,12 @@ app.put('/edit/editExperience', async (req, res) => {
 
 
 app.put('/edit/addExperience', async (req, res) => {
-    const { experience } = req.body;
+    const { email, experience } = req.body;
+    const userEmail = email || "aziza@gmail.com"; // Fallback pour compatibilité
     console.log(experience);
     try {
         const user = await employee.findOneAndUpdate(
-            { email: "aziza@gmail.com" },
+            { email: userEmail },
             { $push: { experiences: experience } },
             { new: true }
         );
@@ -240,10 +247,13 @@ app.put('/edit/addExperience', async (req, res) => {
             return res.status(404).json({ success: false, message: 'User not found' });
         }
 
+        const userResponse = user.toObject();
+        delete userResponse.password;
         res.json({
             success: true,
             message: 'Experience added!',
-            experiences: user.experiences
+            experiences: user.experiences,
+            user: userResponse
         });
     } catch (err) {
         console.error(err);
@@ -252,11 +262,12 @@ app.put('/edit/addExperience', async (req, res) => {
 });
 
 app.put('/edit/addEducation', async (req, res) => {
-    const { education } = req.body;
+    const { email, education } = req.body;
+    const userEmail = email || "aziza@gmail.com"; // Fallback pour compatibilité
     console.log(education);
     try {
         const user = await employee.findOneAndUpdate(
-            { email: "aziza@gmail.com" },
+            { email: userEmail },
             { $push: { education: education } },
             { new: true }
         );
@@ -265,10 +276,13 @@ app.put('/edit/addEducation', async (req, res) => {
             return res.status(404).json({ success: false, message: 'User not found' });
         }
 
+        const userResponse = user.toObject();
+        delete userResponse.password;
         res.json({
             success: true,
             message: 'Education added!',
-            experiences: user.experiences
+            education: user.education,
+            user: userResponse
         });
     } catch (err) {
         console.error(err);
@@ -277,23 +291,237 @@ app.put('/edit/addEducation', async (req, res) => {
 });
 
 app.put('/edit/editEducation', async (req, res) => {
-    const { index, education } = req.body;
+    const { email, index, education } = req.body;
+    const userEmail = email || "aziza@gmail.com"; // Fallback pour compatibilité
 
     try {
         const update = {};
         update[`education.${index}`] = education;
 
         const user = await employee.findOneAndUpdate(
-            { email: "aziza@gmail.com" },
+            { email: userEmail },
             { $set: update },
             { new: true }
         );
         if (!user) {
             return res.status(404).json({ success: false, message: 'User not found' });
         }
-        res.json({ success: true, message: 'Description updated!', description: user.description });
+        const userResponse = user.toObject();
+        delete userResponse.password;
+        res.json({ success: true, message: 'Education updated!', user: userResponse });
     } catch (err) {
         res.status(500).json({ success: false, message: 'Update failed' });
+    }
+});
+
+// Update Profile Settings
+app.put('/api/settings/profile', async (req, res) => {
+    const { email, firstname, lastname, company } = req.body;
+    const userEmail = email || "aziza@gmail.com"; // Fallback pour compatibilité
+    
+    try {
+        // Valider que firstname et lastname sont fournis et non vides
+        if (!firstname || firstname.trim() === '') {
+            return res.status(400).json({ success: false, message: 'First name is required' });
+        }
+        
+        // Si lastname est vide, utiliser firstname comme fallback
+        const validLastname = (lastname && lastname.trim() !== '') ? lastname.trim() : firstname.trim();
+        
+        const updateData = {
+            firstname: firstname.trim(),
+            lastname: validLastname
+        };
+        
+        // Update company in first experience if provided
+        if (company !== undefined && company.trim() !== '') {
+            const user = await employee.findByEmail(userEmail);
+            if (user) {
+                if (user.experiences && user.experiences.length > 0) {
+                    // Update first experience company
+                    user.experiences[0].company = company.trim();
+                } else {
+                    // Create first experience with company
+                    user.experiences = [{ company: company.trim() }];
+                }
+                await user.save();
+            }
+        }
+        
+        // Récupérer l'ancien nom avant la mise à jour pour mettre à jour les posts
+        const oldUser = await employee.findByEmail(userEmail);
+        const oldFullName = oldUser ? `${oldUser.firstname} ${oldUser.lastname}`.trim() : null;
+        
+        const updatedUser = await employee.findOneAndUpdate(
+            { email: userEmail },
+            { $set: updateData },
+            { new: true, runValidators: true }
+        );
+        
+        if (!updatedUser) {
+            return res.status(404).json({ success: false, message: 'User not found' });
+        }
+        
+        // Mettre à jour les posts existants avec le nouveau nom
+        const newFullName = `${updatedUser.firstname} ${updatedUser.lastname}`.trim();
+        if (oldFullName && oldFullName !== newFullName) {
+            try {
+                const Post = (await import('./models/post.js')).default;
+                await Post.updateMany(
+                    { author: oldFullName },
+                    { $set: { author: newFullName } }
+                );
+                console.log(`Updated posts from "${oldFullName}" to "${newFullName}"`);
+            } catch (updateError) {
+                console.error('Error updating posts with new name:', updateError);
+                // Ne pas faire échouer la requête si la mise à jour des posts échoue
+            }
+        }
+        
+        const userResponse = updatedUser.toObject();
+        delete userResponse.password;
+        
+        res.json({ success: true, message: 'Profile updated successfully', user: userResponse });
+    } catch (error) {
+        console.error('Error updating profile:', error);
+        const errorMessage = error.message || 'Failed to update profile';
+        res.status(500).json({ success: false, message: errorMessage });
+    }
+});
+
+// Update Profile Photo
+app.put('/api/settings/profile-photo', upload.single('profileImage'), async (req, res) => {
+    const { email } = req.body;
+    const userEmail = email || "aziza@gmail.com"; // Fallback pour compatibilité
+
+    try {
+        const updateData = {};
+        if (req.file) {
+            updateData.profileImagePath = `/uploads/${req.file.filename}`;
+        }
+
+        const user = await employee.findOneAndUpdate(
+            { email: userEmail },
+            { $set: updateData },
+            { new: true }
+        );
+
+        if (!user) {
+            return res.status(404).json({ success: false, message: 'User not found' });
+        }
+
+        const userResponse = user.toObject();
+        delete userResponse.password;
+        res.json({ success: true, message: 'Profile photo updated successfully', user: userResponse });
+    } catch (error) {
+        console.error('Error updating profile photo:', error);
+        res.status(500).json({ success: false, message: 'Failed to update profile photo' });
+    }
+});
+
+// Update Cover Photo
+app.put('/api/settings/cover-photo', upload.single('coverImage'), async (req, res) => {
+    const { email } = req.body;
+    const userEmail = email || "aziza@gmail.com"; // Fallback pour compatibilité
+
+    try {
+        const updateData = {};
+        if (req.file) {
+            updateData.coverImagePath = `/uploads/${req.file.filename}`;
+        }
+
+        const user = await employee.findOneAndUpdate(
+            { email: userEmail },
+            { $set: updateData },
+            { new: true }
+        );
+
+        if (!user) {
+            return res.status(404).json({ success: false, message: 'User not found' });
+        }
+
+        const userResponse = user.toObject();
+        delete userResponse.password;
+        res.json({ success: true, message: 'Cover photo updated successfully', user: userResponse });
+    } catch (error) {
+        console.error('Error updating cover photo:', error);
+        res.status(500).json({ success: false, message: 'Failed to update cover photo' });
+    }
+});
+
+// Update Account Settings
+app.put('/api/settings/account', async (req, res) => {
+    const { email, newEmail, password } = req.body;
+    const userEmail = email || "aziza@gmail.com"; // Fallback pour compatibilité
+    
+    try {
+        const updateData = {};
+        
+        if (newEmail && newEmail !== userEmail) {
+            // Check if new email already exists
+            const existingUser = await employee.findByEmail(newEmail);
+            if (existingUser) {
+                return res.status(400).json({ success: false, message: 'Email already exists' });
+            }
+            updateData.email = newEmail;
+        }
+        
+        if (password) {
+            updateData.password = password;
+        }
+        
+        if (Object.keys(updateData).length === 0) {
+            return res.status(400).json({ success: false, message: 'No changes to update' });
+        }
+        
+        const updatedUser = await employee.findOneAndUpdate(
+            { email: userEmail },
+            { $set: updateData },
+            { new: true }
+        );
+        
+        if (!updatedUser) {
+            return res.status(404).json({ success: false, message: 'User not found' });
+        }
+        
+        const userResponse = updatedUser.toObject();
+        delete userResponse.password;
+        
+        res.json({ success: true, message: 'Account updated successfully', user: userResponse });
+    } catch (error) {
+        console.error('Error updating account:', error);
+        res.status(500).json({ success: false, message: 'Failed to update account' });
+    }
+});
+
+// Update Privacy Settings
+app.put('/api/settings/privacy', async (req, res) => {
+    const { email, publicProfile, allowSearchEngines } = req.body;
+    const userEmail = email || "aziza@gmail.com"; // Fallback pour compatibilité
+    
+    try {
+        const updateData = {
+            publicProfile: publicProfile,
+            allowSearchEngines: allowSearchEngines
+        };
+        
+        const updatedUser = await employee.findOneAndUpdate(
+            { email: userEmail },
+            { $set: updateData },
+            { new: true }
+        );
+        
+        if (!updatedUser) {
+            return res.status(404).json({ success: false, message: 'User not found' });
+        }
+        
+        const userResponse = updatedUser.toObject();
+        delete userResponse.password;
+        
+        res.json({ success: true, message: 'Privacy settings updated successfully', user: userResponse });
+    } catch (error) {
+        console.error('Error updating privacy settings:', error);
+        res.status(500).json({ success: false, message: 'Failed to update privacy settings' });
     }
 });
 
