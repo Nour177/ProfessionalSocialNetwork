@@ -1,280 +1,241 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta charset='utf-8'>
   <meta http-equiv='X-UA-Compatible' content='IE=edge'>
   <title>Accueil</title>
   <meta name='viewport' content='width=device-width, initial-scale=1'>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet"> <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
   <link rel='stylesheet' type='text/css' media='screen' href='../css/acceuil.css'>
 </head>
+
 <body>
 
-<!-- NAVBAR -->
-<nav class="navbar linkedin-nav px-3">
- <div class="d-flex align-items-center justify-content-between w-100">
-    <div >
-      <img src="" alt="photo du site">
-    </div>
-    <form class="d-flex me-4 flex-grow-1" style="max-width: 300px;">
-      <div class="input-group">
-        <span class="input-group-text">
-          <i class="bi bi-search"></i>
-        </span>
-        <input type="search" class="form-control" placeholder="Search" aria-label="Search">
-      </div>
-    </form>
-    <a class="nav-link text-center position-relative" href="#">
-      <i class="bi bi-house"></i>
-      <div class="small">Home</div>
-    </a>
+   <div id="navbar"></div> 
 
-    <a class="nav-link text-center position-relative" href="#">
-      <i class="bi bi-people "></i>
-      <div class="small">My Network</div>
-      <span class="badge  position-absolute top-0 start-50 translate-middle">
-        5
-      </span>
-    </a>
+    <script>
+        fetch('./navbar.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('navbar').innerHTML = data;
+            });
+    </script>
+  
+  <!-- CONTENU PRINCIPAL -->
+  <div class="container mt-4">
+    <div class="row">
+      <!-- COLONNE GAUCHE -->
+      <div class="col-lg-3">
+        <!-- Carte Profil -->
+        <div class="card mb-3">
+          <div class="card-body text-center p-0">
 
-    <a class="nav-link text-center position-relative" href="#">
-      <i class="bi bi-envelope"></i>
-      <div class="small">Messaging</div>
-      <span class="badge  position-absolute top-0 start-50 translate-middle">
-        0
-      </span>
-    </a>
-
-    <a class="nav-link text-center position-relative" href="#">
-      <i class="bi bi-bell "></i>
-      <div class="small">Notifications</div>
-      <span class="badge  position-absolute top-0 start-50 translate-middle">
-        0
-      </span>
-    </a>
-    <a class="nav-link text-center position-relative" href="#">
-      <i class="bi bi-building-gear "></i>
-      <div class="small">For Business</div>
-    </a>
-    <a class="nav-link text-center" href="/pages/myProfile.html">
-      <i class="bi bi-person-circle "></i>
-      <div class="small">Me</div>
-    </a>
-
-  </div>
-</nav>
-
-<!-- CONTENU PRINCIPAL -->
-<div class="container mt-4">
-  <div class="row">
-    <!-- COLONNE GAUCHE -->
-    <div class="col-lg-3">
-      <!-- Carte Profil -->
-      <div class="card mb-3">
-        <div class="card-body text-center p-0">
-
-           <!-- Bannière -->
+            <!-- Bannière -->
             <div class="profile-banner"></div>
 
             <!-- Photo -->
-            <img src=""
-                alt="Photo profil"
-                class="profile-avatar">
+            <img src="" alt="Photo profil" class="profile-avatar">
 
             <!-- Infos -->
             <div class="profile-info text-center">
               <h6 class="fw-bold mb-0">James Propre</h6>
-              <small  id="company" class="text-muted">
+              <small id="company" class="text-muted">
                 Concepteur Multimédia chez DECLIX
               </small>
             </div>
-        </div>
-      </div>
-
-      <!-- Carte Réseau -->
-      <div class="card mb-2">
-        <div class="card-body">
-          <small class="text-muted">Connections</small>
-          <div>
-            <p class="fw-bold mb-1 "> Grow Your Network <i class="bi bi-person-fill-add"></i> </p>
           </div>
         </div>
-      </div>
 
-      <!-- Mes éléments -->
-      <div class="card mb-3">
-        <div class="card-body">
-          <p class="fw-bold mb-0">
-            <i class="bi bi-bookmark-fill"></i> Mes éléments
-          </p>
-        </div>
-      </div>
-
-      <!-- Groupes / événements -->
-      <div class="card">
-        <div class="card-body">
-          <p class=" fw-bold mb-1"><i class="bi bi-people-fill"></i> Groups</p>
-          <p class=" fw-bold mb-1"><i class="bi bi-calendar-event"> </i>Events</p>
-          <p class=" fw-bold mb-0"> <i class="bi bi-gear-fill"></i>    Settings </i></p>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- FIL D’ACTUALITÉ -->
-    <div class="col-lg-6">
-
-      <!-- Créer un post -->
-      <div class="card create-post">
-      <div class="card-body">
-
-        <!-- Ligne du haut -->
-        <div class="d-flex align-items-center mb-3">
-          <img src=""
-              alt="Photo profil"
-              class="post-avatar me-2 rounded-circle"
-              style="width: 48px; height: 48px; object-fit: cover;">
-
-          <div class="flex-grow-1">
-            <input type="text"
-                  class="form-control post-input"
-                  placeholder="Start a post">
-          </div>
-          <button class="btn ms-2 publish-btn" style="background-color:#386641ff ; color: white; display: none;">
-            Share
-          </button>
-        </div>
-
-        <!-- Actions -->
-        <div class="d-flex justify-content-between post-actions">
-          <button class="btn btn-photo" style="color: cadetblue;"><i class="bi bi-image-fill"></i> Photo</button>
-          <button class="btn btn-video" style="color: var(--yellow-green);"><i class="bi bi-play-btn-fill"></i> Video</button>
-          <button class="btn btn-event" style="color: var(--blushed-brick);"><i class="bi bi-calendar-event-fill"></i> Event</button>
-          <button class="btn btn-article" style="color:chocolate"><i class="bi bi-file-earmark-text-fill"></i> Write an article</button>
-        </div>
-
-        <!-- Formulaires pour les différents types de posts -->
-        <div id="post-forms-container" style="display: none;">
-          
-          <!-- Formulaire Photo -->
-          <div id="photo-form" class="post-form mt-3 p-3 border rounded" style="display: none;">
-            <h6 class="mb-3"><i class="bi bi-image-fill"></i> Add a photo</h6>
-            <div class="mb-3">
-              <label for="photo-file" class="form-label">Select an image</label>
-              <input type="file" class="form-control" id="photo-file" accept="image/*">
-            </div>
-            <div class="mb-3">
-              <label for="photo-description" class="form-label">Description (optional)</label>
-              <textarea class="form-control" id="photo-description" rows="3" placeholder="Add a description..."></textarea>
-            </div>
-            <div class="d-flex justify-content-end gap-2">
-              <button type="button" class="btn btn-secondary btn-cancel-form">Cancel</button>
-              <button type="button" class="btn btn-primary btn-submit-photo">Publish</button>
+        <!-- Carte Réseau -->
+        <div class="card mb-2">
+          <div class="card-body">
+            <small class="text-muted">Connections</small>
+            <div>
+              <p class="fw-bold mb-1 "> Grow Your Network <i class="bi bi-person-fill-add"></i> </p>
             </div>
           </div>
+        </div>
 
-          <!-- Formulaire Video -->
-          <div id="video-form" class="post-form mt-3 p-3 border rounded" style="display: none;">
-            <h6 class="mb-3"><i class="bi bi-play-btn-fill"></i> Add a video</h6>
-            <div class="mb-3">
-              <label for="video-url" class="form-label">Video URL</label>
-              <input type="url" class="form-control" id="video-url" placeholder="https://...">
-            </div>
-            <div class="mb-3">
-              <label for="video-description" class="form-label">Description (optional)</label>
-              <textarea class="form-control" id="video-description" rows="3" placeholder="Add a description..."></textarea>
-            </div>
-            <div class="d-flex justify-content-end gap-2">
-              <button type="button" class="btn btn-secondary btn-cancel-form">Cancel</button>
-              <button type="button" class="btn btn-primary btn-submit-video">Publish</button>
-            </div>
+        <!-- Mes éléments -->
+        <div class="card mb-3">
+          <div class="card-body">
+            <p class="fw-bold mb-0">
+              <i class="bi bi-bookmark-fill"></i> Mes éléments
+            </p>
           </div>
+        </div>
 
-          <!-- Formulaire Event -->
-          <div id="event-form" class="post-form mt-3 p-3 border rounded" style="display: none;">
-            <h6 class="mb-3"><i class="bi bi-calendar-event-fill"></i> Create an event</h6>
-            <div class="mb-3">
-              <label for="event-title" class="form-label">Event title *</label>
-              <input type="text" class="form-control" id="event-title" placeholder="Event title" required>
-            </div>
-            <div class="mb-3">
-              <label for="event-description" class="form-label">Description</label>
-              <textarea class="form-control" id="event-description" rows="3" placeholder="Event description..."></textarea>
-            </div>
-            <div class="row">
-              <div class="col-md-6 mb-3">
-                <label for="event-location" class="form-label">Location</label>
-                <input type="text" class="form-control" id="event-location" placeholder="Event location">
+        <!-- Groupes / événements -->
+        <div class="card">
+          <div class="card-body">
+            <p class=" fw-bold mb-1"><i class="bi bi-people-fill"></i> Groups</p>
+            <p class=" fw-bold mb-1"><i class="bi bi-calendar-event"> </i>Events</p>
+            <p class=" fw-bold mb-0"> <i class="bi bi-gear-fill"></i> Settings </i></p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- FIL D’ACTUALITÉ -->
+      <div class="col-lg-6">
+
+        <!-- Créer un post -->
+        <div class="card create-post">
+          <div class="card-body">
+
+            <!-- Ligne du haut -->
+            <div class="d-flex align-items-center mb-3">
+              <img src="" alt="Photo profil" class="post-avatar me-2 rounded-circle"
+                style="width: 48px; height: 48px; object-fit: cover;">
+
+              <div class="flex-grow-1">
+                <input type="text" class="form-control post-input" placeholder="Start a post">
               </div>
-              <div class="col-md-6 mb-3">
-                <label for="event-date" class="form-label">Date</label>
-                <input type="datetime-local" class="form-control" id="event-date">
+              <button class="btn ms-2 publish-btn" style="background-color:#386641ff ; color: white; display: none;">
+                Share
+              </button>
+            </div>
+
+            <!-- Actions -->
+            <div class="d-flex justify-content-between post-actions">
+              <button class="btn btn-photo" style="color: cadetblue;"><i class="bi bi-image-fill"></i> Photo</button>
+              <button class="btn btn-video" style="color: var(--yellow-green);"><i class="bi bi-play-btn-fill"></i>
+                Video</button>
+              <button class="btn btn-event" style="color: var(--blushed-brick);"><i
+                  class="bi bi-calendar-event-fill"></i> Event</button>
+              <button class="btn btn-article" style="color:chocolate"><i class="bi bi-file-earmark-text-fill"></i> Write
+                an article</button>
+            </div>
+
+            <!-- Formulaires pour les différents types de posts -->
+            <div id="post-forms-container" style="display: none;">
+
+              <!-- Formulaire Photo -->
+              <div id="photo-form" class="post-form mt-3 p-3 border rounded" style="display: none;">
+                <h6 class="mb-3"><i class="bi bi-image-fill"></i> Add a photo</h6>
+                <div class="mb-3">
+                  <label for="photo-file" class="form-label">Select an image</label>
+                  <input type="file" class="form-control" id="photo-file" accept="image/*">
+                </div>
+                <div class="mb-3">
+                  <label for="photo-description" class="form-label">Description (optional)</label>
+                  <textarea class="form-control" id="photo-description" rows="3"
+                    placeholder="Add a description..."></textarea>
+                </div>
+                <div class="d-flex justify-content-end gap-2">
+                  <button type="button" class="btn btn-secondary btn-cancel-form">Cancel</button>
+                  <button type="button" class="btn btn-primary btn-submit-photo">Publish</button>
+                </div>
               </div>
+
+              <!-- Formulaire Video -->
+              <div id="video-form" class="post-form mt-3 p-3 border rounded" style="display: none;">
+                <h6 class="mb-3"><i class="bi bi-play-btn-fill"></i> Add a video</h6>
+                <div class="mb-3">
+                  <label for="video-url" class="form-label">Video URL</label>
+                  <input type="url" class="form-control" id="video-url" placeholder="https://...">
+                </div>
+                <div class="mb-3">
+                  <label for="video-description" class="form-label">Description (optional)</label>
+                  <textarea class="form-control" id="video-description" rows="3"
+                    placeholder="Add a description..."></textarea>
+                </div>
+                <div class="d-flex justify-content-end gap-2">
+                  <button type="button" class="btn btn-secondary btn-cancel-form">Cancel</button>
+                  <button type="button" class="btn btn-primary btn-submit-video">Publish</button>
+                </div>
+              </div>
+
+              <!-- Formulaire Event -->
+              <div id="event-form" class="post-form mt-3 p-3 border rounded" style="display: none;">
+                <h6 class="mb-3"><i class="bi bi-calendar-event-fill"></i> Create an event</h6>
+                <div class="mb-3">
+                  <label for="event-title" class="form-label">Event title *</label>
+                  <input type="text" class="form-control" id="event-title" placeholder="Event title" required>
+                </div>
+                <div class="mb-3">
+                  <label for="event-description" class="form-label">Description</label>
+                  <textarea class="form-control" id="event-description" rows="3"
+                    placeholder="Event description..."></textarea>
+                </div>
+                <div class="row">
+                  <div class="col-md-6 mb-3">
+                    <label for="event-location" class="form-label">Location</label>
+                    <input type="text" class="form-control" id="event-location" placeholder="Event location">
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <label for="event-date" class="form-label">Date</label>
+                    <input type="datetime-local" class="form-control" id="event-date">
+                  </div>
+                </div>
+                <div class="d-flex justify-content-end gap-2">
+                  <button type="button" class="btn btn-secondary btn-cancel-form">Cancel</button>
+                  <button type="button" class="btn btn-primary btn-submit-event">Publish</button>
+                </div>
+              </div>
+
+              <!-- Formulaire Article -->
+              <div id="article-form" class="post-form mt-3 p-3 border rounded" style="display: none;">
+                <h6 class="mb-3"><i class="bi bi-file-earmark-text-fill"></i> Write an article</h6>
+                <div class="mb-3">
+                  <label for="article-title" class="form-label">Article title *</label>
+                  <input type="text" class="form-control" id="article-title" placeholder="Article title" required>
+                </div>
+                <div class="mb-3">
+                  <label for="article-cover-image" class="form-label">Cover image URL (optional)</label>
+                  <input type="url" class="form-control" id="article-cover-image" placeholder="https://...">
+                </div>
+                <div class="mb-3">
+                  <label for="article-body" class="form-label">Article content *</label>
+                  <textarea class="form-control" id="article-body" rows="6" placeholder="Write your article..."
+                    required></textarea>
+                </div>
+                <div class="d-flex justify-content-end gap-2">
+                  <button type="button" class="btn btn-secondary btn-cancel-form">Cancel</button>
+                  <button type="button" class="btn btn-primary btn-submit-article">Publish</button>
+                </div>
+              </div>
+
             </div>
-            <div class="d-flex justify-content-end gap-2">
-              <button type="button" class="btn btn-secondary btn-cancel-form">Cancel</button>
-              <button type="button" class="btn btn-primary btn-submit-event">Publish</button>
-            </div>
+
           </div>
+        </div>
 
-          <!-- Formulaire Article -->
-          <div id="article-form" class="post-form mt-3 p-3 border rounded" style="display: none;">
-            <h6 class="mb-3"><i class="bi bi-file-earmark-text-fill"></i> Write an article</h6>
-            <div class="mb-3">
-              <label for="article-title" class="form-label">Article title *</label>
-              <input type="text" class="form-control" id="article-title" placeholder="Article title" required>
-            </div>
-            <div class="mb-3">
-              <label for="article-cover-image" class="form-label">Cover image URL (optional)</label>
-              <input type="url" class="form-control" id="article-cover-image" placeholder="https://...">
-            </div>
-            <div class="mb-3">
-              <label for="article-body" class="form-label">Article content *</label>
-              <textarea class="form-control" id="article-body" rows="6" placeholder="Write your article..." required></textarea>
-            </div>
-            <div class="d-flex justify-content-end gap-2">
-              <button type="button" class="btn btn-secondary btn-cancel-form">Cancel</button>
-              <button type="button" class="btn btn-primary btn-submit-article">Publish</button>
-            </div>
+        <!-- Les posts seront chargés dynamiquement ici par acceuil.js -->
+        <div id="posts-container">
+          <!-- Posts chargés dynamiquement -->
+        </div>
+
+      </div>
+
+      <!-- COLONNE DROITE -->
+      <div class="col-lg-3">
+        <div class="card">
+          <div class="card-body">
+            <h6 class="text-primary fw-bold">Suggestions</h6>
+            <p class="mb-1">👤 Paul — Developer</p>
+            <p class="mb-1">👤 Sarah — Designer</p>
+            <p class="mb-1">👤 Lucas — Student</p>
           </div>
-
         </div>
-
-      </div>
-    </div>
-
-      <!-- Les posts seront chargés dynamiquement ici par acceuil.js -->
-      <div id="posts-container">
-        <!-- Posts chargés dynamiquement -->
-      </div>
-
-    </div>
-
-    <!-- COLONNE DROITE -->
-    <div class="col-lg-3">
-      <div class="card">
-        <div class="card-body">
-          <h6 class="text-primary fw-bold">Suggestions</h6>
-          <p class="mb-1">👤 Paul — Developer</p>
-          <p class="mb-1">👤 Sarah — Designer</p>
-          <p class="mb-1">👤 Lucas — Student</p>
+        <div class="card">
+          <div class="card-body">
+            <h6 class=" text-primary fw-bold">News</h6>
+            <p class="mb-1">News</p>
+            <p class="mb-1">News</p>
+            <p class="mb-1">News</p>
+          </div>
         </div>
       </div>
-      <div class="card">
-        <div class="card-body">
-          <h6 class=" text-primary fw-bold">News</h6>
-          <p class="mb-1">News</p>
-          <p class="mb-1">News</p>
-          <p class="mb-1">News</p>
-        </div>
-      </div>
-    </div>
 
+    </div>
   </div>
-</div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<script src="../js/acceuil.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../js/acceuil.js"></script>
 </body>
+
 </html>
