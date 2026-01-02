@@ -3,88 +3,101 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create a company</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="../css/style.css">
+    <title>Create a Company</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/acceuil.css">
     <script src="../jq/jquery-3.7.1.min.js"></script>
     <script type="module" src="../jq/createCompany.js"></script>
 </head>
-<body class="bg-light p-5">
-    
-   <div id="navbar" class="mb-3"></div> 
+<body>
 
-    <script>
-        fetch('./navbar.html')
-            .then(response => response.text())
-            .then(data => {
-                document.getElementById('navbar').innerHTML = data;
-            });
-    </script>
-    <div class="container">
+<!-- NAVBAR -->
+<div id="navbar"></div>
+<script src="../js/loadNavbar.js"></script>
+
+<!-- MAIN CONTENT -->
+<div class="container mt-4">
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card shadow-sm">
                     <form action="#" method="POST" id="createCompanyForm">
                         
-                            <div class="card-header bg-white text-center mb-3">
-                                <h1 class="title">Create a Company Page</h1>
+                            <div class="card-header bg-white border-0 text-center py-4">
+                                <h4 class="fw-bold mb-0" style="color: var(--hunter-green);">
+                                    <i class="bi bi-building-add me-2"></i>Create a Company Page
+                                </h4>
+                                <p class="text-muted small mb-0 mt-2">Build your company's professional presence</p>
                             </div>
                             <div class="card-body"> 
-                                <div class="form-group">
-                                    <label class="label">Name</label>
-                                    <input id="name" name="name" type="text" style="height: 50px;" class="form-control" placeholder="Add the name of your company">
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold">Company Name <span class="text-danger">*</span></label>
+                                    <input id="name" name="name" type="text" class="form-control" placeholder="Add the name of your company" required>
                                 </div>
-                                <div class="form-group">
-                                    <label class="label">Domain Name</label>
-                                    <input id="domainName" name="domainName" type="text" style="height: 50px;" class="form-control" placeholder="Add the domain name of your company eg. company.com, example.org">
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold">Domain Name</label>
+                                    <input id="domainName" name="domainName" type="text" class="form-control" placeholder="Add the domain name of your company eg. company.com, example.org">
                                 </div>
-                                <div class="form-group">
-                                    <label class="label">Industry</label>
-                                    <input id="industry" name="industry" type="text" style="height: 50px;" class="form-control" placeholder="eg. Information Technology, Marketing, Finance">
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold">Industry</label>
+                                    <input id="industry" name="industry" type="text" class="form-control" placeholder="eg. Information Technology, Marketing, Finance">
                                 </div>
-                                <div class="form-group">
-                                    <label class="label">Headquarters Location</label>
-                                    <input id="headquarters" name="headquarters" type="text" style="height: 50px;" class="form-control" placeholder="City, State or Remote">
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold">Headquarters Location</label>
+                                    <input id="headquarters" name="headquarters" type="text" class="form-control" placeholder="City, State or Remote">
                                 </div>
-                                <div class="form-group">
-                                    <label class="label">Company Size</label>
-                                    <select id="companySize" name="companySize" class="form-control" style="height: 50px;">
-                                        <option>1-10 employees</option>
-                                        <option>11-50 employees</option>
-                                        <option>51-200 employees</option>
-                                        <option>201-500 employees</option>
-                                        <option>501-1000 employees</option>
-                                        <option>1001-5000 employees</option>
-                                        <option>5001-10,000 employees</option>
-                                        <option>10,001+ employees</option>
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold">Company Size</label>
+                                    <select id="companySize" name="companySize" class="form-control">
+                                        <option value="">Select company size</option>
+                                        <option value="1-10">1-10 employees</option>
+                                        <option value="11-50">11-50 employees</option>
+                                        <option value="51-200">51-200 employees</option>
+                                        <option value="201-500">201-500 employees</option>
+                                        <option value="501-1000">501-1000 employees</option>
+                                        <option value="1001-5000">1001-5000 employees</option>
+                                        <option value="5001-10000">5001-10,000 employees</option>
+                                        <option value="10001+">10,001+ employees</option>
                                     </select>
                                 </div>
-                                <div class="form-group">
-                                    <label class="label">Company Type</label>
-                                    <select id="companyType" name="companyType" class="form-control" style="height: 50px;">
-                                        <option>Public Company</option>
-                                        <option>Private Company</option>
-                                        <option>Nonprofit Organization</option>
-                                        <option>Government Agency</option>
-                                        <option>Educational Institution</option>
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold">Company Type</label>
+                                    <select id="companyType" name="companyType" class="form-control">
+                                        <option value="">Select company type</option>
+                                        <option value="Public Company">Public Company</option>
+                                        <option value="Private Company">Private Company</option>
+                                        <option value="Nonprofit Organization">Nonprofit Organization</option>
+                                        <option value="Government Agency">Government Agency</option>
+                                        <option value="Educational Institution">Educational Institution</option>
                                     </select>
                                 </div>
-                                <div class="form-group mt-3">
-                                    <div class="profile-photo" id="uploadBox">
-                                        <img id="previewImage" src="" alt="camera">
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold">Company Logo</label>
+                                    <div class="mb-3" id="uploadBox">
+                                        <img id="previewImage" src="" alt="Company logo" class="img-thumbnail mb-2" style="max-width: 200px; max-height: 200px; display: none;">
                                         <input type="file" id="fileInput" accept="image/*" hidden>
                                     </div>
-                                    <button type="button" onclick="document.getElementById('fileInput').click();">
-                                            Add photo
+                                    <button type="button" class="btn btn-outline-secondary" onclick="document.getElementById('fileInput').click();">
+                                        <i class="bi bi-camera me-2"></i>Add Company Logo
+                                    </button>
                                 </div>
-                                <div class="form-group" >
-                                    <label class="label">Description</label>
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold">Description</label>
                                     <textarea id="description" name="description" class="form-control" rows="5" placeholder="Describe your company, its mission, and values"></textarea>
                                 </div>
                                 <div id="formMessage" class="mt-3"></div>
-                                <button type="submit" class="btn btn-primary mt-4">
-                                    Create Company Page
+                                <button type="submit" class="btn publish-btn mt-4" style="background:#386641ff; color:white; width: 100%;">
+                                    <i class="bi bi-building-add me-2"></i>Create Company Page
+                                </button>
                             </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </html>
