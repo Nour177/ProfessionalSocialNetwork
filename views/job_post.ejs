@@ -10,21 +10,17 @@
     <script type="module" src="/jq/job_post.js"></script>
 </head>
 <body class="bg-light p-5">
-    <nav class="navbar navbar-expand-lg navbar-light bg-white mb-4 shadow-sm">
-        <div class="container">
-            <a class="navbar-brand" href="/"><img src="" alt="here goes the logo"></a>
-            <div class="collapse navbar-collapse">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/login">Login</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/register">Register</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+    
+   <div id="navbar" class="mb-3"></div> 
+
+    <script>
+        fetch('/pages/navbar.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('navbar').innerHTML = data;
+            });
+    </script>
+
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-8">
@@ -65,7 +61,7 @@
                                     <label class="label">Description</label>
                                     <textarea id="description" name="description" class="form-control" rows="5" placeholder="Describe the role and responsibilities"></textarea>
                                 </div>
-
+                                <div id="formMessages" class="mt-3"></div>
                                 <button type="submit" class="btn btn-primary mt-4">
                                     Post Job Offer
                                 </button>

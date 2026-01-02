@@ -17,3 +17,8 @@ export function validateLocation(location) {
     const re = /^[A-Za-zÀ-ÖØ-öø-ÿ0-9]+(?:(?:[ '.-]|, ?)[A-Za-zÀ-ÖØ-öø-ÿ0-9]+)*$/;
     return re.test(String(location)) && location.length >= 2 && location.length <= 100;
 }
+
+export function validateDomainName(domainName) {
+    const re = /^(?!-)[A-Za-z0-9-]{1,63}(?<!-)\.(?:[A-Za-z]{2,})$/;
+    return re.test(String(domainName).toLowerCase());
+}

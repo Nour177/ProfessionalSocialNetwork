@@ -21,7 +21,12 @@ $(function(){
         const result = await response.json();
 
         if (!response.success) {
-
+            if (response.status === 404) {
+                $('#formMessages').html(`<div class="alert alert-danger">${result.message}</div>`);
+            }
+            if (response.status === 403) {
+                $('#formMessages').html(`<div class="alert alert-danger">${result.message}</div>`);
+            }
         } else {
             window.location.href = result.redirectUrl;
         }

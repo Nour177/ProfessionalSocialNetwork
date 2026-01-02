@@ -225,7 +225,7 @@ function validateStep3() {
 function validateStep4() {
 
     $('.error-message').remove();
-    isValid = true;
+    let isValid = true;
     let validDegrees = ['High School Diploma', "Associate's Degree", "Bachelor's Degree", "Master's Degree", 'Doctorate / PhD','Engineering Degree' ,'Other','Technical Diploma','Vocational Training',"Professional Degree"];
 
     if (!$('#job-option').hasClass('d-none')) {
