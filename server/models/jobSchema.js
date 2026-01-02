@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import employee from "./Employees.js";
 
 const jobSchema = new mongoose.Schema({
   title: {
@@ -21,6 +22,11 @@ const jobSchema = new mongoose.Schema({
     type: String,
     required: true,
     }, 
+    postedBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Employee',
+        required: true
+    }
 }, { timestamps: true });
 
 export const Job = mongoose.model("Job", jobSchema);
