@@ -11,59 +11,15 @@
 </head>
 <body>
 
-<!-- NAVBAR -->
-<nav class="navbar linkedin-nav px-3">
- <div class="d-flex align-items-center justify-content-between w-100">
-    <div >
-      <img src="" alt="photo du site">
-    </div>
-    <form class="d-flex me-4 flex-grow-1" style="max-width: 300px;">
-      <div class="input-group">
-        <span class="input-group-text">
-          <i class="bi bi-search"></i>
-        </span>
-        <input type="search" class="form-control" placeholder="Search" aria-label="Search">
-      </div>
-    </form>
-    <a class="nav-link text-center position-relative" href="#">
-      <i class="bi bi-house"></i>
-      <div class="small">Home</div>
-    </a>
+   <div id="navbar"></div> 
 
-    <a class="nav-link text-center position-relative" href="#">
-      <i class="bi bi-people "></i>
-      <div class="small">My Network</div>
-      <span class="badge  position-absolute top-0 start-50 translate-middle">
-        5
-      </span>
-    </a>
-
-    <a class="nav-link text-center position-relative" href="#">
-      <i class="bi bi-envelope"></i>
-      <div class="small">Messaging</div>
-      <span class="badge  position-absolute top-0 start-50 translate-middle">
-        0
-      </span>
-    </a>
-
-    <a class="nav-link text-center position-relative" href="#">
-      <i class="bi bi-bell "></i>
-      <div class="small">Notifications</div>
-      <span class="badge  position-absolute top-0 start-50 translate-middle">
-        0
-      </span>
-    </a>
-    <a class="nav-link text-center position-relative" href="/jobs/post-job">
-      <i class="bi bi-building-gear "></i>
-      <div class="small">For Business</div>
-    </a>
-    <a class="nav-link text-center" href="/pages/myProfile.html">
-      <i class="bi bi-person-circle "></i>
-      <div class="small">Me</div>
-    </a>
-
-  </div>
-</nav>
+    <script>
+        fetch('./navbar.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('navbar').innerHTML = data;
+            });
+    </script>
 
 <!-- CONTENU PRINCIPAL -->
 <div class="container mt-4">
