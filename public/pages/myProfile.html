@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile - Modern Colorful</title>
+    <title>Profile</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link rel="stylesheet" href="../css/myProfile_style.css">
@@ -13,7 +13,15 @@
 
 <body>
 
+    <div id="navbar"></div>
 
+    <script>
+        fetch('./navbar.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('navbar').innerHTML = data;
+            });
+    </script>
     <header>
         <a title="Edit cover photo" data-bs-toggle="modal" data-bs-target="#editCoverModal">
             <img src="../images/cover.jpg" alt="Cover Picture" class="image-background">
@@ -27,13 +35,13 @@
 
         <!-- Profile Info -->
         <h2 id="nom"></h2>
-        <p class="position" id="position"></p>
+        <p id="position"></p>
 
 
         <!-- About me -->
         <div class="card-custom">
             <div class="card-title d-flex justify-content-between align-items-center">
-                <h5 class="mb-0">Profil</h5>
+                <h5 class="mb-0">About me</h5>
                 <div class="card-icons d-flex">
                     <a data-bs-toggle="modal" data-bs-target="#editInfosModal">
                         <i class="bi bi-pencil icon-small"></i>
@@ -60,7 +68,7 @@
         <!-- Experience -->
         <div class="card-custom">
             <div class="card-title">
-                <h5>Expériences</h5>
+                <h5>Experiences</h5>
             </div>
 
             <div class="experience" id="experience">
@@ -88,9 +96,9 @@
         <div class="card-custom" id="skill">
 
             <div class="card-title d-flex justify-content-between align-items-center">
-                <h5 class="mb-0">Skill</h5>
+                <h5 class="mb-0">Skills</h5>
                 <div class="card-icons d-flex">
-                    <a data-bs-toggle="modal" data-bs-target="#educationModal">
+                    <a data-bs-toggle="modal" data-bs-target="#addSkillModal">
                         <i class="bi bi-plus-lg icon-small"></i>
                     </a>
 
@@ -103,9 +111,9 @@
         <div class="card-custom" id="certification">
 
             <div class="card-title d-flex justify-content-between align-items-center">
-                <h5 class="mb-0">Certification</h5>
+                <h5 class="mb-0">Certifications</h5>
                 <div class="card-icons d-flex">
-                    <a data-bs-toggle="modal" data-bs-target="#educationModal">
+                    <a data-bs-toggle="modal" data-bs-target="#addCertificationModal">
                         <i class="bi bi-plus-lg icon-small"></i>
                     </a>
 
@@ -219,7 +227,6 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content rounded-4 shadow">
 
-                <form id="editExperienceForm" method="post" action="/edit/experience">
 
                     <div class="modal-header border-0">
                         <h5 class="modal-title fw-bold">Edit Experience</h5>
@@ -231,7 +238,9 @@
                             <label for="expRole" class="col-sm-3 col-form-label text-muted">Role</label>
                             <div class="col-sm-9">
                                 <input id="expRole" name="role" type="text" class="form-control bg-light"
-                                    placeholder="Role" required>
+                                    placeholder="Role" >
+                            <div id="editRoleError" class="text-danger small mt-1 d-none"></div>
+
                             </div>
                         </div>
 
@@ -239,7 +248,8 @@
                             <label for="expCompany" class="col-sm-3 col-form-label text-muted">Company</label>
                             <div class="col-sm-9">
                                 <input id="expCompany" name="company" type="text" class="form-control bg-light"
-                                    placeholder="Company" required>
+                                    placeholder="Company" >
+                                    <div id="editCompanyError" class="text-danger small mt-1 d-none"></div>
                             </div>
                         </div>
 
@@ -247,7 +257,8 @@
                             <label for="expStartYear" class="col-sm-3 col-form-label text-muted">Start Year</label>
                             <div class="col-sm-9">
                                 <input id="expStartYear" name="startYear" type="number" class="form-control bg-light "
-                                    placeholder="Start Year" required>
+                                    placeholder="Start Year" >
+                                    <div id="editStartYearError" class="text-danger small mt-1 d-none"></div>
                             </div>
                         </div>
 
@@ -255,7 +266,8 @@
                             <label for="expEndYear" class="col-sm-3 col-form-label text-muted">End Year</label>
                             <div class="col-sm-9">
                                 <input id="expEndYear" name="endYear" type="number" class="form-control bg-light "
-                                    placeholder="End Year" required>
+                                    placeholder="End Year" >
+                                    <div id="editEndYearError" class="text-danger small mt-1 d-none"></div>
                             </div>
                         </div>
 
@@ -270,12 +282,38 @@
 
 
                     <div class="modal-footer">
+                        <button type="button" class="btn btn-danger me-auto" id="deleteExperienceBtn"
+                            data-bs-toggle="modal" data-bs-target="#confirmDeleteExperienceModal">Delete </button>
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
 
                         <button type="submit" id="saveExperienceBtn" class="btn btn-primary">Save</button>
                     </div>
 
-                </form>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete experience Modal -->
+    <div class="modal fade" id="confirmDeleteExperienceModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title text-danger">Delete experience</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body text-center">
+                    <p class="mb-0">
+                    <h5>Are you sure you want to delete this experience?</h5>
+                    </p>
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button class="btn btn-danger" id="confirmDeleteExperienceBtn">Delete</button>
+                </div>
 
             </div>
         </div>
@@ -287,96 +325,75 @@
             <div class="modal-content">
 
 
-                <form id="editExperienceForm">
 
-                    <div class="modal-header border-0">
-                        <h5 class="modal-title fw-bold">Add Experience</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                    </div>
-
-                    <div class="modal-body">
-                        <div class="row mb-2 align-items-center">
-                            <label for="addexpRole" class="col-sm-3 col-form-label text-muted">Role</label>
-                            <div class="col-sm-9">
-                                <input id="addexpRole" name="role" type="text" class="form-control bg-light"
-                                    placeholder="Role" required>
-                            </div>
-                        </div>
-
-                        <div class="row mb-2 align-items-center">
-                            <label for="addexpCompany" class="col-sm-3 col-form-label text-muted">Company</label>
-                            <div class="col-sm-9">
-                                <input id="addexpCompany" name="company" type="text" class="form-control bg-light"
-                                    placeholder="Company" required>
-                            </div>
-                        </div>
-
-                        <div class="row mb-2 align-items-center">
-                            <label for="addexpStartYear" class="col-sm-3 col-form-label text-muted">Start Year</label>
-                            <div class="col-sm-9">
-                                <input id="addexpStartYear" name="startYear" type="number" class="form-control bg-light "
-                                    placeholder="Start Year" required>
-                            </div>
-                        </div>
-
-                        <div class="row mb-2 align-items-center">
-                            <label for="addexpEndYear" class="col-sm-3 col-form-label text-muted">End Year</label>
-                            <div class="col-sm-9">
-                                <input id="addexpEndYear" name="endYear" type="number" class="form-control bg-light "
-                                    placeholder="End Year" required>
-                            </div>
-                        </div>
-
-                        <div class="row mb-2 align-items-start">
-                            <label for="addexpDescription" class="col-sm-3 col-form-label text-muted">Description</label>
-                            <div class="col-sm-9">
-                                <textarea id="addexpDescription" name="description" class="form-control bg-light" rows="3"
-                                    placeholder="Description"></textarea>
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-
-                        <button type="submit" id="saveExpBtn" class="btn btn-primary">Save</button>
-                    </div>
-
-                </form>
-
-            </div>
-        </div>
-    </div>
-
-
-
-    <!-- Add education Modal -->
-    <div class="modal fade" id="educationModal" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-
-                <div class="modal-header">
-                    <h5 class="modal-title">Add Education</h5>
+                <div class="modal-header border-0">
+                    <h5 class="modal-title fw-bold">Add Experience</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
 
                 <div class="modal-body">
-                    <input type="text" class="form-control mb-2" id="etablissement" placeholder="Etablissement"
-                        required>
-                    <input type="text" class="form-control mb-2" id="location" placeholder="Location" required>
-                    <input type="text" class="form-control mb-2" id="degree" placeholder="Degree" required>
-                    <input type="month" class="form-control mb-2" id="edudate" placeholder="Date" required>
+                    <div class="row mb-2 align-items-center">
+                        <label for="addexpRole" class="col-sm-3 col-form-label text-muted">Role</label>
+                        <div class="col-sm-9">
+                            <input id="addexpRole" name="role" type="text" class="form-control bg-light"
+                                placeholder="Role">
+                            <div id="roleError" class="text-danger small mt-1 d-none"></div>
+
+                        </div>
+                    </div>
+
+                    <div class="row mb-2 align-items-center">
+                        <label for="addexpCompany" class="col-sm-3 col-form-label text-muted">Company</label>
+                        <div class="col-sm-9">
+                            <input id="addexpCompany" name="company" type="text" class="form-control bg-light"
+                                placeholder="Company">
+                            <div id="companyError" class="text-danger small mt-1 d-none"></div>
+                        </div>
+                    </div>
+
+                    <div class="row mb-2 align-items-center">
+                        <label for="addexpStartYear" class="col-sm-3 col-form-label text-muted">Start Year</label>
+                        <div class="col-sm-9">
+                            <input id="addexpStartYear" name="startYear" type="number" class="form-control bg-light "
+                                placeholder="Start Year">
+                            <div id="startYearError" class="text-danger small mt-1 d-none"></div>
+                        </div>
+                    </div>
+
+                    <div class="row mb-2 align-items-center">
+                        <label for="addexpEndYear" class="col-sm-3 col-form-label text-muted">End Year</label>
+                        <div class="col-sm-9">
+                            <input id="addexpEndYear" name="endYear" type="number" class="form-control bg-light "
+                                placeholder="End Year">
+                            <div id="endYearError" class="text-danger small mt-1 d-none"></div>
+                        </div>
+                    </div>
+
+                    <div class="row mb-2 align-items-start">
+                        <label for="addexpDescription" class="col-sm-3 col-form-label text-muted">Description</label>
+                        <div class="col-sm-9">
+                            <textarea id="addexpDescription" name="description" class="form-control bg-light" rows="3"
+                                placeholder="Description"></textarea>
+                        </div>
+                    </div>
                 </div>
 
+
                 <div class="modal-footer">
-                    <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button class="btn btn-primary" id="saveEduBtn">Save</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+
+                    <button type="submit" id="saveExpBtn" class="btn btn-primary">Save</button>
                 </div>
+
+
 
             </div>
         </div>
     </div>
+
+
+
+
 
 
     <!-- Add education Modal -->
@@ -385,57 +402,67 @@
             <div class="modal-content">
 
 
-                <form id="editExperienceForm">
 
-                    <div class="modal-header border-0">
-                        <h5 class="modal-title fw-bold">Add Education</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+
+                <div class="modal-header border-0">
+                    <h5 class="modal-title fw-bold">Add Education</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="row mb-2 align-items-center">
+                        <label for="addetudDegree" class="col-sm-3 col-form-label text-muted">Degree</label>
+                        <div class="col-sm-9">
+                            <input id="addetudDegree" name="degree" type="text" class="form-control bg-light "
+                                placeholder="Degree" required>
+                            <div id="degreeError" class="text-danger small mt-1 d-none"></div>
+
+                        </div>
                     </div>
 
-                    <div class="modal-body">
-                        <div class="row mb-2 align-items-center">
-                            <label for="addetudDegree" class="col-sm-3 col-form-label text-muted">Degree</label>
-                            <div class="col-sm-9">
-                                <input id="addetudDegree" name="degree" type="text" class="form-control bg-light "
-                                    placeholder="Degree" required>
-                            </div>
+                    <div class="row mb-2 align-items-center">
+                        <label for="addetudfieldOfStudy" class="col-sm-3 col-form-label text-muted">Field of
+                            study</label>
+                        <div class="col-sm-9">
+                            <input id="addetudfieldOfStudy" name="fieldOfStudy" type="text"
+                                class="form-control bg-light" placeholder="field Of Study" required>
+                            <div id="fieldError" class="text-danger small mt-1 d-none"></div>
+
                         </div>
+                    </div>
 
-                        <div class="row mb-2 align-items-center">
-                            <label for="addetudEstablishment" class="col-sm-3 col-form-label text-muted">Establishment</label>
-                            <div class="col-sm-9">
-                                <input id="addetudEstablishment" name="establishment" type="text" class="form-control bg-light"
-                                    placeholder="Establishment" required>
-                            </div>
-                        </div>
+                    <div class="row mb-2 align-items-center">
+                        <label for="addetudSchool" class="col-sm-3 col-form-label text-muted">School</label>
+                        <div class="col-sm-9">
+                            <input id="addetudSchool" type="text" class="form-control bg-light" placeholder="School"
+                                required>
+                            <div id="schoolError" class="text-danger small mt-1 d-none"></div>
 
-                        <div class="row mb-2 align-items-center">
-                            <label for="addetudLocation" class="col-sm-3 col-form-label text-muted">Location</label>
-                            <div class="col-sm-9">
-                                <input id="addetudLocation" name="location" type="text" class="form-control bg-light"
-                                    placeholder="Location" required>
-                            </div>
-                        </div>
-
-                        
-
-                        <div class="row mb-2 align-items-center">
-                            <label for="addetudYear" class="col-sm-3 col-form-label text-muted">Year</label>
-                            <div class="col-sm-9">
-                                <input id="addetudYear" name="year" type="number" class="form-control bg-light "
-                                    placeholder="Year" required>
-                            </div>
                         </div>
                     </div>
 
 
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
 
-                        <button type="submit" id="saveEtudBtn" class="btn btn-primary">Save</button>
+
+
+                    <div class="row mb-2 align-items-center">
+                        <label for="addetudYear" class="col-sm-3 col-form-label text-muted">Year</label>
+                        <div class="col-sm-9">
+                            <input id="addetudYear" name="year" type="number" class="form-control bg-light "
+                                placeholder="Year" required>
+                            <div id="yearError" class="text-danger small mt-1 d-none"></div>
+                        </div>
                     </div>
+                </div>
 
-                </form>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+
+                    <button type="submit" id="saveEtudBtn" class="btn btn-primary">Save</button>
+                </div>
+
+
 
             </div>
         </div>
@@ -448,86 +475,97 @@
             <div class="modal-content">
 
 
-                <form id="editExperienceForm">
 
-                    <div class="modal-header border-0">
-                        <h5 class="modal-title fw-bold">Add Education</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+
+                <div class="modal-header border-0">
+                    <h5 class="modal-title fw-bold">Edit Education</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="row mb-2 align-items-center">
+                        <label for="etudDegree" class="col-sm-3 col-form-label text-muted">Degree</label>
+                        <div class="col-sm-9">
+                            <input id="etudDegree" name="degree" type="text" class="form-control bg-light "
+                                placeholder="Degree" >
+                            <div id="editDegreeError" class="text-danger small mt-1 d-none"></div>
+
+                        </div>
+
+                    </div>
+                    <div class="row mb-2 align-items-center">
+                        <label for="etudfieldOfStudy" class="col-sm-3 col-form-label text-muted">Field of study</label>
+                        <div class="col-sm-9">
+                            <input id="etudfieldOfStudy" name="location" type="text" class="form-control bg-light"
+                                placeholder="field Of Study" >
+                            <div id="editFieldError" class="text-danger small mt-1 d-none"></div>
+
+                        </div>
                     </div>
 
-                    <div class="modal-body">
-                        <div class="row mb-2 align-items-center">
-                            <label for="etudDegree" class="col-sm-3 col-form-label text-muted">Degree</label>
-                            <div class="col-sm-9">
-                                <input id="etudDegree" name="degree" type="text" class="form-control bg-light "
-                                    placeholder="Degree" required>
-                            </div>
-                        </div>
-                        
-                        <div class="row mb-2 align-items-center">
-                            <label for="etudEstablishment" class="col-sm-3 col-form-label text-muted">Establishment</label>
-                            <div class="col-sm-9">
-                                <input id="etudEstablishment" name="establishment" type="text" class="form-control bg-light"
-                                    placeholder="Establishment" required>
-                            </div>
-                        </div>
+                    <div class="row mb-2 align-items-center">
+                        <label for="etudSchool" class="col-sm-3 col-form-label text-muted">School</label>
+                        <div class="col-sm-9">
+                            <input id="etudSchool" name="establishment" type="text" class="form-control bg-light"
+                                placeholder="School" >
+                            <div id="editSchoolError" class="text-danger small mt-1 d-none"></div>
 
-                        <div class="row mb-2 align-items-center">
-                            <label for="etudLocation" class="col-sm-3 col-form-label text-muted">Location</label>
-                            <div class="col-sm-9">
-                                <input id="etudLocation" name="location" type="text" class="form-control bg-light"
-                                    placeholder="Location" required>
-                            </div>
-                        </div>
-
-                        
-
-                        <div class="row mb-2 align-items-center">
-                            <label for="etudYear" class="col-sm-3 col-form-label text-muted">Year</label>
-                            <div class="col-sm-9">
-                                <input id="etudYear" name="year" type="number" class="form-control bg-light "
-                                    placeholder="Year" required>
-                            </div>
                         </div>
                     </div>
 
 
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
 
-                        <button type="submit" id="saveEducationBtn" class="btn btn-primary">Save</button>
+
+
+                    <div class="row mb-2 align-items-center">
+                        <label for="etudYear" class="col-sm-3 col-form-label text-muted">Year</label>
+                        <div class="col-sm-9">
+                            <input id="etudYear" name="year" type="number" class="form-control bg-light "
+                                placeholder="Year" >
+                            <div id="editYearError" class="text-danger small mt-1 d-none"></div>
+
+                        </div>
                     </div>
+                </div>
 
-                </form>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+
+                    <button type="submit" id="saveEducationBtn" class="btn btn-primary">Save</button>
+                </div>
+
 
             </div>
         </div>
     </div>
 
-    <!-- Delete certification Modal -->
-    <div class="modal fade" id="deletecertificationModal" tabindex="-1" aria-hidden="true">
+    <!-- Delete education Modal -->
+    <div class="modal fade" id="deleteEducationModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
 
                 <div class="modal-header">
-                    <h5 class="modal-title text-danger">Delete certification</h5>
+                    <h5 class="modal-title text-danger">Delete education</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
 
                 <div class="modal-body text-center">
                     <p class="mb-0">
-                    <h5>Are you sure you want to delete this certification?</h5>
+                    <h5>Are you sure you want to delete this education?</h5>
                     </p>
                 </div>
 
                 <div class="modal-footer">
                     <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button class="btn btn-danger" id="confirmDeleteSkillBtn">Delete</button>
+                    <button class="btn btn-danger" id="deleteEducationBtn">Delete</button>
                 </div>
 
             </div>
         </div>
     </div>
+
+
 
     <!-- Delete Skill Modal -->
     <div class="modal fade" id="deleteSkillModal" tabindex="-1" aria-hidden="true">
@@ -554,6 +592,158 @@
         </div>
     </div>
 
+    <!-- Delete Certification Modal -->
+    <div class="modal fade" id="deleteCertificationModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title text-danger">Delete Certification</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body text-center">
+                    <p class="mb-0">
+                    <h5>Are you sure you want to delete this certification?</h5>
+                    </p>
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button class="btn btn-danger" id="confirmDeleteCertificationBtn">Delete</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Skill Modal -->
+    <div class="modal fade" id="addSkillModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addSkillModalLabel">Add Skill</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <label for="skillSelect" class="form-label">Select a Skill</label>
+                    <select class="form-select" id="skillSelect">
+                        <option value="" selected disabled>Choose a skill</option>
+                        <option value="JavaScript">JavaScript</option>
+                        <option value="Python">Python</option>
+                        <option value="Go">Go</option>
+                        <option value="React">React</option>
+                        <option value="Node.js">Node.js</option>
+                        <option value="HTML/CSS">HTML/CSS</option>
+                    </select>
+                    <div id="skillError" class="text-danger small mt-1 d-none"></div>
+
+                </div>
+
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" id="addSkillBtn" class="btn btn-primary">Add</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Add Certification Modal -->
+    <div class="modal fade" id="addCertificationModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+
+                <div class="modal-header border-0">
+                    <h5 class="modal-title fw-bold">Add Certification</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="row mb-2 align-items-center">
+                        <label for="certTitle" class="col-sm-3 col-form-label text-muted">Title</label>
+                        <div class="col-sm-9">
+                            <input id="certTitle" type="text" class="form-control bg-light" placeholder="Title">
+                            <div id="titleError" class="text-danger small mt-1 d-none"></div>
+
+                        </div>
+                    </div>
+
+                    <div class="row mb-2 align-items-center">
+                        <label for="certCompany" class="col-sm-3 col-form-label text-muted">Company</label>
+                        <div class="col-sm-9">
+                            <input id="certCompany" type="text" class="form-control bg-light" placeholder="Company">
+                            <div id="certCompanyError" class="text-danger small mt-1 d-none"></div>
+                        </div>
+                    </div>
+
+                    <div class="row mb-2 align-items-center">
+                        <label for="certYear" class="col-sm-3 col-form-label text-muted">Year</label>
+                        <div class="col-sm-9">
+                            <input id="certYear" type="number" class="form-control bg-light" placeholder="Year">
+                            <div id="ceryYearError" class="text-danger small mt-1 d-none"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" id="addCertificationBtn" class="btn btn-primary">Add</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Certification Modal -->
+    <div class="modal fade" id="editCertificationModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+
+                <div class="modal-header border-0">
+                    <h5 class="modal-title fw-bold">Edit Certification</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="row mb-2 align-items-center">
+                        <label for="editTitle" class="col-sm-3 col-form-label text-muted">Title</label>
+                        <div class="col-sm-9">
+                            <input id="editTitle" type="text" class="form-control bg-light" placeholder="Title">
+                            <div id="editTitleError" class="text-danger small mt-1 d-none"></div>
+
+                        </div>
+                    </div>
+
+                    <div class="row mb-2 align-items-center">
+                        <label for="editCompany" class="col-sm-3 col-form-label text-muted">Company</label>
+                        <div class="col-sm-9">
+                            <input id="editCompany" type="text" class="form-control bg-light" placeholder="Company">
+                            <div id="editCertCompanyError" class="text-danger small mt-1 d-none"></div>
+                        </div>
+                    </div>
+
+                    <div class="row mb-2 align-items-center">
+                        <label for="editYear" class="col-sm-3 col-form-label text-muted">Year</label>
+                        <div class="col-sm-9">
+                            <input id="editYear" type="number" class="form-control bg-light" placeholder="Year">
+                            <div id="editCertYearError" class="text-danger small mt-1 d-none"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" id="editCertificationBtn" class="btn btn-primary">Save</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
 
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
