@@ -15,18 +15,9 @@ const companySchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-    location: {
-    type: String,
-    required: true,
-    },
-    organizationSize: {
-    type: String,
-    required: true,
-  },
-    organizationType: {
-    type: String,
-    required: true,
-  },
+  location: String,
+  organizationSize: String,
+  organizationType: String,
   logo : String,
   description: String,
   website: String,

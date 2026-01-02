@@ -7,6 +7,7 @@ import employee from './models/Employees.js';
 import postRoutes from './routes/postRoutes.js';
 import profileRoutes from './routes/profileRoutes.js';
 
+import companyRouter from './routes/companyRoute.js';
 import {router} from './routes/postJobRoutes.js'
 
 import sessions from 'express-session';
@@ -54,6 +55,8 @@ app.use(express.static(path.join(__dirname, '../public')));
 app.use('/api/posts', postRoutes);
 
 app.use('/', authRoutes);
+
+app.use('/company', companyRouter);
 
 app.use(profileRoutes);
 
