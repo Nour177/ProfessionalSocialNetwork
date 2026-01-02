@@ -1014,6 +1014,7 @@ window.acceuilApp = {
     toggleLike,
     addComment,
     editPost,
-    deletePost
+    deletePost,
+    handleLogout
 };
 

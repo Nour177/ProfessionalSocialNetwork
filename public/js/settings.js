@@ -65,7 +65,7 @@ function populateSettingsForms(user) {
         if (user.experiences && user.experiences.length > 0) {
             // Try to get company from first experience
             company = user.experiences[0].company || '';
-            // If no company in first experience, try to find any experience with company
+            // If no company in first experience, search for any experience with a company
             if (!company) {
                 const expWithCompany = user.experiences.find(exp => exp.company);
                 if (expWithCompany) {
