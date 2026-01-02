@@ -5,6 +5,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import employee from './models/Employees.js';
 import postRoutes from './routes/postRoutes.js';
+import profileRoutes from './routes/profileRoutes.js';
 
 import {router} from './routes/postJobRoutes.js'
 
@@ -54,126 +55,8 @@ app.use('/api/posts', postRoutes);
 
 app.use('/', authRoutes);
 
-app.get('/api/myProfile', async (req, res) => {
-    let user = await employee.findByEmail("aziza@gmail.com");
-    res.json(user);
-});
+app.use(profileRoutes);
 
-app.get('/myProfile', (req, res) => {
-    res.redirect('/pages/myProfile.html');
-});
-
-app.put('/edit/editInfos', async (req, res) => {
-    const { newDescription } = req.body;
-
-    try {
-        const user = await employee.findOneAndUpdate(
-            { email: "aziza@gmail.com" },
-            { description: newDescription },
-            { new: true }
-
-        );
-        if (!user) {
-            return res.status(404).json({ success: false, message: 'User not found' });
-        }
-        res.json({ success: true, message: 'Description updated!', description: user.description });
-    } catch (err) {
-        res.status(500).json({ success: false, message: 'Update failed' });
-    }
-});
-
-app.put('/edit/editExperience', async (req, res) => {
-    const { index, experience } = req.body;
-
-    try {
-        const update = {};
-        update[`experiences.${index}`] = experience;
-
-        const user = await employee.findOneAndUpdate(
-            { email: "aziza@gmail.com" },
-            { $set: update },
-            { new: true }
-        );
-        if (!user) {
-            return res.status(404).json({ success: false, message: 'User not found' });
-        }
-        res.json({ success: true, message: 'Description updated!', description: user.description });
-    } catch (err) {
-        res.status(500).json({ success: false, message: 'Update failed' });
-    }
-});
-
-
-app.put('/edit/addExperience', async (req, res) => {
-    const { experience } = req.body;
-    console.log(experience);
-    try {
-        const user = await employee.findOneAndUpdate(
-            { email: "aziza@gmail.com" },
-            { $push: { experiences: experience } },
-            { new: true }
-        );
-
-        if (!user) {
-            return res.status(404).json({ success: false, message: 'User not found' });
-        }
-
-        res.json({
-            success: true,
-            message: 'Experience added!',
-            experiences: user.experiences
-        });
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ success: false, message: 'Update failed' });
-    }
-});
-
-app.put('/edit/addEducation', async (req, res) => {
-    const { education } = req.body;
-    console.log(education);
-    try {
-        const user = await employee.findOneAndUpdate(
-            { email: "aziza@gmail.com" },
-            { $push: { education: education } },
-            { new: true }
-        );
-
-        if (!user) {
-            return res.status(404).json({ success: false, message: 'User not found' });
-        }
-
-        res.json({
-            success: true,
-            message: 'Education added!',
-            experiences: user.experiences
-        });
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ success: false, message: 'Update failed' });
-    }
-});
-
-app.put('/edit/editEducation', async (req, res) => {
-    const { index, education } = req.body;
-
-    try {
-        const update = {};
-        update[`education.${index}`] = education;
-
-        const user = await employee.findOneAndUpdate(
-            { email: "aziza@gmail.com" },
-            { $set: update },
-            { new: true }
-        );
-        if (!user) {
-            return res.status(404).json({ success: false, message: 'User not found' });
-        }
-        res.json({ success: true, message: 'Description updated!', description: user.description });
-    } catch (err) {
-        res.status(500).json({ success: false, message: 'Update failed' });
-    }
-});
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
