@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import Post from "./post.js";
+
 
 
 const experienceSchema = new mongoose.Schema({

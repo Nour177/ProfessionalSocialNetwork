@@ -1,0 +1,153 @@
+/* Network Page Specific Styles */
+
+.section-header {
+  cursor: pointer;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid #e0e0e0;
+  transition: background-color 0.2s ease;
+}
+
+.section-header:hover {
+  background-color: #f8f9fa;
+}
+
+.section-title {
+  margin: 0;
+  font-weight: 600;
+  font-size: 1.25rem;
+  color: var(--hunter-green);
+  display: flex;
+  align-items: center;
+}
+
+.btn-toggle {
+  font-size: 1.25rem;
+  line-height: 1;
+  color: var(--hunter-green);
+  border: none;
+  background: transparent;
+  transition: transform 0.3s ease;
+  padding: 0.25rem 0.5rem;
+}
+
+.btn-toggle:hover {
+  color: var(--sage-green);
+}
+
+.btn-toggle[aria-expanded="true"] i {
+  transform: rotate(180deg);
+}
+
+/* Network Cards */
+.network-card {
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 0.5rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.network-card:hover {
+  box-shadow: 0 4px 12px rgba(56, 102, 65, 0.15);
+  transform: translateY(-2px);
+  border-color: var(--sage-green);
+}
+
+.network-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--vanilla-cream);
+  background-color: var(--yellow-green);
+}
+
+/* Horizontal Scroll for Suggestions */
+.horizontal-scroll {
+  display: flex;
+  overflow-x: auto;
+  gap: 1rem;
+  padding-bottom: 0.5rem;
+  scroll-behavior: smooth;
+}
+
+.horizontal-scroll::-webkit-scrollbar {
+  height: 8px;
+}
+
+.horizontal-scroll::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.horizontal-scroll::-webkit-scrollbar-thumb {
+  background-color: var(--sage-green);
+  border-radius: 4px;
+}
+
+.horizontal-scroll::-webkit-scrollbar-thumb:hover {
+  background-color: var(--hunter-green);
+}
+
+/* Buttons */
+.btn-success {
+  background-color: var(--hunter-green);
+  border-color: var(--hunter-green);
+}
+
+.btn-success:hover {
+  background-color: var(--sage-green);
+  border-color: var(--sage-green);
+}
+
+.btn-outline-primary {
+  color: var(--hunter-green);
+  border-color: var(--hunter-green);
+}
+
+.btn-outline-primary:hover {
+  background-color: var(--hunter-green);
+  border-color: var(--hunter-green);
+  color: white;
+}
+
+.btn-outline-secondary {
+  color: #6c757d;
+  border-color: #6c757d;
+}
+
+.btn-outline-secondary:hover {
+  background-color: #6c757d;
+  border-color: #6c757d;
+  color: white;
+}
+
+/* Card Body Padding */
+.network-card .card-body {
+  padding: 1rem;
+}
+
+/* Collapse Animation */
+.collapse {
+  transition: height 0.35s ease;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .network-avatar {
+    width: 48px;
+    height: 48px;
+  }
+
+  .section-title {
+    font-size: 1.1rem;
+  }
+
+  .horizontal-scroll {
+    gap: 0.75rem;
+  }
+}
