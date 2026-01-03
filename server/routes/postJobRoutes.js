@@ -2,6 +2,7 @@ import express from 'express';
 export const router = express.Router()
 import { Job } from '../models/jobSchema.js';
 import { checkCompany } from '../controllers/jobPostController.js';
+import { getJobDetails } from '../controllers/jobPostController.js';
 
 router.get('/post-job',(req, res) => {
     console.log('Rendering job post page for user:', req.session.user);
@@ -20,4 +21,20 @@ router.post('/post-job', checkCompany,(req, res) => {
     Job.create(newJob);
     res.status(200).json({success: true, redirectUrl:"/"})
 
+});
+
+router.get('/:id', getJobDetails, (req, res) => {
+    //69580eaadf721870f3fe5fbe
+    const { job, company } = res.locals.data;
+    let jobLocation = job.location || "Not specified";
+    console.log({
+        ...job,
+        ...company,
+        jobLocation: jobLocation,
+    })
+    res.render('jobOfferDetails', {
+        ...job,
+        ...company,
+        jobLocation: jobLocation,
+    });
 });

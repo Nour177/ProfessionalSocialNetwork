@@ -1,4 +1,6 @@
 import Company from "../models/companySchema.js";
+import {Job} from "../models/jobSchema.js";
+import employee from "../models/Employees.js";
 
 export const checkCompany = async (req, res, next) => {
     const email = req.session.user ? req.session.user.email : req.body.email;
@@ -21,4 +23,26 @@ export const checkCompany = async (req, res, next) => {
         });
     }
     next();
+};
+
+export const getJobDetails = async (req, res, next) => {
+    try {
+        const jobId = req.params.id;
+
+        const job = await Job.findById(jobId).populate('postedBy', 'firstname lastname description profileImagePath');
+        if (!job) return res.status(404).json({ message: "Job not found" });
+
+        const company = await Company.findOne({ name: job.companyName }).lean();
+
+        const responseData = {
+            job: job,
+            company: company || {} 
+        };
+
+        res.locals.data = responseData;
+        next();
+
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
 };

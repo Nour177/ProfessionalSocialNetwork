@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post a Job Offer</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/acceuil.css">
+    <script src="/jq/jquery-3.7.1.min.js"></script>
+    <script type="module" src="/jq/job_post.js"></script>
+</head>
+<body>
+
+<div id="navbar"></div>
+<script src="/js/loadNavbar.js"></script>
+
+<div class="container mt-4">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card shadow-sm">
+                    <form action="#" method="POST" id="jobPostForm">
+                        <div class="card-header bg-white border-0 py-4">
+                            <span class="d-flex align-items-center mb-3">
+                                <% if (locals.logo) {%>
+                                    <img src="<%= locals.logo %>" alt="Company Logo" class="rounded-circle me-2" style="width: 60px; height: 60px; object-fit: cover;">
+                                    <a href="/company/<%= locals._id %>" class="text-decoration-none">
+                                    <h5 class="mb-0"> <%= locals.name %></h5>
+                                    </a>
+                                <%} else { %>  
+                                    <a href="/company/<%= locals._id %>" class="text-decoration-none">
+                                    <h5 class="mb-0"> <%= locals.name %></h5>
+                                    </a>
+                                <%}%>
+                            </span>
+                            <h3 ><%= locals._doc.title %></h3>
+                              <% if (locals.location) {%>
+                                <p class="text-secondary mb-0"> Headquarters: <%= locals.location %></p>
+                              <%}%>
+                                <p class="text-secondary">Job Location: <%= locals.jobLocation %></p>
+
+                            <button type="button" class="btn btn-primary btn-sm mt-2" style="width: fit-content; background-color: transparent; border: 1px solid #666666; color: #666666; font-weight: 600; cursor: default;">
+                                <%= locals._doc.employmentType %> 
+                            </button>
+
+                            <button type="button" class="btn btn-primary btn-sm mt-2" style="width: fit-content;">
+                                Apply Now <i class="bi bi-box-arrow-up-right me-1"></i> 
+                            </button>
+
+                        </div>
+                        <div class="card-body">
+                            <h5 class="fw-bold mb-3">Meet the Hiring Team</h5>
+                            <div class="d-flex align-items-center mb-3">
+                                <img src="<%= locals._doc.postedBy.profileImagePath%>" 
+                                    alt="Manager Profile"
+                                    class="rounded-circle me-3 border" 
+                                    style="width: 50px; height: 50px; object-fit: cover; min-width: 50px;" />
+
+                                <div class="d-flex flex-column justify-content-center lh-sm">
+                                    <a href="/profile/<=% locals._doc.postedBy._id %>">
+                                    <h6 class="fw-bold text-dark mb-0">
+                                        <%=locals._doc.postedBy.firstname%> <%=locals._doc.postedBy.lastname%>
+                                    </h6>
+                                    </a>
+                                    
+                                    <span class="text-secondary small fw-light">
+                                        <%=locals._doc.postedBy.description%>
+                                    </span>
+                                    
+                                </div>
+                            </div>
+                            <h5 class="fw-bold mb-3 mt-3">About the Job</h5>
+                            <% if(locals.description){ %>
+                                <h6> Who are we ?</h6>
+                                <p><%= locals.description %></p>
+                            <% } %>
+                            <h6> Job description</h6>
+                            <p><%= locals._doc.description %></p>
+       
+
+                                
+
+
+</body>
+</html>
