@@ -21,6 +21,7 @@ const companySchema = new mongoose.Schema({
   logo : String,
   description: String,
   website: String,
+  admin : { type: mongoose.Schema.Types.ObjectId, ref: 'Employee', required: true },
 });
 
 export default mongoose.model("Company", companySchema);
