@@ -2,11 +2,14 @@ import express from 'express';
 export const router = express.Router()
 import { Job } from '../models/jobSchema.js';
 import { checkCompany } from '../controllers/jobPostController.js';
-import { getJobDetails } from '../controllers/jobPostController.js';
+import { getJobDetails, renderEditPage, updateJob, deleteJob } from '../controllers/jobPostController.js';
 
 router.get('/post-job',(req, res) => {
     console.log('Rendering job post page for user:', req.session.user);
-    res.render('job_post',{firstname: req.session.user ? req.session.user.firstname : null});
+    res.render('job_post',{
+        firstname: req.session.user ? req.session.user.firstname : null,
+        isEditing : false
+    });
 });
 
 router.post('/post-job', checkCompany,(req, res) => {
@@ -36,5 +39,11 @@ router.get('/:id', getJobDetails, (req, res) => {
         ...job,
         ...company,
         jobLocation: jobLocation,
+        userId : req.session.user._id
     });
 });
+
+router.get("/edit/:id", renderEditPage)
+router.post("/update/:id", updateJob);
+
+router.delete('/delete/:id', deleteJob);
