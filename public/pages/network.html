@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset='utf-8'>
+  <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+  <title>Network</title>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel='stylesheet' type='text/css' media='screen' href='../css/acceuil.css'>
+  <link rel='stylesheet' type='text/css' media='screen' href='../css/network.css'>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div id="navbar"></div>
+<script src="../js/loadNavbar.js"></script>
+
+<!-- CONTENU PRINCIPAL -->
+<div class="container mt-4">
+  <div class="row">
+    <!-- COLONNE GAUCHE -->
+    <div class="col-lg-3">
+      <!-- Carte Profil -->
+      <div class="card mb-3">
+        <div class="card-body text-center p-0">
+          <!-- Bannière -->
+          <div class="profile-banner"></div>
+          <!-- Photo -->
+          <img src="" alt="Photo profil" class="profile-avatar">
+          <!-- Infos -->
+          <div class="profile-info text-center">
+            <h6 class="fw-bold mb-0">sans nom</h6>
+            <small id="company" class="text-muted">
+              No job title set
+            </small>
+          </div>
+        </div>
+      </div>
+
+      <!-- Carte Réseau -->
+      <div class="card mb-2">
+        <div class="card-body">
+          <small class="text-muted">Connections</small>
+          <div>
+            <a href="./network.html" class="fw-bold mb-1"> Grow Your Network <i class="bi bi-person-fill-add"></i> </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mes éléments -->
+      <div class="card mb-3">
+        <div class="card-body">
+          <p class="fw-bold mb-0">
+            <i class="bi bi-bookmark-fill"></i> Mes éléments
+          </p>
+        </div>
+      </div>
+
+      <!-- Groupes / événements -->
+      <div class="card">
+        <div class="card-body">
+          <p class="fw-bold mb-1"><i class="bi bi-people-fill"></i> Groups</p>
+          <p class="fw-bold mb-1"><i class="bi bi-calendar-event"></i> Events</p>
+          <a class="fw-bold mb-0" href="./settings.html"> <i class="bi bi-gear-fill"></i> Settings </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- COLONNE CENTRALE -->
+    <div class="col-lg-6">
+      <!-- Pending Invitations Section -->
+      <div class="card mb-3">
+        <div class="section-header" data-bs-toggle="collapse" data-bs-target="#pendingInvitations" aria-expanded="true" aria-controls="pendingInvitations" role="button">
+          <h2 class="section-title">
+            <i class="bi bi-envelope-check me-2"></i>Pending Invitations
+          </h2>
+          <button class="btn-toggle" aria-label="Toggle Pending Invitations" type="button">
+            <i class="bi bi-chevron-down"></i>
+          </button>
+        </div>
+        <div id="pendingInvitations" class="collapse show">
+          <div class="card-body">
+            <!-- Example invitation card -->
+            <div class="network-card mb-3">
+              <div class="card-body d-flex align-items-center">
+                <img src="../images/profile.png" alt="Avatar" class="network-avatar me-3" />
+                <div class="flex-grow-1">
+                  <h6 class="mb-0 fw-bold">invi test</h6>
+                  <small class="text-muted">Company</small>
+                </div>
+                <div class="d-flex gap-2">
+                  <button class="btn btn-success btn-sm">
+                    <i class="bi bi-check-lg"></i> Accept
+                  </button>
+                  <button class="btn btn-outline-secondary btn-sm">
+                    <i class="bi bi-x-lg"></i> Decline
+                  </button>
+                </div>
+              </div>
+            </div>
+            <!-- Plus d'invitations ici -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Suggestions Section -->
+      <div class="card mb-3">
+        <div class="section-header" data-bs-toggle="collapse" data-bs-target="#suggestions" aria-expanded="false" aria-controls="suggestions" role="button">
+          <h2 class="section-title">
+            <i class="bi bi-people me-2"></i>Suggestions
+          </h2>
+          <button class="btn-toggle" aria-label="Toggle Suggestions" type="button">
+            <i class="bi bi-chevron-down"></i>
+          </button>
+        </div>
+        <div id="suggestions" class="collapse">
+          <div class="card-body">
+            <div class="horizontal-scroll">
+              <!-- Suggestions will be loaded dynamically here -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Your Network Section -->
+      <div class="card mb-3">
+        <div class="section-header" data-bs-toggle="collapse" data-bs-target="#yourNetwork" aria-expanded="false" aria-controls="yourNetwork" role="button">
+          <h2 class="section-title">
+            <i class="bi bi-diagram-3 me-2"></i>Your Network
+          </h2>
+          <button class="btn-toggle" aria-label="Toggle Your Network" type="button">
+            <i class="bi bi-chevron-down"></i>
+          </button>
+        </div>
+        <div id="yourNetwork" class="collapse">
+          <div class="card-body">
+            <div class="row row-cols-1 row-cols-md-2 g-3">
+              <!-- Network connections will be loaded dynamically here -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- COLONNE DROITE -->
+    <div class="col-lg-3">
+      <div class="card">
+        <div class="card-body">
+          <p class="fw-bold mb-3">
+            <i class="bi bi-lightbulb me-2"></i>Quick Actions
+          </p>
+          <div class="d-grid gap-2">
+            <button class="btn btn-outline-primary btn-sm">
+              <i class="bi bi-search me-2"></i>Find People
+            </button>
+            <button class="btn btn-outline-primary btn-sm">
+              <i class="bi bi-envelope me-2"></i>Invite Friends
+            </button>
+            <button class="btn btn-outline-primary btn-sm">
+              <i class="bi bi-people me-2"></i>Join Groups
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-body">
+          <p class="fw-bold mb-3">
+            <i class="bi bi-graph-up me-2"></i>Network Stats
+          </p>
+          <div class="d-flex justify-content-between mb-2">
+            <span class="text-muted">Connections</span>
+            <span class="fw-bold" id="stats-connections">0</span>
+          </div>
+          <div class="d-flex justify-content-between mb-2">
+            <span class="text-muted">Pending</span>
+            <span class="fw-bold" id="stats-pending">0</span>
+          </div>
+          <div class="d-flex justify-content-between">
+            <span class="text-muted">Suggestions</span>
+            <span class="fw-bold" id="stats-suggestions">0</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../js/imageUtils.js"></script>
+<script src="../js/network.js"></script>
+</body>
+
+</html>

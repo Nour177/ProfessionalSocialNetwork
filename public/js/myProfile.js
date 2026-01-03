@@ -153,7 +153,7 @@ function displayEducation(education) {
 
         div.innerHTML = `
             <div class="card-icons d-flex gap-4">
-                <img src="${ed.logo || '../images/default-school.png'}" alt="School Logo" onerror="this.src='../images/default-school.png'">
+                <img src="${ed.logo || '../images/graduation-hat.png'}" alt="School Logo" onerror="this.src='../images/default-school.png'">
                 <div>
                     <h6 class="mb-0">${ed.fieldOfStudy || ed.degree || 'No degree'}</h6>
                     <small class="text-muted">${ed.school || ed.establishment || ''} ${ed.degree ? '• ' + ed.degree : ''}</small>

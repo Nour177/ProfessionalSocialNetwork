@@ -1,5 +1,6 @@
 import { validateName, validateLocation } from "./validations.js";
 $(function(){
+
     $('#jobPostForm').on('submit', async function(event){
         console.log('i am working');
         event.preventDefault();
@@ -11,8 +12,8 @@ $(function(){
         if (!validateForm(data)) {
             return;
         }
-
-        const response = await fetch('/jobs/post-job', {
+        const url = $(this).attr('action');
+        const response = await fetch(url, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)
@@ -20,7 +21,7 @@ $(function(){
 
         const result = await response.json();
 
-        if (!response.success) {
+        if (!result.success) {
             if (response.status === 404) {
                 $('#formMessages').html(`<div class="alert alert-danger">${result.message}</div>`);
             }

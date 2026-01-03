@@ -102,13 +102,13 @@ function updateProfileCard(user) {
     const profileName = document.querySelector('.profile-info h6');
     const profileJob = document.querySelector('.profile-info small');
     
-    if (profileAvatar && user.profileImagePath) {
-        profileAvatar.src = user.profileImagePath;
-        profileAvatar.alt = `${user.firstname} ${user.lastname}`;
+    if (profileAvatar) {
+        setImageWithFallback(profileAvatar, user.profileImagePath, '../images/profile.png');
+        profileAvatar.alt = `${user.firstname || ''} ${user.lastname || ''}`.trim() || 'Profile picture';
     }
     
     if (profileName) {
-        profileName.textContent = `${user.firstname} ${user.lastname}`;
+        profileName.textContent = `${user.firstname || ''} ${user.lastname || ''}`.trim() || 'User';
     }
     
     if (profileJob) {

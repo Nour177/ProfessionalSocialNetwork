@@ -9,24 +9,19 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 
     <link rel="stylesheet" href="../css/profile_style.css">
+    <link rel="stylesheet" href="../css/acceuil.css">
+    <link rel="stylesheet" href="../css/myProfile_style.css">
 
 </head>
 
 <body>
-
+    <!-- NAVBAR -->
     <div id="navbar"></div>
+    <script src="../js/loadNavbar.js"></script>
 
-    <script>
-        fetch('./navbar.html')
-            .then(response => response.text())
-            .then(data => {
-                document.getElementById('navbar').innerHTML = data;
-            });
-    </script>
     <header>
-        <a href="" title="Edit cover photo" data-bs-toggle="modal" data-bs-target="#editCoverModal"
-            onclick="return false;">
-            <img src="../images/cover.jpg" alt="Cover Picture" class="image-background">
+        <a href="" title="Edit cover photo" data-bs-toggle="modal" data-bs-target="#editCoverModal" onclick="return false;">
+            <img src="../images/default-cover.jpg" alt="Cover Picture" class="image-background">
         </a>
         <a href="" title="Edit profile photo" data-bs-toggle="modal" data-bs-target="#editPhotoModal"
             onclick="return false;">

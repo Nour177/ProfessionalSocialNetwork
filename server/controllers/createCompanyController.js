@@ -12,7 +12,8 @@ export const createCompany = async (req, res) => {
         organizationType: req.body.organizationType,
         industry: req.body.industry,
         description: req.body.description,
-        logo: logoPath
+        logo: logoPath,
+        admin: req.session.user._id
     });
 
     try {
