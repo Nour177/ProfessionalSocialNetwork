@@ -1,5 +1,5 @@
 // Configuration de l'API
-const API_BASE_URL = 'http://localhost:5000'; // Ajustez selon votre configuration (port)
+const API_BASE_URL = 'http://localhost:3000'; // Ajustez selon votre configuration (port)
 
 // État de l'application
 let currentUser = null;
@@ -720,9 +720,9 @@ async function addComment(postId, commentText) {
     }
     
     // Pour les tests
-    // const userName = currentUser 
-    //     ? `${currentUser.firstname} ${currentUser.lastname}`
-    //     : 'Test User';
+    const userName = currentUser 
+        ? `${currentUser.firstname} ${currentUser.lastname}`
+        : 'Test User';
     
     try {
         const commentData = {
