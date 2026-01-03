@@ -58,7 +58,15 @@ const employeeSchema = new mongoose.Schema({
   skills: [String],
   languages: [String],
   profileImagePath: String,
-  coverImagePath: String
+  coverImagePath: String,
+  publicProfile: {
+    type: Boolean,
+    default: true
+  },
+  allowSearchEngines: {
+    type: Boolean,
+    default: false
+  }
 
 }, { timestamps: true });
 

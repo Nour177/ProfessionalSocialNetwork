@@ -3,10 +3,9 @@ import dotenv from 'dotenv';
 import connectDB from './database.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import employee from './models/Employees.js';
 import postRoutes from './routes/postRoutes.js';
 import profileRoutes from './routes/profileRoutes.js';
-
+import settingsRoutes from './routes/settingsRoutes.js';
 import companyRouter from './routes/companyRoute.js';
 import {router} from './routes/postJobRoutes.js'
 
@@ -58,8 +57,11 @@ app.use('/', authRoutes);
 
 app.use('/company', companyRouter);
 
+// Profile routes
 app.use(profileRoutes);
 
+// Settings routes
+app.use(settingsRoutes);
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);

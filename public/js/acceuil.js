@@ -75,20 +75,41 @@ function updateUserProfileUI(user) {
     const profileJob = document.querySelector('#company');
     const postAvatar = document.querySelector('.post-avatar');
     
-    if (profileAvatar && user.profileImagePath) {
-        profileAvatar.src = user.profileImagePath;
+    
+    if (profileAvatar) {
+        setImageWithFallback(profileAvatar, user.profileImagePath, '../images/profile.png');
+        profileAvatar.alt = `${user.firstname || ''} ${user.lastname || ''}`.trim() || 'Profile picture';
     }
     
     if (profileName) {
-        profileName.textContent = `${user.firstname} ${user.lastname}`;
+        profileName.textContent = `${user.firstname || ''} ${user.lastname || ''}`.trim() || 'User';
     }
     
-    if (profileJob && user.recentJob) {
-        profileJob.innerHTML = `${user.recentJob}`;
+    if (profileJob) {
+        // Use recentJob if available, otherwise get from first experience
+        let jobText = '';
+        if (user.recentJob) {
+            jobText = user.recentJob;
+        } else if (user.experiences && user.experiences.length > 0) {
+            const firstExp = user.experiences[0];
+            const jobTitle = firstExp.role || '';
+            const company = firstExp.company || '';
+            if (jobTitle && company) {
+                jobText = `${jobTitle} at ${company}`;
+            } else if (jobTitle) {
+                jobText = jobTitle;
+            } else if (company) {
+                jobText = company;
+            }
+        }
+        if (jobText) {
+            profileJob.innerHTML = jobText;
+        }
     }
     
-    if (postAvatar && user.profileImagePath) {
-        postAvatar.src = user.profileImagePath;
+    
+    if (postAvatar) {
+        setImageWithFallback(postAvatar, user.profileImagePath, '../images/profile.png');
     }
 }
 
@@ -180,10 +201,11 @@ function createPostElement(post) {
         <div class="card-body">
             <div class="d-flex align-items-center justify-content-between mb-2">
                 <div class="d-flex align-items-center">
-                    <img src="${post.authorAvatar || '/uploads/default-avatar.png'}" 
+                    <img src="${normalizeImagePath(post.authorAvatar || '', '../images/profile.png')}" 
                          alt="Photo profil" 
                          class="rounded-circle me-2" 
-                         style="width: 40px; height: 40px; object-fit: cover;">
+                         style="width: 40px; height: 40px; object-fit: cover;"
+                         onerror="this.src='../images/profile.png'; this.onerror=null;">
                     <div>
                         <h6 class="fw-bold mb-0">${escapeHtml(post.author || 'User')}</h6>
                         <p class="text-muted small mb-0">${timeAgo}</p>
@@ -206,7 +228,7 @@ function createPostElement(post) {
                 ` : ''}
             </div>
             
-            ${post.image ? `<img src="${post.image}" class="img-fluid rounded mb-2" alt="Image du post">` : ''}
+            ${post.image ? `<img src="${normalizeImagePath(post.image, '../images/default-c.jpg')}" class="img-fluid rounded mb-2" alt="Image du post" onerror="this.src='../images/default-c.jpg'; this.onerror=null;">` : ''}
             ${post.video ? `<video src="${post.video}" class="img-fluid rounded mb-2" controls></video>` : ''}
             
             <p class="mb-2">${escapeHtml(post.content || '')}</p>
@@ -540,6 +562,27 @@ function setupEventListeners() {
             }
         }
     });
+    
+    // Logout button
+    const logoutBtn = document.getElementById('logout-btn');
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            handleLogout();
+        });
+    }
+}
+
+// Fonction pour gérer la déconnexion
+function handleLogout() {
+    if (confirm('Are you sure you want to logout?')) {
+        // Clear localStorage
+        localStorage.removeItem('user');
+        localStorage.removeItem('isAuthenticated');
+        
+        // Rediriger vers la page de login
+        window.location.href = '/pages/login.html';
+    }
 }
 
 // Créer un nouveau post (texte simple)
@@ -975,6 +1018,7 @@ window.acceuilApp = {
     toggleLike,
     addComment,
     editPost,
-    deletePost
+    deletePost,
+    handleLogout
 };
 

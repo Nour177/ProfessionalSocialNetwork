@@ -193,3 +193,36 @@ body {
   background-color: #6c757d;
   border-color: #6c757d;
 }
+a:hover{
+  color: var(--sage-green);
+  text-decoration: none;
+} 
+a{
+  color: var(--hunter-green);
+}
+
+/* Dropdown menu styles */
+.navbar .dropdown-toggle::after {
+  display: none; /* Hide default Bootstrap dropdown arrow */
+}
+
+.navbar .dropdown-menu {
+  margin-top: 0.5rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.navbar .dropdown-item {
+  padding: 0.5rem 1rem;
+  transition: background-color 0.2s;
+}
+
+.navbar .dropdown-item:hover {
+  background-color: #f8f9fa;
+}
+
+.navbar .dropdown-item i {
+  margin-right: 0.5rem;
+  width: 16px;
+}
