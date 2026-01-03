@@ -21,7 +21,7 @@
                 localStorage.removeItem('user');
             
                 try {
-                    await fetch('http://localhost:5000/api/logout', {
+                    await fetch('http://localhost:3000/api/logout', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
@@ -86,7 +86,7 @@
         }
 
         // Fetch notificationsI
-        fetch('http://localhost:5000/api/notifications/count', {
+        fetch('http://localhost:3000/api/notifications/count', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
