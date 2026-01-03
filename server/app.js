@@ -6,6 +6,7 @@ import { fileURLToPath } from 'url';
 import postRoutes from './routes/postRoutes.js';
 import profileRoutes from './routes/profileRoutes.js';
 import settingsRoutes from './routes/settingsRoutes.js';
+import networkRoutes from './routes/networkRoutes.js';
 import companyRouter from './routes/companyRoute.js';
 import {router} from './routes/postJobRoutes.js'
 
@@ -62,6 +63,9 @@ app.use(profileRoutes);
 
 // Settings routes
 app.use(settingsRoutes);
+
+// Network routes
+app.use(networkRoutes);
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);

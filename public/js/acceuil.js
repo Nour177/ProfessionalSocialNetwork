@@ -4,6 +4,7 @@ const API_BASE_URL = 'http://localhost:3000'; // Ajustez selon votre configurati
 // État de l'application
 let currentUser = null;
 let posts = [];
+let suggestions = [];
 
 // Vérifier si un post appartient à l'utilisateur actuel
 function isCurrentUserPost(author) {
@@ -34,6 +35,9 @@ async function initializeApp() {
     
     // Charger les posts (tous les posts dans la base)
     await loadPosts();
+    
+    // Charger les suggestions
+    await loadSuggestions();
     
     // Configurer les écouteurs d'événements (listeners)
     setupEventListeners();
@@ -571,6 +575,15 @@ function setupEventListeners() {
             handleLogout();
         });
     }
+    
+    // Gérer le bouton Connect pour les suggestions
+    document.addEventListener('click', async (e) => {
+        if (e.target.closest('.connect-suggestion-btn')) {
+            const button = e.target.closest('.connect-suggestion-btn');
+            const email = button.getAttribute('data-email');
+            await handleConnectSuggestion(email, button);
+        }
+    });
 }
 
 // Fonction pour gérer la déconnexion
@@ -762,7 +775,6 @@ async function addComment(postId, commentText) {
         return;
     }
     
-    // Pour les tests
     const userName = currentUser 
         ? `${currentUser.firstname} ${currentUser.lastname}`
         : 'Test User';
@@ -1011,6 +1023,136 @@ async function deletePost(postId) {
     }
 }
 
+// Charger les suggestions
+async function loadSuggestions() {
+    try {
+        if (!currentUser || !currentUser.email) {
+            console.error('No current user found for suggestions');
+            suggestions = [];
+            displaySuggestions();
+            return;
+        }
+
+        console.log('Loading suggestions for:', currentUser.email);
+        const response = await fetch(`${API_BASE_URL}/api/network/suggestions?email=${encodeURIComponent(currentUser.email)}`, {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' }
+        });
+        
+        if (response.ok) {
+            const data = await response.json();
+            suggestions = data.suggestions || [];
+            console.log('Suggestions loaded:', suggestions);
+        } else {
+            const errorData = await response.json().catch(() => ({}));
+            console.error('Error loading suggestions:', response.status, errorData);
+            suggestions = [];
+        }
+        
+        displaySuggestions();
+    } catch (error) {
+        console.error('Error loading suggestions:', error);
+        suggestions = [];
+        displaySuggestions();
+    }
+}
+
+// Afficher les suggestions
+function displaySuggestions() {
+    const container = document.getElementById('suggestions-container');
+    if (!container) {
+        console.error('Suggestions container not found');
+        return;
+    }
+    
+    console.log('Displaying suggestions:', suggestions);
+    
+    if (suggestions.length === 0) {
+        container.innerHTML = '<p class="text-muted text-center mb-0 small">No suggestions available</p>';
+        return;
+    }
+    
+    // maximum 2 suggestions sur la page d'accueil
+    const suggestionsToShow = suggestions.slice(0, 2);
+    
+    container.innerHTML = suggestionsToShow.map(suggestion => `
+        <div class="card shadow-sm mb-2" style="max-width: 100%;">
+            <div class="card-body d-flex align-items-center p-2">
+                <img src="${normalizeImagePath(suggestion.avatar, '../images/default-avatar.png')}" 
+                     alt="${suggestion.name}" 
+                     class="rounded-circle me-2" 
+                     style="width: 48px; height: 48px; object-fit: cover;"
+                     onerror="this.src='../images/default-avatar.png'; this.onerror=null;">
+                <div class="flex-grow-1">
+                    <h6 class="mb-0 fw-bold small">${escapeHtml(suggestion.name)}</h6>
+                    <small class="text-muted" style="font-size: 0.75rem;">
+                        ${escapeHtml(suggestion.job || 'No job title')}
+                    </small>
+                </div>
+                <button class="btn btn-sm connect-suggestion-btn" 
+                        data-email="${suggestion.email}"
+                        style="border: 1px solid #386641ff; color: #386641ff; background: transparent; padding: 0.25rem 0.5rem;">
+                    <i class="bi bi-person-plus"></i>
+                </button>
+            </div>
+        </div>
+    `).join('');
+}
+
+// Gérer la connexion avec une suggestion
+async function handleConnectSuggestion(email, button) {
+    try {
+        if (!currentUser || !currentUser.email) {
+            alert('User not authenticated');
+            return;
+        }
+
+        // Désactiver le bouton pendant la requête
+        button.disabled = true;
+        button.innerHTML = '<i class="bi bi-hourglass-split"></i>';
+
+        const response = await fetch(`${API_BASE_URL}/api/network/connect`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+                email: currentUser.email,
+                targetEmail: email
+            })
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            if (data.success) {
+                // Mettre à jour le bouton (demande a été envoyée)
+                button.disabled = true;
+                button.innerHTML = '<i class="bi bi-check-lg"></i>';
+                button.style.color = '#28a745';
+                button.style.borderColor = '#28a745';
+                
+                // Retirer la suggestion
+                suggestions = suggestions.filter(s => s.email !== email);
+                displaySuggestions();
+                
+                console.log('Connection request sent successfully');
+            } else {
+                alert(data.message || 'Error sending connection request');
+                button.disabled = false;
+                button.innerHTML = '<i class="bi bi-person-plus"></i>';
+            }
+        } else {
+            const errorData = await response.json().catch(() => ({}));
+            alert(errorData.message || 'Error sending connection request');
+            button.disabled = false;
+            button.innerHTML = '<i class="bi bi-person-plus"></i>';
+        }
+    } catch (error) {
+        console.error('Error connecting to user:', error);
+        alert('Network error while sending connection request');
+        button.disabled = false;
+        button.innerHTML = '<i class="bi bi-person-plus"></i>';
+    }
+}
+
 // Exporter les fonctions (en cas de necessité)
 window.acceuilApp = {
     loadPosts,
@@ -1019,6 +1161,7 @@ window.acceuilApp = {
     addComment,
     editPost,
     deletePost,
-    handleLogout
+    handleLogout,
+    loadSuggestions
 };
 
