@@ -57,13 +57,13 @@ header {
   max-width: 1000px;
 }
 
-#nom {
+#nom, #companyName {
   font-weight: 700;
   font-size: 1.8rem;
   text-align: center;
 }
 
-#position {
+#position, #companyIndustry, #companyInfos {
   color: #6c757d;
   text-align: center;
   margin-bottom: 24px;

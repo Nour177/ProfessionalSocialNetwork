@@ -5,6 +5,8 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import postRoutes from './routes/postRoutes.js';
 import profileRoutes from './routes/profileRoutes.js';
+import companyProfileRoutes from './routes/companyProfileRoutes.js';
+import { upload } from './middleware/upload.js';
 import settingsRoutes from './routes/settingsRoutes.js';
 import networkRoutes from './routes/networkRoutes.js';
 import companyRouter from './routes/companyRoute.js';
@@ -60,6 +62,8 @@ app.use('/company', companyRouter);
 
 // Profile routes
 app.use(profileRoutes);
+app.use(companyProfileRoutes);
+
 
 // Settings routes
 app.use(settingsRoutes);
