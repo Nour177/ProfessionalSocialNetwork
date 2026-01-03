@@ -6,7 +6,8 @@ import { fileURLToPath } from 'url';
 import employee from './models/Employees.js';
 import postRoutes from './routes/postRoutes.js';
 import profileRoutes from './routes/profileRoutes.js';
-
+import companyProfileRoutes from './routes/companyProfileRoutes.js';
+import { upload } from './middleware/upload.js';
 import companyRouter from './routes/companyRoute.js';
 import {router} from './routes/postJobRoutes.js'
 
@@ -406,7 +407,10 @@ app.put('/api/settings/privacy', async (req, res) => {
         res.status(500).json({ success: false, message: 'Failed to update privacy settings' });
     }
 });
+
 app.use(profileRoutes);
+app.use(companyProfileRoutes);
+
 
 
 app.listen(port, () => {
