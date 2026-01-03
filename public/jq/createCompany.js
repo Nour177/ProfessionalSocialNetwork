@@ -3,6 +3,7 @@ $(function(){
     $('#fileInput').on('change', function () {
         const file = this.files[0];
         if (file) {
+            $('#previewImage').removeClass('d-none');
             previewFile(file);
         }
     });

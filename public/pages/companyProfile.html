@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Company Profile</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="../css/profile_style.css">
+</head>
+
+<body>
+
+    <div id="navbar"></div>
+
+    <script>
+        fetch('./navbar.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('navbar').innerHTML = data;
+            });
+    </script>
+
+    <header>
+        <a data-bs-toggle="modal" data-bs-target="#editCoverModal">
+            <img src="../images/cover.jpg" class="image-background" alt="Cover">
+        </a>
+
+        <a data-bs-toggle="modal" data-bs-target="#editLogoModal">
+            <img src="../images/company-logo.png" class="profile-img" alt="Company Logo">
+        </a>
+    </header>
+
+    <main class="container-md container-profile">
+
+        <!-- Company Basic Info -->
+        <h2 id="companyName">Company Name</h2>
+        <p class="text-muted" id="companyIndustry">Industry</p>
+
+        <p id="companyInfos">
+            <i class="bi bi-geo-alt"></i>
+            <span id="companyLocation">Location</span> ·
+            <span id="companySize">50–100 employees</span> <br>
+            <a id="companyWebsite" href="" target="_blank">
+                <i class="bi bi-globe"></i> Visit website
+            </a>
+        </p>
+
+
+
+
+        <!-- Overview -->
+        <div class="card-custom mt-3 " id="infos">
+            <div class="card-title d-flex justify-content-between">
+                <h5>Overview</h5>
+                <div class="card-icons d-flex">
+                <a data-bs-toggle="modal" data-bs-target="#editAboutModal">
+                    <i class="bi bi-pencil icon-small"></i>
+                </a>
+                </div>
+            </div>
+            <p id="companyDescription"></p>
+        </div>
+
+        <!-- Company Posts -->
+        <div class="card-custom">
+            <h5 class="card-title-custom mb-3">Posts</h5>
+
+
+            <div class="post-item mb-3 p-3" id="posts">
+
+            </div>
+        </div>
+
+        <!-- Job Openings -->
+        <div class="card-custom">
+            <div class="card-title d-flex justify-content-between">
+                <h5>Recent job openings</h5>
+            </div>
+                <div class="post-item mb-3 p-3" id="jobs">
+
+            <div id="jobsList"></div>
+        </div>
+
+        
+
+    </main>
+    <div class="text-center my-4">
+            <button id="generatePdfBtn" class="btn btn-primary">Download CV as PDF</button>
+        </div>
+    <!-- Edit About Company Modal -->
+    <div class="modal fade" id="editAboutModal">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5>Edit Company Description</h5>
+                    <button class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <textarea id="companyDescriptionTextarea" class="form-control" rows="5"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button class="btn btn-primary" id="saveCompanyDescriptionBtn">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Logo Modal -->
+    <div class="modal fade" id="editLogoModal">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5>Change Company Logo</h5>
+                    <button class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="file" class="form-control" accept="image/*">
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button class="btn btn-primary">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+
+<script>
+document.getElementById('generatePdfBtn').addEventListener('click', async () => {
+    const { jsPDF } = window.jspdf;
+
+    // Sections to include in the PDF
+    const sections = [
+        document.getElementById('infos'),
+        
+    ];
+
+    const pdf = new jsPDF('p', 'mm', 'a4');
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdfHeight = pdf.internal.pageSize.getHeight();
+    let yOffset = 0;
+
+    for (let i = 0; i < sections.length; i++) {
+        const canvas = await html2canvas(sections[i], { scale: 2 });
+        const imgData = canvas.toDataURL('image/png');
+
+        const imgHeight = (canvas.height * pdfWidth) / canvas.width;
+
+        // Check if content exceeds page height
+        if (yOffset + imgHeight > pdfHeight) {
+            pdf.addPage();
+            yOffset = 0;
+        }
+
+        pdf.addImage(imgData, 'PNG', 0, yOffset, pdfWidth, imgHeight);
+        yOffset += imgHeight;
+    }
+
+    pdf.save('My_CV.pdf');
+});
+
+</script>
+
+    <script src="../js/companyProfile.js"></script>
+
+</body>
+
+</html>

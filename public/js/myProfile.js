@@ -1592,3 +1592,32 @@ async function updateEducation(index, education) {
         alert('Network error. Please try again.');
     }
 }
+
+
+// Get elements
+const uploadBtn = document.getElementById('uploadVideoBtn');
+const videoInput = document.getElementById('cvVideoInput');
+const previewContainer = document.getElementById('videoPreviewContainer');
+
+// When button clicked, open file selector
+uploadBtn.addEventListener('click', () => {
+    videoInput.click();
+});
+
+// When user selects a video
+videoInput.addEventListener('change', () => {
+    const file = videoInput.files[0];
+    if (!file) return;
+
+    // Clear previous preview
+    previewContainer.innerHTML = '';
+
+    // Create video element
+    const video = document.createElement('video');
+    video.src = URL.createObjectURL(file);
+    video.controls = true;
+    video.width = 300; // adjust size
+    video.height = 200;
+
+    previewContainer.appendChild(video);
+});
