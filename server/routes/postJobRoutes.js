@@ -3,6 +3,7 @@ export const router = express.Router()
 import { Job } from '../models/jobSchema.js';
 import { checkCompany } from '../controllers/jobPostController.js';
 import { getJobDetails, renderEditPage, updateJob, deleteJob, getAllJobs } from '../controllers/jobPostController.js';
+import Application from '../models/jobApplicationSchema.js';
 
 router.get('/api/jobs', getAllJobs);
 
@@ -37,10 +38,17 @@ router.post('/post-job', checkCompany,(req, res) => {
 
 });
 
-router.get('/:id', getJobDetails, (req, res) => {
+router.get('/:id', getJobDetails, async (req, res) => {
     //69580eaadf721870f3fe5fbe
     const { job, company } = res.locals.data;
     let jobLocation = job.location || "Not specified";
+    let jobId = job._id
+    let hasApplied = false
+
+    const existingApplication = await Application.findOne({ jobId, applicantId: req.session.user._id });
+        if (existingApplication) {
+            hasApplied = true
+        }
     console.log({
         ...job,
         ...company,
@@ -50,7 +58,8 @@ router.get('/:id', getJobDetails, (req, res) => {
         ...job,
         ...company,
         jobLocation: jobLocation,
-        userId : req.session?.user?._id || null
+        userId : req.session.user._id || null,
+        hasApplied : hasApplied
     });
 });
 
