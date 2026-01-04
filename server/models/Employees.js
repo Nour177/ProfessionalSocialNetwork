@@ -51,7 +51,6 @@ const employeeSchema = new mongoose.Schema({
 
   profileImagePath: String,
   description: String,
-  //posts:[Post],
   experiences: [experienceSchema],
   education: [educationSchema],
   certifications:[certificationSchema],
@@ -59,6 +58,7 @@ const employeeSchema = new mongoose.Schema({
   languages: [String],
   profileImagePath: String,
   coverImagePath: String,
+  videoPath: String,
   publicProfile: {
     type: Boolean,
     default: true
