@@ -1191,8 +1191,8 @@ function displayJobOffers() {
         return;
     }
 
-    // Afficher maximum 3 offres sur la page d'accueil
-    const jobsToShow = jobOffers.slice(0, 3);
+    // Afficher maximum 2 offres sur la page d'accueil
+    const jobsToShow = jobOffers.slice(0, 2);
     
     container.innerHTML = jobsToShow.map(job => `
         <div class="card shadow-sm mb-2 job-offer-card" 
