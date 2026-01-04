@@ -3,8 +3,13 @@ import express from 'express';
 import {
   redirectCompanyProfilePage,
   getCompanyByAdminId,
-  updateCompanyDescription
+  updateCompanyDescription,
+  updateCompanyCover, 
+  updateCompanyLogo,
+  updateCompanyDetails
 } from '../controllers/companyProfileController.js';
+
+import { upload, uploadVideo } from '../middleware/upload.js';
 
 const router = express.Router();
 
@@ -15,6 +20,9 @@ router.get('/companyProfile', redirectCompanyProfilePage);
 router.get('/api/companies/admin/:adminId', getCompanyByAdminId);
 
 router.put('/api/companies/description', updateCompanyDescription);
+router.put('/api/companies/cover', upload.single('cover'), updateCompanyCover);
+router.put('/api/companies/logo', upload.single('logo'), updateCompanyLogo);
+router.put('/api/companies/details', updateCompanyDetails);
 
 
 export default router;

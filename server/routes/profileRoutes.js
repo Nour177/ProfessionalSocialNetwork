@@ -22,6 +22,8 @@ const router = express.Router();
 router.get('/api/myProfile', getProfile);
 router.get('/myProfile', redirectProfilePage);
 
+
+
 router.put('/edit/editInfos', editDescription);
 router.put('/edit/addExperience', addExperience);
 router.put('/edit/editExperience', editExperience);

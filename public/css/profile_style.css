@@ -32,6 +32,15 @@ header {
   transform: scale(1.02);
   opacity: 0.85;
 }
+.image-background2 {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  padding: 0 100px;
+  border-radius: 0.5rem;
+}
+
+
 
 .profile-img {
   width: 180px;
@@ -52,6 +61,17 @@ header {
   box-shadow: 0 0 15px rgba(0,0,0,0.3);
 }
 
+.profile-img2 {
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  position: absolute;
+  bottom: -80px;
+  left: 50%;
+  transform: translateX(-50%);
+  object-fit: cover;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
 .container-profile {
   margin-top: 80px;
   max-width: 1000px;
@@ -127,6 +147,14 @@ header {
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
   cursor: pointer;
+}
+
+.experience-item2 {
+  min-width: 200px;
+  max-width: 400px;
+  padding: 15px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
 .experience-item:hover {
@@ -209,4 +237,13 @@ header {
 
 .btn-secondary {
   border: none !important;
+}
+
+#videoPreviewContainer {
+    display: flex;
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: center; 
+    gap: 10px;          
+    text-align: center;     
 }
