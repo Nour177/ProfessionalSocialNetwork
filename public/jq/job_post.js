@@ -16,7 +16,8 @@ $(function(){
         const response = await fetch(url, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data)
+            body: JSON.stringify(data),
+            credentials: 'include'
         });
 
         const result = await response.json();
@@ -30,6 +31,37 @@ $(function(){
             }
         } else {
             window.location.href = result.redirectUrl;
+        }
+    });
+
+    $('#applyBtn').on('click', async function() {
+
+        const jobId = $(this).data('job-id');
+        const btn = $(this);
+
+        // Disable button to prevent double clicks
+        btn.prop('disabled', true).text('Sending...');
+
+        try {
+            const response = await fetch('/applications/apply', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ jobId: jobId })
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                btn.html('<i class="bi bi-check-circle-fill"></i> Applied');
+            } else {
+                $('#formMessages').html(`<div class="alert alert-danger">${result.message}</div>`);
+                btn.prop('disabled', false).text('Apply Now'); // Re-enable if error
+            }
+
+        } catch (error) {
+            $('#formMessages').html(`<div class="alert alert-danger">Something went wrong</div>`);
+            console.error(error);
+            btn.prop('disabled', false).text('Apply Now');
         }
     });
 });
