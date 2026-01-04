@@ -1,5 +1,5 @@
 // import { handleLogout } from './acceuil.js';
-const API_BASE_URL = 'http://localhost:5000';
+const API_BASE_URL = 'http://localhost:3000';
 const currentYear = new Date().getFullYear();
 
 // État de l'application

@@ -126,7 +126,7 @@ Créer un fichier `.env` dans `server/` :
 ```env
 MONGO_URI=your_mongo_cluster_url
 JWT_SECRET=your_secret_key
-PORT=5000
+PORT=3000
 ```
 
 ## 4️⃣ Lancer le projet

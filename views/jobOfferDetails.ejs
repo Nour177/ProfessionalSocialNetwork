@@ -22,7 +22,7 @@
                 <div class="card shadow-sm">
                     <form action="#" method="POST" id="jobPostForm">
                         <div class="card-header bg-white border-0 py-4">
-                            <% if (locals._doc.postedBy._id.toString() === locals.userId) { %>
+                            <% if (locals.userId && locals._doc.postedBy._id && locals._doc.postedBy._id.toString() === locals.userId.toString()) { %>
                                 <div class="mt-3">
                                     <div class="text-end">
                                     <a href="/jobs/edit/<%= locals._doc._id %>" class="btn btn-outline-secondary me-2">
@@ -78,21 +78,24 @@
                         <div class="card-body">
                             <h5 class="fw-bold mb-3">Meet the Hiring Team</h5>
                             <div class="d-flex align-items-center mb-3">
-                                <img src="<%= locals._doc.postedBy.profileImagePath%>" 
+                                <img src="<%= locals._doc.postedBy.profileImagePath || '/images/profile.png' %>" 
                                     alt="Manager Profile"
                                     class="rounded-circle me-3 border" 
-                                    style="width: 50px; height: 50px; object-fit: cover; min-width: 50px;" />
+                                    style="width: 50px; height: 50px; object-fit: cover; min-width: 50px;"
+                                    onerror="this.src='/images/profile.png'" />
 
                                 <div class="d-flex flex-column justify-content-center lh-sm">
-                                    <a href="/profile/<=% locals._doc.postedBy._id %>">
+                                    <a href="/profile/<%= locals._doc.postedBy._id %>">
                                     <h6 class="fw-bold text-dark mb-0">
                                         <%=locals._doc.postedBy.firstname%> <%=locals._doc.postedBy.lastname%>
                                     </h6>
                                     </a>
                                     
+                                    <% if (locals._doc.postedBy.description) { %>
                                     <span class="text-secondary small fw-light">
                                         <%=locals._doc.postedBy.description%>
                                     </span>
+                                    <% } %>
                                     
                                 </div>
                             </div>
@@ -119,7 +122,8 @@
 
         try {
             const response = await fetch(`/jobs/delete/${jobId}`, {
-                method: 'DELETE'
+                method: 'DELETE',
+                credentials: 'include'
             });
 
             const result = await response.json();
