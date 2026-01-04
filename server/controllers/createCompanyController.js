@@ -1,9 +1,13 @@
 import Company from '../models/companySchema.js';
 
 export const createCompany = async (req, res) => {
+    if (!req.session?.user) {
+        return res.status(401).json({ success: false, message: "You must be logged in to create a company" });
+    }
 
     const logoPath = req.file ? `/uploads/${req.file.filename}` : null;
     console.log('Received company data:', logoPath);
+
     const company = new Company({
         name: req.body.name,
         domainName: req.body.domainName,

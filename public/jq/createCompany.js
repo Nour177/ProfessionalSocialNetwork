@@ -23,8 +23,8 @@ $(function(){
 
         const response = await fetch('/company/create-company', {
             method: 'POST',
-            body: formData
-            
+            body: formData,
+            credentials: 'include'
         });
 
         const result = await response.json();

@@ -7,14 +7,20 @@ import { getJobDetails, renderEditPage, updateJob, deleteJob, getAllJobs } from 
 router.get('/api/jobs', getAllJobs);
 
 router.get('/post-job',(req, res) => {
+    if (!req.session?.user) {
+        return res.redirect('/pages/login.html');
+    }
     console.log('Rendering job post page for user:', req.session.user);
     res.render('job_post',{
-        firstname: req.session.user ? req.session.user.firstname : null,
+        firstname: req.session.user.firstname,
         isEditing : false
     });
 });
 
 router.post('/post-job', checkCompany,(req, res) => {
+    if (!req.session?.user) {
+        return res.status(401).json({ success: false, message: "You must be logged in to post a job" });
+    }
 
     console.log('Received job post data:', req.body);
 
@@ -23,8 +29,11 @@ router.post('/post-job', checkCompany,(req, res) => {
         postedBy: req.session.user._id
     }
 
-    Job.create(newJob);
-    res.status(200).json({success: true, redirectUrl:"/"})
+    Job.create(newJob).then(savedJob => {
+        res.status(200).json({success: true, redirectUrl:"/"})
+    }).catch(error => {
+        res.status(500).json({success: false, message: error.message})
+    });
 
 });
 

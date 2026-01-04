@@ -1,9 +1,22 @@
 import Company from "../models/companySchema.js";
 import {Job} from "../models/jobSchema.js";
-import employee from "../models/Employees.js";
 
 export const checkCompany = async (req, res, next) => {
+    if (!req.session?.user && !req.body.email) {
+        return res.status(401).json({ 
+            success: false, 
+            message: "You must be logged in to post a job" 
+        });
+    }
+
     const email = req.session.user ? req.session.user.email : req.body.email;
+    if (!email || typeof email !== 'string' || !email.includes('@')) {
+        return res.status(400).json({ 
+            success: false, 
+            message: "Invalid email address" 
+        });
+    }
+
     let domain = email.split('@')[1];
     let name = req.body.companyName;
 
