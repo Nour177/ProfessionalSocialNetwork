@@ -11,6 +11,7 @@ import settingsRoutes from './routes/settingsRoutes.js';
 import networkRoutes from './routes/networkRoutes.js';
 import companyRouter from './routes/companyRoute.js';
 import {router} from './routes/postJobRoutes.js'
+import jobApplicatinRoute from './routes/jobApplicationRoutes.js';
 
 import sessions from 'express-session';
 import authRoutes from './routes/authRoute.js';
@@ -42,6 +43,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.set('view engine', 'ejs');
 app.use('/jobs', router);
+app.use('/applications',jobApplicatinRoute)
 
 connectDB();
 
