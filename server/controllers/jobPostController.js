@@ -49,7 +49,14 @@ export const getJobDetails = async (req, res, next) => {
 
 export const renderEditPage = async (req, res) => {
     try {
+        if (!req.session?.user) {
+            return res.redirect('/pages/login.html');
+        }
+
         const job = await Job.findById(req.params.id);
+        if (!job) {
+            return res.status(404).json({ message: "Job not found" });
+        }
         
         if (job.postedBy.toString() !== req.session.user._id) {
             return res.redirect('/'); 
@@ -67,12 +74,20 @@ export const renderEditPage = async (req, res) => {
 
 export const updateJob = async (req, res) => {
     try {
+        if (!req.session?.user) {
+            return res.status(401).json({ success: false, message: "Unauthorized" });
+        }
+
         const jobId = req.params.id;
         const updatedData = req.body; 
 
         const job = await Job.findById(jobId);
+        if (!job) {
+            return res.status(404).json({ success: false, message: "Job not found" });
+        }
+
         if (job.postedBy.toString() !== req.session.user._id) {
-            return res.status(403).send("Unauthorized");
+            return res.status(403).json({ success: false, message: "Unauthorized" });
         }
 
         await Job.findByIdAndUpdate(jobId, updatedData);
@@ -86,12 +101,16 @@ export const updateJob = async (req, res) => {
 
     } catch (error) {
         console.error("Error updating job:", error);
-        res.status(500).send("Server Error");
+        res.status(500).json({ success: false, message: "Server Error" });
     }
 };
 
 export const deleteJob = async (req, res) => {
     try {
+        if (!req.session?.user) {
+            return res.status(401).json({ success: false, message: "Unauthorized" });
+        }
+
         const jobId = req.params.id;
 
         const job = await Job.findById(jobId);
@@ -114,5 +133,26 @@ export const deleteJob = async (req, res) => {
     } catch (error) {
         console.error("Error deleting job:", error);
         res.status(500).json({ success: false, message: "Server error" });
+    }
+};
+
+// Récupérer toutes les offres d'emploi (pour la page d'accueil)
+export const getAllJobs = async (req, res) => {
+    try {
+        const limit = parseInt(req.query.limit) || 10; //10 par defaut
+        
+        const jobs = await Job.find()
+            .sort({ createdAt: -1 }) //plus récents
+            .limit(limit)
+            .select('title companyName location employmentType _id createdAt')
+            .lean();
+
+        res.json({ 
+            success: true, 
+            jobs: jobs 
+        });
+    } catch (error) {
+        console.error("Error getting jobs:", error);
+        res.status(500).json({ success: false, message: "Server error", error: error.message });
     }
 };

@@ -39,6 +39,9 @@ async function initializeApp() {
     // Charger les suggestions
     await loadSuggestions();
     
+    // Charger les offres d'emploi
+    await loadJobOffers();
+    
     // Configurer les écouteurs d'événements (listeners)
     setupEventListeners();
     
@@ -1032,8 +1035,6 @@ async function loadSuggestions() {
             displaySuggestions();
             return;
         }
-
-        console.log('Loading suggestions for:', currentUser.email);
         const response = await fetch(`${API_BASE_URL}/api/network/suggestions?email=${encodeURIComponent(currentUser.email)}`, {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' }
@@ -1064,8 +1065,6 @@ function displaySuggestions() {
         console.error('Suggestions container not found');
         return;
     }
-    
-    console.log('Displaying suggestions:', suggestions);
     
     if (suggestions.length === 0) {
         container.innerHTML = '<p class="text-muted text-center mb-0 small">No suggestions available</p>';
@@ -1153,6 +1152,67 @@ async function handleConnectSuggestion(email, button) {
     }
 }
 
+// Charger les offres d'emploi
+async function loadJobOffers() {
+    try {
+        console.log('Loading job offers...');
+        const response = await fetch(`${API_BASE_URL}/jobs/api/jobs?limit=2`, {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' }
+        });
+        
+        if (response.ok) {
+            const data = await response.json();
+            jobOffers = data.jobs || [];
+        } else {
+            const errorData = await response.json().catch(() => ({}));
+            console.error('Error loading job offers:', response.status, errorData);
+            jobOffers = [];
+        }
+        
+        displayJobOffers();
+    } catch (error) {
+        console.error('Error loading job offers:', error);
+        jobOffers = [];
+        displayJobOffers();
+    }
+}
+
+// Afficher les offres d'emploi
+function displayJobOffers() {
+    const container = document.getElementById('jobContainer');
+    if (!container) {
+        console.error('Job container not found');
+        return;
+    }
+    
+    if (jobOffers.length === 0) {
+        container.innerHTML = '<p class="text-muted text-center mb-0 small">No job offers available</p>';
+        return;
+    }
+
+    // Afficher maximum 3 offres sur la page d'accueil
+    const jobsToShow = jobOffers.slice(0, 3);
+    
+    container.innerHTML = jobsToShow.map(job => `
+        <div class="card shadow-sm mb-2 job-offer-card" 
+             style="max-width: 100%; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;"
+             onclick="window.location.href='/jobs/${job._id}'"
+             onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 8px rgba(0,0,0,0.15)'"
+             onmouseout="this.style.transform=''; this.style.boxShadow=''">
+            <div class="card-body p-2">
+                <h6 class="mb-1 fw-bold small" style="color: #386641ff;">${escapeHtml(job.title || 'No title')}</h6>
+                <p class="mb-1 small text-muted" style="font-size: 0.75rem; margin-bottom: 0.25rem !important;">
+                    <i class="bi bi-building"></i> ${escapeHtml(job.companyName || 'Company not specified')}
+                </p>
+                <p class="mb-0 small text-muted" style="font-size: 0.7rem;">
+                    <i class="bi bi-briefcase"></i> ${escapeHtml(job.employmentType || 'Not specified')}
+                </p>
+            </div>
+        </div>
+    `).join('');
+}
+
 // Exporter les fonctions (en cas de necessité)
 window.acceuilApp = {
     loadPosts,
@@ -1162,6 +1222,7 @@ window.acceuilApp = {
     editPost,
     deletePost,
     handleLogout,
-    loadSuggestions
+    loadSuggestions,
+    loadJobOffers
 };
 

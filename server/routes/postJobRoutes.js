@@ -2,7 +2,9 @@ import express from 'express';
 export const router = express.Router()
 import { Job } from '../models/jobSchema.js';
 import { checkCompany } from '../controllers/jobPostController.js';
-import { getJobDetails, renderEditPage, updateJob, deleteJob } from '../controllers/jobPostController.js';
+import { getJobDetails, renderEditPage, updateJob, deleteJob, getAllJobs } from '../controllers/jobPostController.js';
+
+router.get('/api/jobs', getAllJobs);
 
 router.get('/post-job',(req, res) => {
     console.log('Rendering job post page for user:', req.session.user);
@@ -39,7 +41,7 @@ router.get('/:id', getJobDetails, (req, res) => {
         ...job,
         ...company,
         jobLocation: jobLocation,
-        userId : req.session.user._id
+        userId : req.session?.user?._id || null
     });
 });
 
