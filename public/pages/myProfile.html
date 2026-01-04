@@ -10,7 +10,6 @@
 
     <link rel="stylesheet" href="../css/profile_style.css">
     <link rel="stylesheet" href="../css/acceuil.css">
-    <link rel="stylesheet" href="../css/myProfile_style.css">
 
 </head>
 
@@ -20,7 +19,8 @@
     <script src="../js/loadNavbar.js"></script>
 
     <header>
-        <a href="" title="Edit cover photo" data-bs-toggle="modal" data-bs-target="#editCoverModal" onclick="return false;">
+        <a href="" title="Edit cover photo" data-bs-toggle="modal" data-bs-target="#editCoverModal"
+            onclick="return false;">
             <img src="../images/default-cover.jpg" alt="Cover Picture" class="image-background">
         </a>
         <a href="" title="Edit profile photo" data-bs-toggle="modal" data-bs-target="#editPhotoModal"
@@ -38,7 +38,7 @@
 
 
         <!-- About me -->
-        <div class="card-custom">
+        <div class="card-custom" id="description">
             <div class="card-title d-flex justify-content-between align-items-center">
                 <h5 class="mb-0">About me</h5>
                 <div class="card-icons d-flex">
@@ -120,15 +120,17 @@
             </div>
 
         </div>
+
+        
         <div class="card-custom">
             <div class="card-title d-flex justify-content-between align-items-center">
                 <h5 class="mb-0">CV Video</h5>
                 <div class="card-icons d-flex">
-                    <button id="uploadVideoBtn" class="btn btn-sm btn-outline-primary">Upload Video</button>
+                    <button id="uploadVideoBtn" class="btn btn-sm btn-outline-primary">Re/Upload Video</button>
                 </div>
             </div>
             <div class="mt-2" id="videoPreviewContainer">
-                <!-- Video preview will appear here -->
+                <video class="profile-video" width="400" height="300" controls></video>
             </div>
             <input type="file" id="cvVideoInput" accept="video/*" style="display:none">
         </div>
@@ -766,6 +768,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    
 
     <script src="../js/myProfile.js"></script>
 </body>

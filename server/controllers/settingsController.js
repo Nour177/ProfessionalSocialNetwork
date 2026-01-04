@@ -1,5 +1,8 @@
 import employee from '../models/Employees.js';
 
+import Company from '../models/companySchema.js';
+
+
 // Update Profile Settings
 export const updateProfile = async (req, res) => {
     const { email, firstname, lastname, company } = req.body;
@@ -206,3 +209,66 @@ export const updatePrivacy = async (req, res) => {
     }
 };
 
+
+export const saveVideo = async (req, res) => {
+    const { email } = req.body;
+    const userEmail = email || req.session?.user?.email || "aziza@gmail.com" ; 
+
+    try {
+
+        const updateData = {};
+        if (req.file) {
+            updateData.videoPath = `/uploads/${req.file.filename}`;
+        }
+
+        const user = await employee.findOneAndUpdate(
+            { email: userEmail },
+            { $set: updateData },
+            { new: true }
+        );
+
+        if (!user) {
+            return res.status(404).json({ success: false, message: 'User not found' });
+        }
+
+        const userResponse = user.toObject();
+        delete userResponse.password;
+        res.json({ success: true, message: 'Video saved successfully', user: userResponse });
+    } catch (error) {
+        console.error('Error saving video :', error);
+        res.status(500).json({ success: false, message: 'Failed to save video' });
+    }
+};
+
+
+
+
+export const saveVideoCompany = async (req, res) => {
+    const { id } = req.body;
+    const companyId = id  ; 
+
+    try {
+
+        const updateData = {};
+        if (req.file) {
+            updateData.video = `/uploads/${req.file.filename}`;
+        }
+        console.log()
+        const company = await Company.findOneAndUpdate(
+            { _id: companyId },
+            { $set: updateData },
+            { new: true }
+        );
+
+
+        if (!company) {
+            return res.status(404).json({ success: false, message: 'company not found' });
+        }
+
+        const companyResponse = company.toObject();
+        res.json({ success: true, message: 'Video saved successfully', company: companyResponse });
+    } catch (error) {
+        console.error('Error saving video :', error);
+        res.status(500).json({ success: false, message: 'Failed to save video' });
+    }
+};

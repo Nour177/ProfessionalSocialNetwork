@@ -4,9 +4,11 @@ import {
     updateProfilePhoto,
     updateCoverPhoto,
     updateAccount,
-    updatePrivacy
+    updatePrivacy,
+    saveVideo, 
+    saveVideoCompany
 } from '../controllers/settingsController.js';
-import { upload } from '../middleware/upload.js';
+import { upload, uploadVideo } from '../middleware/upload.js';
 
 const router = express.Router();
 
@@ -16,6 +18,9 @@ router.put('/api/settings/profile-photo', upload.single('profileImage'), updateP
 router.put('/api/settings/cover-photo', upload.single('coverImage'), updateCoverPhoto);
 router.put('/api/settings/account', updateAccount);
 router.put('/api/settings/privacy', updatePrivacy);
+router.put('/api/settings/profile-video', uploadVideo, saveVideo);
+router.put('/api/settings/company-video', uploadVideo, saveVideoCompany);
+
 
 export default router;
 

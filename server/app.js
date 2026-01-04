@@ -11,6 +11,7 @@ import settingsRoutes from './routes/settingsRoutes.js';
 import networkRoutes from './routes/networkRoutes.js';
 import companyRouter from './routes/companyRoute.js';
 import {router} from './routes/postJobRoutes.js'
+import otherProfileRoutes from './routes/otherProfileRoutes.js';
 
 import sessions from 'express-session';
 import authRoutes from './routes/authRoute.js';
@@ -63,6 +64,8 @@ app.use('/company', companyRouter);
 // Profile routes
 app.use(profileRoutes);
 app.use(companyProfileRoutes);
+app.use(otherProfileRoutes);
+
 
 
 // Settings routes

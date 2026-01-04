@@ -1,11 +1,11 @@
 // import { handleLogout } from './acceuil.js';
-const API_BASE_URL = 'http://localhost:5000';
+const API_BASE_URL = 'http://localhost:3000';
 const currentYear = new Date().getFullYear();
 
 // État de l'application
 let currentUser = null;
 let eventListenersSetup = false; //pour eviter les refrech plusieurs fois
-let isInitializing = false; 
+let isInitializing = false;
 
 // Initialisation
 document.addEventListener('DOMContentLoaded', () => {
@@ -22,7 +22,7 @@ async function initializeApp() {
         window.location.href = '/pages/login.html';
         return;
     }
-    
+
     await loadUserProfile();
 }
 
@@ -30,21 +30,21 @@ async function initializeApp() {
 async function loadUserProfile() {
     try {
         const userData = JSON.parse(localStorage.getItem('user'));
-        
+
         if (!userData) {
             window.location.href = '/pages/login.html';
             return;
         }
-        
+
         currentUser = userData;
-        
+
         displayUserProfile(userData);
-        
+
         // Charger les posts en parallèle (ne bloque pas l'affichage)
         loadUserPosts(userData).catch(error => {
             console.error('Error loading posts:', error);
         });
-        
+
         // Configurer les event listeners 
         if (!eventListenersSetup) {
             setupEventListeners(userData);
@@ -64,8 +64,8 @@ function displayUserProfile(user) {
 
     const position = document.getElementById('position');
     if (position) {
-        const jobTitle = user.experiences && user.experiences.length > 0 
-            ? user.experiences[0].role || user.position || user.email 
+        const jobTitle = user.experiences && user.experiences.length > 0
+            ? user.experiences[0].role || user.position || user.email
             : user.position || user.email;
         position.textContent = jobTitle;
     }
@@ -87,10 +87,26 @@ function displayUserProfile(user) {
         coverImg.src = user.coverImagePath;
     }
 
+    const profileVideo = document.querySelector('.profile-video');
+    if (profileVideo) {
+        if (user.videoPath) {
+            profileVideo.src = user.videoPath;
+            profileVideo.style.display = 'block';
+        } else {
+            profileVideo.src = '';
+            profileVideo.style.display = 'none';
+        }
+    }
+
     displayExperiences(user.experiences || []);
     displayEducation(user.education || []);
     displaySkills(user.skills || []);
     displayCertifications(user.certifications || []);
+
+    document.getElementById('generatePdfBtn').addEventListener('click', generateCVPdf);
+    setupVideoUploader('uploadVideoBtn', 'cvVideoInput', 'videoPreviewContainer');
+
+
 }
 
 function displayExperiences(experiences) {
@@ -102,23 +118,21 @@ function displayExperiences(experiences) {
     experiences.forEach((exp, index) => {
         const div = document.createElement("div");
         div.className = "experience-item";
-        div.setAttribute("role", "button");
-        div.setAttribute("data-bs-toggle", "modal");
-        div.setAttribute("data-bs-target", "#editExperienceModal");
-        div.setAttribute("data-index", index);
+        div.setAttribute("data-role", exp.role || '');
+        div.setAttribute("data-company", exp.company || '');
+        div.setAttribute("data-start", exp.startYear || '');
+        div.setAttribute("data-end", exp.endYear || '');
+        div.setAttribute("data-desc", exp.description || '');
 
         div.innerHTML = `
-            <img src="${exp.logo || '../images/default-c.jpg'}" alt="Company Logo" onerror="this.src='../images/default-c.jpg'">
-            <h6 class="mb-0">${exp.role || 'No role specified'}</h6>
-            <div class="text-muted small">
-                <span>${exp.company || 'No company'}</span>
-                ${exp.startYear || exp.endYear ? `
-                    <span class="mx-1">•</span>
-                    <span>${exp.startYear || ''}${exp.startYear && exp.endYear ? '-' : ''}${exp.endYear || ''}</span>
-                ` : ''}
-            </div>
-            ${exp.description ? `<p class="mb-0">${exp.description}</p>` : ''}
-        `;
+<img src="${exp.logo || '../images/default-c.jpg'}" alt="Company Logo" width="200" height="150">
+  <h6>${exp.role || 'No role specified'}</h6>
+  <div class="text-muted small">
+    <span>${exp.company || 'No company'}</span>
+    ${exp.startYear || exp.endYear ? `<span class="mx-1">•</span><span>${exp.startYear || ''}-${exp.endYear || ''}</span>` : ''}
+  </div>
+  ${exp.description ? `<p>${exp.description}</p>` : ''}
+`;
 
         experienceContainer.appendChild(div);
     });
@@ -151,22 +165,28 @@ function displayEducation(education) {
         div.className = "education-item d-flex align-items-start justify-content-between mb-3 p-2 border rounded";
         div.setAttribute("data-index", index);
 
+        // Add data attributes for PDF reading
+        div.setAttribute("data-field", ed.fieldOfStudy || ed.degree || '');
+        div.setAttribute("data-school", ed.school || ed.establishment || '');
+        div.setAttribute("data-degree", ed.degree || '');
+        div.setAttribute("data-start", ed.startYear || '');
+        div.setAttribute("data-end", ed.endYear || '');
+
         div.innerHTML = `
-            <div class="card-icons d-flex gap-4">
-                <img src="${ed.logo || '../images/graduation-hat.png'}" alt="School Logo" onerror="this.src='../images/default-school.png'">
-                <div>
-                    <h6 class="mb-0">${ed.fieldOfStudy || ed.degree || 'No degree'}</h6>
-                    <small class="text-muted">${ed.school || ed.establishment || ''} ${ed.degree ? '• ' + ed.degree : ''}</small>
-                    ${ed.startYear || ed.endYear ? `
-                        <p class="mb-0"><small class="text-muted">${ed.startYear || ''}${ed.startYear && ed.endYear ? '-' : ''}${ed.endYear || ''}</small></p>
-                    ` : ''}
-                </div>
-            </div>
-            <div class="ms-auto d-flex gap-3">
-                <i class="bi bi-pencil" role="button" data-bs-toggle="modal" data-bs-target="#editEducationModal"></i>
-                <i class="bi bi-trash" role="button" data-bs-toggle="modal" data-bs-target="#deleteEducationModal"></i>
-            </div>
-        `;
+    <div class="card-icons d-flex gap-4">
+        <img src="${ed.logo || '../images/graduation-hat.png'}" alt="School Logo" onerror="this.src='../images/default-school.png'" width="50" height="50">
+        <div>
+            <h6 class="mb-0">${ed.fieldOfStudy || ed.degree || 'No degree'}</h6>
+            <small class="text-muted">${ed.school || ed.establishment || ''} ${ed.degree ? '• ' + ed.degree : ''}</small>
+            ${ed.startYear || ed.endYear ? `<p class="mb-0"><small class="text-muted">${ed.startYear || ''}${ed.startYear && ed.endYear ? '-' : ''}${ed.endYear || ''}</small></p>` : ''}
+        </div>
+    </div>
+    <div class="ms-auto d-flex gap-3">
+        <i class="bi bi-pencil" role="button" data-bs-toggle="modal" data-bs-target="#editEducationModal"></i>
+        <i class="bi bi-trash" role="button" data-bs-toggle="modal" data-bs-target="#deleteEducationModal"></i>
+    </div>
+`;
+
 
         educationContainer.appendChild(div);
     });
@@ -187,10 +207,14 @@ function displaySkills(skills) {
         div.className = "skill-item d-flex align-items-center justify-content-between mb-3 p-2 border rounded";
         div.setAttribute("data-index", index);
 
+        // store skill in a data attribute for PDF
+        div.setAttribute("data-skill", skill);
+
         div.innerHTML = `
-            <span>${skill}</span>
-            <i class="bi bi-trash ms-auto" role="button" data-bs-toggle="modal" data-bs-target="#deleteSkillModal"></i>
-        `;
+    <span>${skill}</span>
+    <i class="bi bi-trash ms-auto" role="button" data-bs-toggle="modal" data-bs-target="#deleteSkillModal"></i>
+`;
+
         skillContainer.appendChild(div);
     });
 }
@@ -210,16 +234,22 @@ function displayCertifications(certifications) {
         div.className = "certification-item d-flex align-items-center justify-content-between mb-3 p-2 border rounded";
         div.setAttribute("data-index", index);
 
+        // store cert info for PDF
+        div.setAttribute("data-title", cert.title || '');
+        div.setAttribute("data-company", cert.company || '');
+        div.setAttribute("data-year", cert.year || '');
+
         div.innerHTML = `
-            <div>
-                <h6 class="mb-0">${cert.title || 'No title'}</h6>
-                <small>${cert.company || ''} ${cert.year ? '• ' + cert.year : ''}</small>
-            </div>
-            <div class="ms-auto d-flex gap-3">
-                <i class="bi bi-pencil" role="button" data-bs-toggle="modal" data-bs-target="#editCertificationModal"></i>
-                <i class="bi bi-trash" role="button" data-bs-toggle="modal" data-bs-target="#deleteCertificationModal"></i>
-            </div>
-        `;
+    <div>
+        <h6 class="mb-0">${cert.title || 'No title'}</h6>
+        <small>${cert.company || ''} ${cert.year ? '• ' + cert.year : ''}</small>
+    </div>
+    <div class="ms-auto d-flex gap-3">
+        <i class="bi bi-pencil" role="button" data-bs-toggle="modal" data-bs-target="#editCertificationModal"></i>
+        <i class="bi bi-trash" role="button" data-bs-toggle="modal" data-bs-target="#deleteCertificationModal"></i>
+    </div>
+`;
+
         certificationContainer.appendChild(div);
     });
 }
@@ -230,7 +260,7 @@ async function loadUserPosts(user) {
     if (container) {
         container.innerHTML = '<p class="text-center text-muted"><i class="bi bi-hourglass-split"></i> Loading posts...</p>';
     }
-    
+
     try {
         console.log('Loading posts for user:', user);
         const response = await fetch(`${API_BASE_URL}/api/posts`, {
@@ -246,9 +276,9 @@ async function loadUserPosts(user) {
 
         const data = await response.json();
         console.log('Posts API response:', data);
-        
+
         let allPosts = [];
-        
+
         if (data.success && data.posts) {
             allPosts = data.posts;
         } else if (Array.isArray(data)) {
@@ -261,15 +291,15 @@ async function loadUserPosts(user) {
 
         // Filtrer les posts de l'utilisateur actuel
         const userFullName = `${user.firstname || ''} ${user.lastname || ''}`.trim();
-        
+
         console.log('Filtering posts for user:', userFullName);
-        
+
         const userPosts = allPosts.filter(post => {
             if (!post.author) return false;
             const postAuthor = post.author.trim();
             return postAuthor === userFullName;
         });
-        
+
         console.log('User posts found:', userPosts.length);
         displayUserPosts(userPosts);
     } catch (error) {
@@ -309,7 +339,7 @@ function displayUserPosts(posts) {
     }
 
     console.log('Displaying', posts.length, 'posts');
-    
+
     const sortedPosts = [...posts].sort((a, b) => {
         const dateA = a.createdAt ? new Date(a.createdAt) : new Date(0);
         const dateB = b.createdAt ? new Date(b.createdAt) : new Date(0);
@@ -322,12 +352,12 @@ function displayUserPosts(posts) {
             div.className = "post-item mb-3 p-3";
             div.style = "background:#f8f9fa; border-radius:12px;";
 
-            const postDate = post.createdAt 
+            const postDate = post.createdAt
                 ? new Date(post.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
                 : 'Recently';
 
             let postContent = '';
-            
+
             if (post.postType === 'image' && post.image) {
                 postContent = `
                     ${post.content ? `<p>${escapeHtml(post.content)}</p>` : ''}
@@ -384,7 +414,7 @@ function displayUserPosts(posts) {
             console.error('Error displaying post:', error, post);
         }
     });
-    
+
     console.log('Posts displayed successfully');
 }
 
@@ -393,9 +423,9 @@ function setupEventListeners(user) {
         console.log('Event listeners already setup, skipping...');
         return;
     }
-    
+
     eventListenersSetup = true;
-    
+
     // Edit Photo Modal
     const photoInput = document.getElementById('profilePhotoInput');
     const photoPreview = document.getElementById('photoPreview');
@@ -450,7 +480,7 @@ function setupEventListeners(user) {
         });
 
         saveCoverBtn.addEventListener('click', async (e) => {
-            e.preventDefault(); 
+            e.preventDefault();
             const file = coverInput.files[0];
             if (file) {
                 await updateCoverPhoto(file);
@@ -470,12 +500,12 @@ function setupEventListeners(user) {
         });
 
         saveDescriptionBtn.addEventListener('click', async (e) => {
-            e.preventDefault(); 
+            e.preventDefault();
             const newDescription = descriptionTextarea.value;
             await updateDescription(newDescription);
         });
     }
-     // Logout button
+    // Logout button
     const logoutBtn = document.getElementById('logout-btn');
     if (logoutBtn) {
         logoutBtn.addEventListener('click', (e) => {
@@ -1380,12 +1410,12 @@ async function updateProfilePhoto(file) {
             delete updatedUser.password;
             localStorage.setItem('user', JSON.stringify(updatedUser));
             currentUser = updatedUser;
-            
+
             const modalInstance = bootstrap.Modal.getInstance(document.getElementById('editPhotoModal'));
             if (modalInstance) {
                 modalInstance.hide();
             }
-            
+
             const profileImg = document.querySelector('.profile-img');
             if (profileImg && updatedUser.profileImagePath) {
                 profileImg.src = updatedUser.profileImagePath;
@@ -1416,12 +1446,12 @@ async function updateCoverPhoto(file) {
             delete updatedUser.password;
             localStorage.setItem('user', JSON.stringify(updatedUser));
             currentUser = updatedUser;
-            
+
             const modalInstance = bootstrap.Modal.getInstance(document.getElementById('editCoverModal'));
             if (modalInstance) {
                 modalInstance.hide();
             }
-            
+
             const coverImg = document.querySelector('.image-background');
             if (coverImg && updatedUser.coverImagePath) {
                 coverImg.src = updatedUser.coverImagePath;
@@ -1442,9 +1472,9 @@ async function updateDescription(newDescription) {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ 
+            body: JSON.stringify({
                 email: currentUser.email,
-                newDescription: newDescription 
+                newDescription: newDescription
             })
         });
 
@@ -1452,12 +1482,12 @@ async function updateDescription(newDescription) {
         if (data.success) {
             currentUser.description = newDescription;
             localStorage.setItem('user', JSON.stringify(currentUser));
-            
+
             const infos = document.getElementById('infos');
             if (infos) {
                 infos.textContent = newDescription;
             }
-            
+
             const modalInstance = bootstrap.Modal.getInstance(document.getElementById('editInfosModal'));
             if (modalInstance) {
                 modalInstance.hide();
@@ -1476,10 +1506,10 @@ async function updateExperience(index, experience) {
         const response = await fetch(`${API_BASE_URL}/edit/editExperience`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ 
+            body: JSON.stringify({
                 email: currentUser.email,
-                index: index, 
-                experience: experience 
+                index: index,
+                experience: experience
             })
         });
 
@@ -1507,9 +1537,9 @@ async function addExperience(experience) {
         const response = await fetch(`${API_BASE_URL}/edit/addExperience`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ 
+            body: JSON.stringify({
                 email: currentUser.email,
-                experience: experience 
+                experience: experience
             })
         });
 
@@ -1537,9 +1567,9 @@ async function addEducation(education) {
         const response = await fetch(`${API_BASE_URL}/edit/addEducation`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ 
+            body: JSON.stringify({
                 email: currentUser.email,
-                education: education 
+                education: education
             })
         });
 
@@ -1567,10 +1597,10 @@ async function updateEducation(index, education) {
         const response = await fetch(`${API_BASE_URL}/edit/editEducation`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ 
+            body: JSON.stringify({
                 email: currentUser.email,
-                index: index, 
-                education: education 
+                index: index,
+                education: education
             })
         });
 
@@ -1594,30 +1624,262 @@ async function updateEducation(index, education) {
 }
 
 
-// Get elements
-const uploadBtn = document.getElementById('uploadVideoBtn');
-const videoInput = document.getElementById('cvVideoInput');
-const previewContainer = document.getElementById('videoPreviewContainer');
 
-// When button clicked, open file selector
-uploadBtn.addEventListener('click', () => {
-    videoInput.click();
-});
+function setupVideoUploader(uploadBtnId, videoInputId, previewContainerId) {
+    const uploadBtn = document.getElementById(uploadBtnId);
+    const videoInput = document.getElementById(videoInputId);
+    const previewContainer = document.getElementById(previewContainerId);
 
-// When user selects a video
-videoInput.addEventListener('change', () => {
-    const file = videoInput.files[0];
-    if (!file) return;
+    if (!uploadBtn || !videoInput || !previewContainer) return;
 
-    // Clear previous preview
-    previewContainer.innerHTML = '';
+    uploadBtn.addEventListener('click', () => {
+        videoInput.click();
+    });
 
-    // Create video element
-    const video = document.createElement('video');
-    video.src = URL.createObjectURL(file);
-    video.controls = true;
-    video.width = 300; // adjust size
-    video.height = 200;
+    videoInput.addEventListener('change', () => {
+        const file = videoInput.files[0];
+        if (!file) return;
 
-    previewContainer.appendChild(video);
-});
+        previewContainer.innerHTML = '';
+
+        // Create video preview
+        const video = document.createElement('video');
+        video.src = URL.createObjectURL(file);
+        video.controls = true;
+        video.width = 400;
+        video.height = 300;
+        previewContainer.appendChild(video);
+
+        const msgEl = document.createElement('div');
+        msgEl.id = 'videoUploadMsg';
+        msgEl.style.marginTop = '10px';
+        msgEl.style.color = 'green';
+        previewContainer.appendChild(msgEl);
+
+        // Create Save button
+        let saveBtn = document.createElement('button');
+        saveBtn.textContent = 'Save Video';
+        saveBtn.id = 'saveVideoBtn';
+        saveBtn.classList.add('btn', 'btn-primary', 'mt-2');
+        previewContainer.appendChild(saveBtn);
+
+        // Save button click event
+        saveBtn.addEventListener('click', async () => {
+            const formData = new FormData();
+            formData.append('videoFile', file);
+            formData.append('email', currentUser.email);
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/settings/profile-video`, {
+                    method: 'PUT',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (data.success && data.user) {
+                    const updatedUser = data.user;
+                    delete updatedUser.password;
+                    localStorage.setItem('user', JSON.stringify(updatedUser));
+                    currentUser = updatedUser;
+
+                    // Show success message below video
+                    msgEl.textContent = ' Video uploaded successfully!';
+
+
+
+
+                    // update video preview on profile page
+                    const profileVideo = document.querySelector('.profile-video');
+                    if (profileVideo && updatedUser.videoPath) {
+                        profileVideo.src = updatedUser.videoPath;
+                    }
+                } else {
+                    alert('Failed to update video: ' + (data.message || 'Unknown error'));
+                }
+            } catch (error) {
+                console.error('Error uploading video:', error);
+                alert('Network error. Please try again.');
+            }
+        });
+    });
+}
+
+
+
+
+
+async function generateCVPdf() {
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF('p', 'mm', 'a4');
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdfHeight = pdf.internal.pageSize.getHeight();
+    let yOffset = 20;
+
+    const nomEl = document.getElementById('nom');
+    const nom = nomEl ? nomEl.innerText.trim() : '';
+    const posEl = document.getElementById('position');
+    const position = posEl ? posEl.innerText.trim() : '';
+
+    if (nom) {
+        pdf.setFont('helvetica', 'bold');
+        pdf.setFontSize(18);
+        pdf.text(nom, pdfWidth / 2, yOffset, { align: 'center' });
+        yOffset += 12;
+    }
+
+    if (position) {
+        pdf.setFont('helvetica', 'italic');
+        pdf.setFontSize(14);
+        pdf.text(position, pdfWidth / 2, yOffset, { align: 'center' });
+        yOffset += 25;
+    }
+
+    const descriptionEl = document.getElementById('infos');
+    const description = descriptionEl ? descriptionEl.innerText.trim() : '';
+
+    if (description) {
+        pdf.setFont('helvetica', 'bold');
+        pdf.setFontSize(12);
+        pdf.text('Description', 10, yOffset);
+        yOffset += 8;
+
+        pdf.setFont('helvetica', 'normal');
+        pdf.setFontSize(12);
+        const descLines = pdf.splitTextToSize(description, pdfWidth - 20);
+        pdf.text(descLines, 10, yOffset);
+        yOffset += descLines.length * 6 + 10;
+    }
+
+    const expDivs = document.querySelectorAll('#experience .experience-item');
+    if (expDivs.length > 0) {
+        pdf.setFont('helvetica', 'bold');
+        pdf.setFontSize(12);
+        pdf.text('Experiences', 10, yOffset);
+        yOffset += 8;
+
+        pdf.setFont('helvetica', 'normal');
+        pdf.setFontSize(12);
+
+        expDivs.forEach(exp => {
+            const role = exp.dataset.role || '';
+            const company = exp.dataset.company || '';
+            const start = exp.dataset.start || '';
+            const end = exp.dataset.end || '';
+            const desc = exp.dataset.desc || '';
+
+            let title = '';
+            if (role && company) {
+                title = `${role} - ${company}`;
+            } else if (role) {
+                title = role;
+            } else if (company) {
+                title = company;
+            }
+            const years = start ? `${start} - ${end}` : '';
+
+            pdf.text(title, 10, yOffset);
+            pdf.text(years, pdfWidth - 50, yOffset);
+            yOffset += 6;
+
+            if (desc) {
+                const lines = pdf.splitTextToSize(desc, pdfWidth - 20);
+                pdf.text(lines, 10, yOffset);
+                yOffset += lines.length * 6;
+            }
+
+            yOffset += 5;
+            if (yOffset > pdfHeight - 20) { pdf.addPage(); yOffset = 20; }
+        });
+    }
+
+    const eduDivs = document.querySelectorAll('.education-item');
+    if (eduDivs.length > 0) {
+        pdf.setFont('helvetica', 'bold');
+        pdf.setFontSize(12);
+        pdf.text('Education', 10, yOffset);
+        yOffset += 8;
+
+        pdf.setFont('helvetica', 'normal');
+        pdf.setFontSize(12);
+
+        eduDivs.forEach(ed => {
+            const field = ed.dataset.field || '';
+            const school = ed.dataset.school || '';
+            const degree = ed.dataset.degree || '';
+            const start = ed.dataset.start || '';
+            const end = ed.dataset.end || '';
+
+            const title = field;
+            const subtitle = `${school}${degree ? ' • ' + degree : ''}`;
+            const years = start ? `${start} - ${end}` : '';
+
+            pdf.text(title, 10, yOffset);
+            pdf.text(years, pdfWidth - 50, yOffset);
+            yOffset += 6;
+
+            if (subtitle) {
+                const lines = pdf.splitTextToSize(subtitle, pdfWidth - 20);
+                pdf.text(lines, 10, yOffset);
+                yOffset += lines.length * 6;
+            }
+
+            yOffset += 5;
+            if (yOffset > pdfHeight - 20) { pdf.addPage(); yOffset = 20; }
+        });
+        yOffset += 5;
+    }
+
+    const skillDivs = document.querySelectorAll('.skill-item');
+    if (skillDivs.length > 0) {
+        pdf.setFont('helvetica', 'bold');
+        pdf.setFontSize(12);
+        pdf.text('Skills', 10, yOffset);
+        yOffset += 8;
+
+        pdf.setFont('helvetica', 'normal');
+        pdf.setFontSize(12);
+
+        skillDivs.forEach(skillDiv => {
+            const skillText = skillDiv.dataset.skill || '';
+            if (skillText) {
+                pdf.text(`• ${skillText}`, 10, yOffset);
+                yOffset += 6;
+            }
+            if (yOffset > pdfHeight - 20) { pdf.addPage(); yOffset = 20; }
+        });
+        yOffset += 5;
+    }
+
+    const certDivs = document.querySelectorAll('.certification-item');
+    if (certDivs.length > 0) {
+        pdf.setFont('helvetica', 'bold');
+        pdf.setFontSize(12);
+        pdf.text('Certifications', 10, yOffset);
+        yOffset += 8;
+
+        pdf.setFont('helvetica', 'normal');
+        pdf.setFontSize(12);
+
+        certDivs.forEach(certDiv => {
+            const title = certDiv.dataset.title || '';
+            const company = certDiv.dataset.company || '';
+            const year = certDiv.dataset.year || '';
+
+            pdf.text(title, 10, yOffset);
+            const rightText = `${company}${year ? ' • ' + year : ''}`;
+            pdf.text(rightText, pdfWidth - 50, yOffset);
+            yOffset += 6;
+
+            yOffset += 2;
+            if (yOffset > pdfHeight - 20) { pdf.addPage(); yOffset = 20; }
+        });
+        yOffset += 5;
+    }
+
+    pdf.save('My_CV.pdf');
+}
+
+
+
+

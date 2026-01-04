@@ -19,6 +19,7 @@ const companySchema = new mongoose.Schema({
   organizationSize: String,
   organizationType: String,
   logo : String,
+  cover: String,
   description: String,
   website: String,
   admin: {
@@ -26,6 +27,7 @@ const companySchema = new mongoose.Schema({
     ref: 'employee',
     required: true,
   },
+  video: String,
 });
 
 export default mongoose.model("Company", companySchema);
