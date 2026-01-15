@@ -47,6 +47,8 @@ export const getJobApplicants = async (req, res) => {
             .populate('applicantId', 'firstname lastname description profileImagePath email')
             .lean();
 
+        console.log("job applications : ",applications)
+
         res.render('applicants-list', { 
             job: job, 
             applications: applications 
@@ -55,5 +57,33 @@ export const getJobApplicants = async (req, res) => {
     } catch (error) {
         console.error(error);
         res.status(500).send("Server Error");
+    }
+};
+
+export const updateApplicationStatus = async (req, res) => {
+    try {
+        const { appId, status } = req.body;
+        const userId = req.session.user._id; 
+
+        const application = await Application.findById(appId).populate('jobId');
+
+        if (!application) {
+            return res.status(404).json({ success: false, message: "Application not found" });
+        }
+
+        const job = await Job.findById(application.jobId);
+        
+        if (job.postedBy.toString() !== userId) {
+             return res.status(403).json({ success: false, message: "Unauthorized" });
+        }
+
+        application.status = status;
+        await application.save();
+
+        res.json({ success: true, message: "Status updated" });
+
+    } catch (error) {
+        console.error("Status update error:", error);
+        res.status(500).json({ success: false, message: "Server error" });
     }
 };

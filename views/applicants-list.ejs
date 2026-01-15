@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/acceuil.css">
     <script src="/jq/jquery-3.7.1.min.js"></script>
+    <script type="module" src="/jq/applicants-list.js"></script>
 </head>
 <body>
 
@@ -28,7 +29,7 @@
         
         <div class="row">
             <% applications.forEach(app => { %>
-                <div class="col-md-6 mb-3">
+                <div class="col-md-7 mb-3">
                     <div class="card shadow-sm">
                         <div class="card-body d-flex align-items-center">
                             
@@ -50,6 +51,20 @@
                                 <a href="/profile/<%= app.applicantId._id %>" class="btn btn-sm btn-outline-primary">
                                     View Profile
                                 </a>
+                            </div>
+                            <div class="ms-3">
+                                <select class="form-select form-select-sm" 
+                                        data-app-id="<%= app._id %>" id="status-dropdown" >
+                                        
+                                    <% const statuses = ['Applied', 'Interviewing', 'Accepted', 'Rejected']; %>
+                                    
+                                    <% statuses.forEach(status => { %>
+                                        <option value="<%= status %>" 
+                                            <%= app.status === status ? 'selected' : '' %>>
+                                            <%= status %>
+                                        </option>
+                                    <% }) %>
+                                </select>
                             </div>
 
                         </div>
