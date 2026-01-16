@@ -13,6 +13,8 @@ import companyRouter from './routes/companyRoute.js';
 import {router} from './routes/postJobRoutes.js'
 import otherProfileRoutes from './routes/otherProfileRoutes.js';
 import jobApplicatinRoute from './routes/jobApplicationRoutes.js';
+import { router as searchRoutes } from './routes/searchRoutes.js';
+import { router as notificationRoutes } from './routes/notificationRoutes.js';
 
 import sessions from 'express-session';
 import authRoutes from './routes/authRoute.js';
@@ -42,19 +44,19 @@ app.use((req, res, next) => {
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+app.set('views', path.join(__dirname, '../views'));
 app.set('view engine', 'ejs');
+
 app.use('/jobs', router);
 app.use('/applications',jobApplicatinRoute)
 
 connectDB();
 
 const port = process.env.PORT || 3000;
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-app.use('/uploads', express.static(path.join(__dirname, '../public/uploads')));
-app.use(express.static(path.join(__dirname, '../public')));
 
 // Routes API pour les posts
 app.use('/api/posts', postRoutes);
@@ -68,13 +70,20 @@ app.use(profileRoutes);
 app.use(companyProfileRoutes);
 app.use(otherProfileRoutes);
 
-
-
 // Settings routes
 app.use(settingsRoutes);
 
 // Network routes
 app.use(networkRoutes);
+
+// Notification routes
+app.use(notificationRoutes);
+//search
+app.use(searchRoutes);
+
+// Static files
+app.use('/uploads', express.static(path.join(__dirname, '../public/uploads')));
+app.use(express.static(path.join(__dirname, '../public')));
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);

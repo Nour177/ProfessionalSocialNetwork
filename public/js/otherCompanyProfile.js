@@ -12,29 +12,70 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Initialize app
 async function initializeApp() {
+    await loadCompanyProfile();
+}
 
-       
+// Charger le profil de la company
+async function loadCompanyProfile() {
+    // Check if there's a companyId in the URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const companyId = urlParams.get('companyId');
+    
+    if (companyId) {
+        try {
+            const response = await fetch(`${API_BASE_URL}/api/companies/${companyId}`, {
+                method: 'GET',
+                credentials: 'include'
+            });
+            
+            if (!response.ok) {
+                throw new Error('Failed to fetch company');
+            }
+            
+            const companyData = await response.json();
+            currentCompany = companyData;
+            localStorage.setItem('company', JSON.stringify(companyData));
+            
+            displayCompanyProfile(currentCompany);
+            displayDetails(currentCompany);
+            displayCompanyVideo(currentCompany);
+        } catch (error) {
+            console.error('Error loading company:', error);
+            // Fallback to localStorage
+            const companyData = JSON.parse(localStorage.getItem('company') || '{}');
+            if (companyData && companyData._id) {
+                currentCompany = companyData;
+                displayCompanyProfile(currentCompany);
+                displayDetails(currentCompany);
+                displayCompanyVideo(currentCompany);
+            }
+        }
+    } else {
+        const companyData = JSON.parse(localStorage.getItem('company') || '{}');
+        if (companyData && companyData._id) {
+            currentCompany = companyData;
+            displayCompanyProfile(currentCompany);
+            displayDetails(currentCompany);
+            displayCompanyVideo(currentCompany);
+        }
+    }
+}
 
-        localStorage.setItem('company', JSON.stringify(companyData));
-
-        // Display company info
-        displayCompanyProfile(currentCompany);
-        displayDetails(currentCompany);
-
-        const companyVideo = document.querySelector('.profile-video');
-        if (companyVideo) {
-            if (currentCompany.video) {
-            companyVideo.src = currentCompany.video;
+function displayCompanyVideo(company) {
+    const companyVideo = document.querySelector('.profile-video');
+    if (companyVideo) {
+        if (company && company.video) {
+            let videoPath = company.video;
+            if (videoPath && !videoPath.startsWith('/') && !videoPath.startsWith('http') && !videoPath.startsWith('../')) {
+                videoPath = '/' + videoPath;
+            }
+            companyVideo.src = videoPath;
             companyVideo.style.display = 'block';
         } else {
             companyVideo.src = '';
             companyVideo.style.display = 'none';
         }
-        }
-
-
-
-    
+    }
 }
 
 // display company profile
@@ -58,16 +99,30 @@ function displayCompanyProfile(company) {
         companyDescription.textContent = company.description || 'No description available.';
     }
 
-    // Photo de profil
+    // Photo de profil (logo)
     const profileImg = document.querySelector('.profile-img2');
-    if (profileImg && company.logo) {
-        profileImg.src = company.logo;
+    if (profileImg) {
+        let logoPath = company.logo || '../images/default-c.png';
+        if (logoPath && !logoPath.startsWith('/') && !logoPath.startsWith('http') && !logoPath.startsWith('../')) {
+            logoPath = '/' + logoPath;
+        }
+        profileImg.src = logoPath;
+        profileImg.onerror = function() {
+            this.src = '../images/default-c.png';
+        };
     }
 
     // Image de couverture
     const coverImg = document.querySelector('.image-background2');
-    if (coverImg && company.cover) {
-        coverImg.src = company.cover;
+    if (coverImg) {
+        let coverPath = company.cover || '../images/default-cover.jpg';
+        if (coverPath && !coverPath.startsWith('/') && !coverPath.startsWith('http') && !coverPath.startsWith('../')) {
+            coverPath = '/' + coverPath;
+        }
+        coverImg.src = coverPath;
+        coverImg.onerror = function() {
+            this.src = '../images/default-cover.jpg';
+        };
     }
 
 }

@@ -1,5 +1,7 @@
 import Application from '../models/jobApplicationSchema.js';
 import { Job } from '../models/jobSchema.js';
+import { createNotification } from './notificationController.js';
+import employee from '../models/Employees.js';
 
 export const applyToJob = async (req, res) => {
     try {
@@ -22,6 +24,19 @@ export const applyToJob = async (req, res) => {
             jobId,
             applicantId: userId
         });
+
+        //applicant info for notification
+        const applicant = await employee.findById(userId);
+        if (applicant && job.postedBy) {
+            await createNotification(
+                job.postedBy,
+                'job_application',
+                'New Job Application',
+                `${applicant.firstname} ${applicant.lastname} applied to your job: ${job.title}`,
+                userId,
+                `/applications/job/${jobId}`
+            );
+        }
 
         res.json({ success: true, message: "Application sent successfully!" });
 
@@ -79,6 +94,35 @@ export const updateApplicationStatus = async (req, res) => {
 
         application.status = status;
         await application.save();
+
+        const applicant = await employee.findById(application.applicantId);
+        const jobPoster = await employee.findById(userId);
+        
+        if (applicant && jobPoster) {
+            let statusMessage = '';
+            switch(status) {
+                case 'Accepted':
+                    statusMessage = 'Congratulations! Your application has been accepted';
+                    break;
+                case 'Interviewing':
+                    statusMessage = 'Your application is being reviewed for an interview';
+                    break;
+                case 'Rejected':
+                    statusMessage = 'Your application was not selected for this position';
+                    break;
+                default:
+                    statusMessage = `Your application status has been updated to ${status}`;
+            }
+            
+            await createNotification(
+                application.applicantId,
+                'job_application',
+                `Application Status Update: ${status}`,
+                `${statusMessage} for ${job.title} at ${job.companyName}`,
+                userId,
+                `/jobs/${job._id}`
+            );
+        }
 
         res.json({ success: true, message: "Status updated" });
 

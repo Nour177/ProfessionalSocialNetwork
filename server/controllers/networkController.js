@@ -1,6 +1,7 @@
 import employee from '../models/Employees.js';
 import Connection from '../models/connection.js';
 import mongoose from 'mongoose';
+import { createNotification } from './notificationController.js';
 
 // Obtenir 5 suggestions aléatoires (utilisateurs de la base- pas connecté avec )
 export const getSuggestions = async (req, res) => {
@@ -242,6 +243,16 @@ export const sendConnectionRequest = async (req, res) => {
             requestedBy: requester._id
         });
 
+        //notif 
+        await createNotification(
+            recipient._id,
+            'connection_request',
+            'New Connection Request',
+            `${requester.firstname} ${requester.lastname} wants to connect with you`,
+            requester._id,
+            `/pages/network.html`
+        );
+
         res.json({ success: true, message: 'Connection request sent', connection: newConnection });
     } catch (error) {
         console.error('Error sending connection request:', error);
@@ -281,6 +292,20 @@ export const acceptConnection = async (req, res) => {
         // Mettre à jour le statut
         connection.status = 'accepted';
         await connection.save();
+
+        //notif
+        const requesterId = connection.requestedBy;
+        const requester = await employee.findById(requesterId);
+        if (requester) {
+            await createNotification(
+                requesterId,
+                'connection_accepted',
+                'Connection Accepted',
+                `${currentUser.firstname} ${currentUser.lastname} accepted your connection request`,
+                currentUser._id,
+                `/pages/network.html`
+            );
+        }
 
         res.json({ success: true, message: 'Connection accepted', connection });
     } catch (error) {

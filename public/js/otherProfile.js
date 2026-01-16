@@ -26,14 +26,40 @@ async function initializeApp() {
     await loadUserProfile();
 }
 
-// Charger le profil utilisateur depuis localStorage
+// Charger le profil utilisateur depuis l'URL ou localStorage
 async function loadUserProfile() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const userId = urlParams.get('userId');
     
-    const userData = JSON.parse(localStorage.getItem('user'));
-
-    currentUser = userData;
-    displayUserProfile(userData);
-
+    if (userId) {
+        try {
+            const response = await fetch(`${API_BASE_URL}/api/profile?id=${userId}`, {
+                method: 'GET',
+                credentials: 'include'
+            });
+            
+            if (!response.ok) {
+                throw new Error('Failed to fetch profile');
+            }
+            
+            const userData = await response.json();
+            currentUser = userData;
+            displayUserProfile(userData);
+        } catch (error) {
+            console.error('Error loading profile:', error);
+            const userData = JSON.parse(localStorage.getItem('user') || '{}');
+            if (userData && userData._id) {
+                currentUser = userData;
+                displayUserProfile(userData);
+            }
+        }
+    } else {
+        const userData = JSON.parse(localStorage.getItem('user') || '{}');
+        if (userData && userData._id) {
+            currentUser = userData;
+            displayUserProfile(userData);
+        }
+    }
 }
 
 // Afficher le profil utilisateur
@@ -58,14 +84,28 @@ function displayUserProfile(user) {
 
     // Photo de profil
     const profileImg = document.querySelector('.profile-img2');
-    if (profileImg && user.profileImagePath) {
-        profileImg.src = user.profileImagePath;
+    if (profileImg) {
+        let profilePath = user.profileImagePath || '../images/profile.png';
+        if (profilePath && !profilePath.startsWith('/') && !profilePath.startsWith('http') && !profilePath.startsWith('../')) {
+            profilePath = '/' + profilePath;
+        }
+        profileImg.src = profilePath;
+        profileImg.onerror = function() {
+            this.src = '../images/profile.png';
+        };
     }
 
     // Image de couverture
     const coverImg = document.querySelector('.image-background2');
-    if (coverImg && user.coverImagePath) {
-        coverImg.src = user.coverImagePath;
+    if (coverImg) {
+        let coverPath = user.coverImagePath || '../images/default-cover.jpg';
+        if (coverPath && !coverPath.startsWith('/') && !coverPath.startsWith('http') && !coverPath.startsWith('../')) {
+            coverPath = '/' + coverPath;
+        }
+        coverImg.src = coverPath;
+        coverImg.onerror = function() {
+            this.src = '../images/default-cover.jpg';
+        };
     }
 
     const profileVideo = document.querySelector('.profile-video');
@@ -84,9 +124,8 @@ function displayUserProfile(user) {
     displaySkills(user.skills || []);
     displayCertifications(user.certifications || []);
 
-    
-
-
+    //posts
+    loadUserPosts(user);
 }
 
 function displayExperiences(experiences) {

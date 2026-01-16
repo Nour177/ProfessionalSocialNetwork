@@ -19,6 +19,36 @@ export const getCompanyByAdminId = async (req, res) => {
     }
 };
 
+export const getCompanyByIdAPI = async (req, res) => {
+    try {
+        const company = await Company.findById(req.params.id);
+        if (!company) {
+            return res.status(404).json({ success: false, message: 'Company not found' });
+        }
+        res.json(company);
+    } catch (err) {
+        console.error('Error getting company by ID:', err);
+        res.status(500).json({ success: false, message: 'Server error' });
+    }
+};
+
+// Get company by ID and redirect to company profile page
+export const getCompanyById = async (req, res) => {
+    try {
+        const companyId = req.params.id;
+        const company = await Company.findById(companyId);
+        
+        if (!company) {
+            return res.status(404).json({ success: false, message: 'Company not found' });
+        }
+        
+        res.redirect(`/pages/otherCompanyProfile.html?companyId=${companyId}`);
+    } catch (err) {
+        console.error('Error getting company by ID:', err);
+        res.status(500).json({ success: false, message: 'Server error' });
+    }
+};
+
 
 // Update company description
 export const updateCompanyDescription = async (req, res) => {

@@ -227,3 +227,137 @@ a{
   margin-right: 0.5rem;
   width: 16px;
 }
+
+/* Search dropdown styles */
+#search-results-dropdown {
+  background-color: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 0;
+  margin-top: 0.5rem;
+}
+
+#search-results-dropdown .dropdown-header {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--hunter-green);
+  text-transform: uppercase;
+  padding: 0.5rem 1rem;
+  margin: 0;
+  background-color: #f8f9fa;
+}
+
+#search-results-dropdown .dropdown-item {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #f0f0f0;
+  color: #333;
+  text-decoration: none;
+}
+
+#search-results-dropdown .dropdown-item:last-child {
+  border-bottom: none;
+}
+
+#search-results-dropdown .dropdown-item:hover {
+  background-color: #f8f9fa;
+  color: var(--hunter-green);
+}
+
+#search-results-dropdown .dropdown-item img {
+  flex-shrink: 0;
+}
+
+#search-results-dropdown .dropdown-divider {
+  margin: 0.25rem 0;
+  border-top: 1px solid #e0e0e0;
+}
+
+/* Search results page styles */
+.nav-tabs {
+  border-bottom: 2px solid var(--sage-green);
+}
+
+.nav-tabs .nav-link {
+  color: var(--hunter-green);
+  border: none;
+  border-bottom: 3px solid transparent;
+  padding: 0.75rem 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.nav-tabs .nav-link:hover {
+  border-bottom-color: var(--sage-green);
+  color: var(--sage-green);
+  background-color: rgba(106, 153, 78, 0.05);
+}
+
+.nav-tabs .nav-link.active {
+  color: var(--hunter-green);
+  background-color: transparent;
+  border-bottom-color: var(--hunter-green);
+  font-weight: 600;
+}
+
+.tab-content {
+  padding-top: 1rem;
+}
+
+/* Search result cards */
+#all-results .card,
+#profiles-results .card,
+#jobs-results .card,
+#companies-results .card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border: 1px solid #e0e0e0;
+}
+
+#all-results .card:hover,
+#profiles-results .card:hover,
+#jobs-results .card:hover,
+#companies-results .card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(56, 102, 65, 0.15);
+}
+
+#all-results h5,
+#profiles-results h5,
+#jobs-results h5,
+#companies-results h5 {
+  color: var(--hunter-green);
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+/* Notifications styles */
+#notifications-dropdown {
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+#notifications-dropdown .dropdown-item {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #f0f0f0;
+  transition: background-color 0.2s;
+}
+
+#notifications-dropdown .dropdown-item:hover {
+  background-color: #f8f9fa;
+}
+
+#notifications-dropdown .dropdown-item.bg-light {
+  background-color: rgba(56, 102, 65, 0.05) !important;
+}
+
+.notification-item {
+  transition: background-color 0.2s;
+  cursor: pointer;
+}
+
+.notification-item:hover {
+  background-color: #f8f9fa !important;
+}
+
+.notification-item.border-primary {
+  border-left-width: 4px !important;
+}

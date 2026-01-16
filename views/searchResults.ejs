@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/acceuil.css">
+</head>
+<body>
+
+<div id="navbar"></div>
+<script src="/js/loadNavbar.js"></script>
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <!-- Search Bar -->
+            <div class="card mb-4 shadow-sm">
+                <div class="card-body">
+                    <form id="searchForm" class="d-flex">
+                        <div class="input-group flex-grow-1">
+                            <span class="input-group-text">
+                                <i class="bi bi-search"></i>
+                            </span>
+                            <input type="search" 
+                                   class="form-control" 
+                                   placeholder="Search for people, jobs, or companies..." 
+                                   id="searchInput"
+                                   value="<%= query %>"
+                                   aria-label="Search">
+                        </div>
+                        <button type="submit" class="btn btn-primary ms-2" style="background-color: var(--hunter-green); border-color: var(--hunter-green);">
+                            <i class="bi bi-search me-1"></i>Search
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Filter Tabs -->
+            <ul class="nav nav-tabs mb-4" id="searchTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="all-tab" data-bs-toggle="tab" data-bs-target="#all" type="button" role="tab" aria-controls="all" aria-selected="true">
+                        All (<span id="all-count">0</span>)
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="profiles-tab" data-bs-toggle="tab" data-bs-target="#profiles" type="button" role="tab" aria-controls="profiles" aria-selected="false">
+                        People (<span id="profiles-count">0</span>)
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="jobs-tab" data-bs-toggle="tab" data-bs-target="#jobs" type="button" role="tab" aria-controls="jobs" aria-selected="false">
+                        Jobs (<span id="jobs-count">0</span>)
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="companies-tab" data-bs-toggle="tab" data-bs-target="#companies" type="button" role="tab" aria-controls="companies" aria-selected="false">
+                        Companies (<span id="companies-count">0</span>)
+                    </button>
+                </li>
+            </ul>
+
+            <!-- Tab Content -->
+            <div class="tab-content" id="searchTabContent">
+                <!-- All Results -->
+                <div class="tab-pane fade show active" id="all" role="tabpanel">
+                    <div id="all-results"></div>
+                </div>
+
+                <!-- Profiles Results -->
+                <div class="tab-pane fade" id="profiles" role="tabpanel">
+                    <div id="profiles-results"></div>
+                </div>
+
+                <!-- Jobs Results -->
+                <div class="tab-pane fade" id="jobs" role="tabpanel">
+                    <div id="jobs-results"></div>
+                </div>
+
+                <!-- Companies Results -->
+                <div class="tab-pane fade" id="companies" role="tabpanel">
+                    <div id="companies-results"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/js/searchResults.js"></script>
+</body>
+</html>
