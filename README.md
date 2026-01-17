@@ -141,7 +141,7 @@ ProfessionalSocialNetwork
 
 ## 1- Cloner le projet
 ```bash
-git clone https://github.com/y/ProfessionalSocialNetwork.git
+git clone https://github.com/Nour177/ProfessionalSocialNetwork.git
 cd ProfessionalSocialNetwork
 ```
 
